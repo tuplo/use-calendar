@@ -7,7 +7,8 @@ main() {
   esbuild src/index.ts \
     --bundle \
     --format=esm \
-    --outfile=dist/index.mjs
+    --outfile=dist/index.mjs \
+    --external:react
 }
 
 main

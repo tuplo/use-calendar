@@ -13,9 +13,17 @@
 	"scripts": {
 		"build": "bash sh/build.sh",
 		"lint:ts": "tsc --noEmit",
-		"lint": "eslint src --ext ts,tsx"
+		"lint": "eslint src --ext ts,tsx",
+		"test:ci": "bash sh/test-ci.sh",
+		"test": "bash sh/test.sh"
+	},
+	"peerDependencies": {
+		"react": "^16.8.6"
 	},
 	"devDependencies": {
+		"@testing-library/jest-dom": "5.16.4",
+		"@testing-library/react": "13.3.0",
+		"@types/jest": "28.1.4",
 		"@typescript-eslint/eslint-plugin": "5.30.5",
 		"@typescript-eslint/parser": "5.30.5",
 		"esbuild": "0.14.49",
@@ -25,6 +33,7 @@
 		"eslint-plugin-import": "2.26.0",
 		"eslint-plugin-jest": "26.5.3",
 		"jest": "28.1.2",
+		"jest-environment-jsdom": "28.1.2",
 		"prettier": "2.7.1",
 		"ts-jest": "28.0.5",
 		"typescript": "4.7.4"
@@ -57,7 +66,21 @@
 			"jest": true
 		},
 		"rules": {
-			"import/prefer-default-export": "off"
+			"import/prefer-default-export": "off",
+			"import/extensions": "off",
+			"import/no-extraneous-dependencies": "off",
+			"jest/prefer-expect-assertions": "off",
+			"no-restricted-syntax": [
+				"error",
+				{
+					"selector": "LabeledStatement",
+					"message": "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand."
+				},
+				{
+					"selector": "WithStatement",
+					"message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
+				}
+			]
 		}
 	},
 	"jest": {
@@ -67,6 +90,20 @@
 		"transform": {
 			"^.+\\.(t|j)sx?$": "ts-jest"
 		},
-		"testEnvironment": "node"
+		"testEnvironment": "jest-environment-jsdom",
+		"moduleDirectories": [
+			"node_modules",
+			"<rootDir>/"
+		],
+		"moduleNameMapper": {
+			"^src/(.*)": "<rootDir>/src/$1"
+		},
+		"setupFilesAfterEnv": [
+			"@testing-library/jest-dom/extend-expect"
+		]
+	},
+	"dependencies": {
+		"react": "18.2.0",
+		"react-dom": "18.2.0"
 	}
 }
