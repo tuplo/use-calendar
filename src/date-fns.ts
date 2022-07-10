@@ -1,13 +1,13 @@
 type GetDateFromArgs = {
 	date: Date;
-	days: number;
-	weeks: number;
-	months: number;
-	years: number;
+	days?: number;
+	weeks?: number;
+	months?: number;
+	years?: number;
 };
-export function getDateFrom(args: Partial<GetDateFromArgs>) {
+export function getDateFrom(args: GetDateFromArgs) {
 	const { date, days, weeks, months, years } = args;
-	let d = days;
+	let d = days || 0;
 	if (weeks) d = weeks * 7;
 	if (months) d = months * 30;
 	if (years) d = years * 365;

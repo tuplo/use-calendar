@@ -2,7 +2,7 @@ import * as df from './date-fns';
 import type { Day, Month, UseCalendarOptions, Week } from './calhook.d';
 
 type PadAdjacentMonthDaysArgs = {
-	week: Date[];
+	week: Week;
 	firstDayOfWeek: number;
 	date: Date;
 };
@@ -56,7 +56,7 @@ export function newDay(args: NewDayArgs): Day {
 		date,
 		isToday: df.isSameDay(date, today),
 		isSelectable,
-		isSelected: selected ? df.isSameDay(date, args.selected) : false,
+		isSelected: selected ? df.isSameDay(date, selected) : false,
 	};
 }
 
@@ -82,7 +82,7 @@ export function getWeeks(args: GetWeekArgs): Week[] {
 	const days = df.getDaysOfMonth({ year, month });
 
 	let currentWeekIndex = 0;
-	const weeks = [];
+	const weeks: Week[] = [];
 	for (const date of days) {
 		weeks[currentWeekIndex] = weeks[currentWeekIndex] || [];
 		const weekDay = date.getDay();

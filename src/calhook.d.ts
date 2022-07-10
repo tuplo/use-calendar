@@ -5,7 +5,7 @@ export interface Day {
 	isSelected: boolean;
 }
 
-export type Week = Day[];
+export type Week = (Day | null)[];
 
 export interface Month {
 	weeks: Week[];

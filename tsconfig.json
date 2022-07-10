@@ -9,9 +9,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "target": "es6",
     "incremental": true
   },

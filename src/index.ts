@@ -14,7 +14,7 @@ export function useCalendar(
 		selectedDate,
 		onDateSelected,
 	} = options || {};
-	const [selected, setSelected] = useState<Date>(selectedDate);
+	const [selected, setSelected] = useState<Date | undefined>(selectedDate);
 	const [visibleMonth, setVisibleMonth] = useState(selected || new Date());
 	const { minDate, maxDate } = getMinMaxDate(options);
 	const months = df

@@ -212,7 +212,8 @@ describe('calhook', () => {
 			);
 			const { current: actual } = hook.result;
 
-			expect(actual.months[0].weeks[1][0].isSelected).toBe(true);
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			expect(actual.months[0].weeks[1][0]!.isSelected).toBe(true);
 		});
 	});
 });

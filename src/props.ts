@@ -3,7 +3,7 @@ import { Day, GetDayPropsOptions, Month } from './calhook.d';
 
 type BuildGetDayPropsArgs = {
 	setSelected: (newSelected: Date) => void;
-	onDateSelected: (day: Day) => void;
+	onDateSelected?: (day: Day) => void;
 };
 
 export function buildGetDayProps(args: BuildGetDayPropsArgs) {
@@ -21,7 +21,7 @@ export function buildGetDayProps(args: BuildGetDayPropsArgs) {
 				// make sure daily saving times doesn't overlap
 				day.date.setHours(12);
 				setSelected(day.date);
-				onDateSelected(day);
+				if (onDateSelected) onDateSelected(day);
 			},
 		};
 	};
