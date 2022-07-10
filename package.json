@@ -10,6 +10,13 @@
 		"calendar",
 		"headless ui"
 	],
+	"types": "dist/index.d.ts",
+	"module": "./dist/index.mjs",
+	"files": [
+		"dist/index.d.ts",
+		"dist/index.mjs",
+		"dist/calhook.d.ts"
+	],
 	"scripts": {
 		"build": "bash sh/build.sh",
 		"lint:ts": "tsc --noEmit",
