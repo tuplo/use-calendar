@@ -39,7 +39,7 @@
 		"test": "bash sh/test.sh"
 	},
 	"peerDependencies": {
-		"react": "^16.8.6"
+		"react": "^16.8.6 || ^17.0.0 || ^18.0.0"
 	},
 	"devDependencies": {
 		"@testing-library/jest-dom": "5.16.4",
