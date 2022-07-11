@@ -5,6 +5,20 @@ import { getCalendarMonth, getMinMaxDate } from './helpers';
 import type { CalendarProps, UseCalendarOptions } from './calhook';
 import { buildGetBackForwardProps, buildGetDayProps } from './props';
 
+export type {
+	Day,
+	Week,
+	Month,
+	GetDayPropsOptions,
+	GetDayPropsReturns,
+	GetDayPropsFn,
+	GetBackForwardPropsReturns,
+	GetBackPropsFn,
+	GetForwardPropsFn,
+	CalendarProps,
+	UseCalendarOptions,
+} from './calhook.d';
+
 export function useCalendar(
 	options?: Partial<UseCalendarOptions>
 ): CalendarProps {
