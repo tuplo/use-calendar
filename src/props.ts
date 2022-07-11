@@ -4,6 +4,7 @@ import { Day, GetDayPropsOptions, Month } from './calhook.d';
 type BuildGetDayPropsArgs = {
 	setSelected: (newSelected: Date) => void;
 	onDateSelected?: (day: Day) => void;
+	locale?: string;
 };
 
 export function buildGetDayProps(args: BuildGetDayPropsArgs) {
@@ -11,13 +12,15 @@ export function buildGetDayProps(args: BuildGetDayPropsArgs) {
 
 	return (options: GetDayPropsOptions) => {
 		const { day } = options;
-		const locale = typeof navigator !== 'undefined' ? navigator.language : 'en';
+		const locale = args.locale || navigator?.language || 'en';
 		const dtf = new Intl.DateTimeFormat(locale, { dateStyle: 'long' });
 
 		return {
 			'aria-label': dtf.format(new Date(day.date)),
 			role: 'button',
 			onClick: () => {
+				if (!options.day.isSelectable) return;
+
 				// make sure daily saving times doesn't overlap
 				day.date.setHours(12);
 				setSelected(day.date);

@@ -10,6 +10,7 @@ describe('date-fns', () => {
 	});
 
 	it.each([
+		['bad arg', '2022-07-11', { foo: 1 }, '2022-07-11'],
 		['previous date', '2020-01-01', { days: -1 }, '2019-12-31'],
 		['previous date', '2020-03-01', { days: -1 }, '2020-02-29'],
 		['previous week', '2022-07-02', { weeks: -1 }, '2022-06-25'],
@@ -18,12 +19,42 @@ describe('date-fns', () => {
 		['next day', '2020-01-31', { days: 1 }, '2020-02-01'],
 		['next week', '2020-01-31', { weeks: 1 }, '2020-02-07'],
 		['next week', '2022-12-29', { weeks: 1 }, '2023-01-05'],
+		['next month', '2022-07-11', { months: 1 }, '2022-08-11'],
+		['next month', '2020-01-31', { months: 1 }, '2020-02-29'],
+		['next month', '2022-12-29', { months: 1 }, '2023-01-29'],
+		['previous month', '2022-12-29', { months: -1 }, '2022-11-29'],
+		['next year', '2022-07-11', { years: 1 }, '2023-07-11'],
+		['next year', '2020-01-31', { years: 1 }, '2021-01-31'],
+		['next year', '2022-12-29', { years: 1 }, '2023-12-29'],
+		['previous year', '2022-12-29', { years: -1 }, '2021-12-29'],
 	])('getDateFrom: %s %s', (_, dateStr, args, expected) => {
 		const actual = df.getDateFrom({ date: new Date(dateStr), ...args });
 		expect(actual).toStrictEqual(new Date(expected));
 	});
 
+	describe('getFirstDayOfMonth', () => {
+		it('returns the first day of the month: current month', () => {
+			jest.useFakeTimers().setSystemTime(new Date('2022-07-11'));
+			const actual = df.getFirstDayOfMonth();
+			const expected = new Date('2022-07-01');
+			expect(actual).toStrictEqual(expected);
+		});
+
+		it('returns the first day of the month', () => {
+			const actual = df.getFirstDayOfMonth(new Date('2020-01-01'));
+			const expected = new Date('2020-01-01');
+			expect(actual).toStrictEqual(expected);
+		});
+	});
+
 	describe('getLastDayOfMonth', () => {
+		it('returns the last day of the month: current month', () => {
+			jest.useFakeTimers().setSystemTime(new Date('2022-07-11'));
+			const actual = df.getLastDayOfMonth();
+			const expected = new Date('2022-07-31');
+			expect(actual).toStrictEqual(expected);
+		});
+
 		it.each([
 			['2020-01-01', '2020-01-31'],
 			['2020-12-10', '2020-12-31'],

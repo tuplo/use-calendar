@@ -19,9 +19,9 @@
 	],
 	"scripts": {
 		"build": "bash sh/build.sh",
+		"coverage": "bash sh/coverage.sh",
 		"lint:ts": "tsc --noEmit",
 		"lint": "eslint src --ext ts,tsx",
-		"test:ci:coverage": "bash sh/coverage.sh",
 		"test:ci": "bash sh/test-ci.sh",
 		"test": "bash sh/test.sh"
 	},
@@ -79,6 +79,7 @@
 			"import/extensions": "off",
 			"import/no-extraneous-dependencies": "off",
 			"jest/prefer-expect-assertions": "off",
+			"jest/no-hooks": "off",
 			"no-restricted-syntax": [
 				"error",
 				{

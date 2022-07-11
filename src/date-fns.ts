@@ -7,12 +7,37 @@ type GetDateFromArgs = {
 };
 export function getDateFrom(args: GetDateFromArgs) {
 	const { date, days, weeks, months, years } = args;
+
 	let d = days || 0;
 	if (weeks) d = weeks * 7;
-	if (months) d = months * 30;
-	if (years) d = years * 365;
+	if (d) {
+		return new Date(date.getFullYear(), date.getMonth(), date.getDate() + d);
+	}
 
-	return new Date(date.getFullYear(), date.getMonth(), date.getDate() + d);
+	if (months) {
+		const dayOfMonth = date.getDate();
+		const newDate = new Date(date.getTime());
+		newDate.setMonth(date.getMonth() + months + 1, 0);
+		const daysInMonth = newDate.getDate();
+		if (dayOfMonth >= daysInMonth) {
+			return newDate;
+		}
+
+		newDate.setFullYear(newDate.getFullYear(), newDate.getMonth(), dayOfMonth);
+		return newDate;
+	}
+
+	if (years) {
+		const newDate = new Date(date.getTime());
+		newDate.setFullYear(
+			date.getFullYear() + years,
+			date.getMonth(),
+			date.getDate()
+		);
+		return newDate;
+	}
+
+	return date;
 }
 
 export function isSameDay(date1: Date, date2: Date): boolean {
