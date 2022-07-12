@@ -1,3 +1,3 @@
-import * as calhook from '../index';
+import { useCalendar } from '../index';
 
-module.exports = calhook;
+module.exports = { useCalendar };

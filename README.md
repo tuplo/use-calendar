@@ -2,7 +2,7 @@
 <div align="center">
   <img src="logo.png" alt="Logo" width="120" height="120">
   <h1 align="center">calhook</h3>
-  <p align="center">Headless calendar hook for React (no dependencies)</p>
+  <p align="center">Headless calendar hook for React (no dependencies, WAI-ARIA compliant)</p>
   <p align="center">
     <img src="https://img.shields.io/npm/v/@tuplo/calhook">
     <img src="https://img.shields.io/bundlephobia/minzip/@tuplo/calhook">
@@ -67,12 +67,12 @@ function Calendar() {
 
 ```typescript
 const calendarProps = useCalendar({
-	availableDates: [new Date('2022-07-11'), new Date('2022-07-12')],
-	firstDayOfWeek: 1,
-	minDate: new Date('2022-07-01'),
-	maxDate: new Date('2022-07-31'),
-	onDateSelected: (day) => console.log(day.date),
-	selectedDate: new Date('2022-07-11'),
+  availableDates: [new Date('2022-07-11'), new Date('2022-07-12')],
+  firstDayOfWeek: 1,
+  minDate: new Date('2022-07-01'),
+  maxDate: new Date('2022-07-31'),
+  onDateSelected: (day) => console.log(day.date),
+  selectedDate: new Date('2022-07-11'),
 });
 ```
 
