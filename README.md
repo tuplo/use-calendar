@@ -2,7 +2,7 @@
 <div align="center">
   <img src="logo.png" alt="Logo" width="120" height="120">
   <h1 align="center">calhook</h3>
-  <p align="center">Tiny headless calendar hook for React (no dependencies)</p>
+  <p align="center">Headless calendar hook for React (no dependencies)</p>
   <p align="center">
     <img src="https://img.shields.io/npm/v/@tuplo/calhook">
     <img src="https://img.shields.io/bundlephobia/minzip/@tuplo/calhook">
@@ -12,7 +12,6 @@
   	 <img src="https://github.com/tuplo/calhook/actions/workflows/build.yml/badge.svg">
   </p>
 </div>
-
 
 ## Install
 
@@ -50,14 +49,15 @@ function Calendar() {
             <button {...getForwardProps()}>Next</button>
           </nav>
           {
-            weeks.map((week, weekIndex) => (
-              week.map((day, dayIndex) => (
-                <span {...getDayProps()}>{day.date.getDate()}</span>
+            weeks.map((week) =>
+              week.map((day) => 
+                day 
+                  ? <button {...getDayProps({ day })}>{day.date.getDate()}</button>
+                  : <span />
               )
-            )
           }
         </div>
-      )
+      ))
     </>
   )
 }
@@ -67,13 +67,13 @@ function Calendar() {
 
 ```typescript
 const calendarProps = useCalendar({
-  availableDates: [new Date('2022-07-11'), new Date('2022-07-12')],
-  firstDayOfWeek: 1,
-  minDate: new Date('2022-07-01'),
-  maxDate: new Date('2022-07-31'),
-  onDateSelected: (day) => console.log(day.date),
-  selectedDate: new Date('2022-07-11'),
-})
+	availableDates: [new Date('2022-07-11'), new Date('2022-07-12')],
+	firstDayOfWeek: 1,
+	minDate: new Date('2022-07-01'),
+	maxDate: new Date('2022-07-31'),
+	onDateSelected: (day) => console.log(day.date),
+	selectedDate: new Date('2022-07-11'),
+});
 ```
 
 ### availableDates
@@ -112,7 +112,6 @@ Called when the user selects a date.
 > `Date` | defaults to `new Date()`
 
 Used to calculate what month to display on initial render.
-
 
 ## License
 
