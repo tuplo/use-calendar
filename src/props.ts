@@ -12,6 +12,12 @@ export function buildGetDayProps(args: BuildGetDayPropsArgs) {
 
 	return (options: GetDayPropsOptions) => {
 		const { day } = options;
+		if (!day) {
+			return {
+				onClick: () => undefined,
+			};
+		}
+
 		const locale = args.locale || navigator?.language || 'en';
 		const dtf = new Intl.DateTimeFormat(locale, { dateStyle: 'long' });
 
@@ -19,10 +25,9 @@ export function buildGetDayProps(args: BuildGetDayPropsArgs) {
 			'aria-label': dtf.format(new Date(day.date)),
 			role: 'button',
 			onClick: () => {
-				if (!options.day.isSelectable) return;
+				const { isSelectable } = day;
+				if (!isSelectable) return;
 
-				// make sure daily saving times doesn't overlap
-				day.date.setHours(12);
 				setSelected(day.date);
 				if (onDateSelected) onDateSelected(day);
 			},

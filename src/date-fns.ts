@@ -75,7 +75,7 @@ export function getDaysOfMonth(args: GetDaysOfMonthArgs) {
 
 type GetMonthsInRangeArgs = { start?: Date; end?: Date };
 export function getMonthsInRange(args: GetMonthsInRangeArgs) {
-	const { start = new Date(), end = new Date() } = args;
+	const { start = new Date(Date.now()), end = new Date(Date.now()) } = args;
 	const months = [];
 
 	// include last date in range
@@ -94,13 +94,13 @@ export function getMonthsInRange(args: GetMonthsInRangeArgs) {
 	return months;
 }
 
-export function getFirstDayOfMonth(date: Date = new Date()) {
+export function getFirstDayOfMonth(date: Date = new Date(Date.now())) {
 	const month = date.getMonth();
 	const year = date.getFullYear();
 	return new Date(year, month, 1);
 }
 
-export function getLastDayOfMonth(date: Date = new Date()) {
+export function getLastDayOfMonth(date: Date = new Date(Date.now())) {
 	const month = date.getMonth();
 	const year = date.getFullYear();
 	return new Date(year, month + 1, 0);
@@ -110,7 +110,7 @@ type IsInRangeArgs = { date: Date; minDate?: Date; maxDate?: Date };
 export function isInRange(args: IsInRangeArgs) {
 	const {
 		date,
-		minDate = new Date(),
+		minDate = new Date(Date.now()),
 		maxDate = getLastDayOfMonth(minDate),
 	} = args;
 

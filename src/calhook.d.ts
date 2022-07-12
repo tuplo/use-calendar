@@ -14,7 +14,7 @@ export interface Month {
 }
 
 export interface GetDayPropsOptions {
-	day: Day;
+	day: Day | null;
 }
 
 export interface GetDayPropsReturns {
@@ -23,7 +23,9 @@ export interface GetDayPropsReturns {
 	onClick: () => void;
 }
 
-export type GetDayPropsFn = (options: GetDayPropsOptions) => GetDayPropsReturns;
+export type GetDayPropsFn = (
+	options: GetDayPropsOptions
+) => Partial<GetDayPropsReturns>;
 
 export interface GetBackForwardPropsReturns {
 	'aria-label': string;

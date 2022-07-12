@@ -1,22 +1,22 @@
 import { useState } from 'react';
 
+import type { CalendarProps, UseCalendarOptions } from './calhook';
 import * as df from './date-fns';
 import { getCalendarMonth, getMinMaxDate } from './helpers';
-import type { CalendarProps, UseCalendarOptions } from './calhook';
 import { buildGetBackForwardProps, buildGetDayProps } from './props';
 
 export type {
+	CalendarProps,
 	Day,
-	Week,
-	Month,
-	GetDayPropsOptions,
-	GetDayPropsReturns,
-	GetDayPropsFn,
 	GetBackForwardPropsReturns,
 	GetBackPropsFn,
+	GetDayPropsFn,
+	GetDayPropsOptions,
+	GetDayPropsReturns,
 	GetForwardPropsFn,
-	CalendarProps,
+	Month,
 	UseCalendarOptions,
+	Week,
 } from './calhook.d';
 
 export function useCalendar(
@@ -29,7 +29,9 @@ export function useCalendar(
 		onDateSelected,
 	} = options || {};
 	const [selected, setSelected] = useState<Date | undefined>(selectedDate);
-	const [visibleMonth, setVisibleMonth] = useState(selected || new Date());
+	const [visibleMonth, setVisibleMonth] = useState(
+		selected || new Date(Date.now())
+	);
 	const { minDate, maxDate } = getMinMaxDate(options);
 	const months = df
 		.getMonthsInRange({ start: minDate, end: maxDate })

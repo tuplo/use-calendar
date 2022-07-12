@@ -18,7 +18,7 @@ describe('props functions', () => {
 				const setSelectedSpy = jest.fn();
 				const fn = buildGetDayProps({ setSelected: setSelectedSpy });
 				const day = {
-					date: new Date(),
+					date: new Date(Date.now()),
 					isToday: false,
 					isSelectable,
 					isSelected: false,
@@ -29,6 +29,16 @@ describe('props functions', () => {
 				expect(setSelectedSpy).toHaveBeenCalledTimes(expected);
 			}
 		);
+
+		it('null day', () => {
+			const setSelectedSpy = jest.fn();
+			const fn = buildGetDayProps({ setSelected: setSelectedSpy });
+			const actual = fn({ day: null });
+
+			actual.onClick();
+
+			expect(setSelectedSpy).toHaveBeenCalledTimes(0);
+		});
 
 		describe('locale', () => {
 			const dateNowSpy = jest
@@ -110,7 +120,7 @@ describe('props functions', () => {
 					onDateSelected: onDateSelectedSpy,
 				});
 				const day = {
-					date: new Date(),
+					date: new Date(Date.now()),
 					isToday: false,
 					isSelectable: true,
 					isSelected: false,

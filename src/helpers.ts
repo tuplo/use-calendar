@@ -45,7 +45,7 @@ type NewDayArgs = {
 };
 export function newDay(args: NewDayArgs): Day {
 	const { availableDates, date, minDate, maxDate, selected } = args;
-	const today = new Date();
+	const today = new Date(Date.now());
 
 	let isSelectable = df.isInRange({ date, minDate, maxDate });
 	if (availableDates) {
@@ -138,7 +138,7 @@ export function getMinMaxDate(options?: Partial<UseCalendarOptions>) {
 		availableDates,
 		minDate,
 		maxDate,
-		selectedDate = new Date(),
+		selectedDate = new Date(Date.now()),
 	} = options || {};
 	let min = minDate || df.getFirstDayOfMonth(selectedDate);
 	let max = maxDate || df.getLastDayOfMonth(selectedDate);
