@@ -3,25 +3,25 @@ set -euo pipefail
 
 main() {
   rm -rf dist
-  rm -rf cjs
 
   tsc --build tsconfig.build.json
   cp src/calhook.d.ts dist/calhook.d.ts
   rm dist/date-fns.* dist/helpers.* dist/props.* dist/index.js dist/*.tsbuildinfo
+  rm -rf dist/react
 
   esbuild src/index.ts \
     --bundle \
+    --external:react \
     --format=esm \
-    --outfile=dist/index.mjs \
-    --external:react
+    --minify \
+    --outfile=dist/index.esm.js
 
-  esbuild src/cjs/index.js \
+  esbuild src/index.ts \
     --bundle \
-    --outfile=dist/index.cjs \
-    --external:react
-
-  # node12 compatibility
-  mkdir cjs && cp dist/index.cjs cjs/index.js
+    --external:react \
+    --format=cjs \
+    --minify \
+    --outfile=dist/index.cjs.js
 }
 
 main
