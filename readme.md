@@ -50,8 +50,8 @@ function Calendar() {
           </nav>
           {
             weeks.map((week) =>
-              week.map((day) => 
-                day 
+              week.map((day) =>
+                day
                   ? <button {...getDayProps({ day })}>{day.date.getDate()}</button>
                   : <span />
               )
@@ -67,12 +67,12 @@ function Calendar() {
 
 ```typescript
 const calendarProps = useCalendar({
-  availableDates: [new Date('2022-07-11'), new Date('2022-07-12')],
-  firstDayOfWeek: 1,
-  minDate: new Date('2022-07-01'),
-  maxDate: new Date('2022-07-31'),
-  onDateSelected: (day) => console.log(day.date),
-  selectedDate: new Date('2022-07-11'),
+	availableDates: [new Date('2022-07-11'), new Date('2022-07-12')],
+	firstDayOfWeek: 1,
+	minDate: new Date('2022-07-01'),
+	maxDate: new Date('2022-07-31'),
+	onDateSelected: (day) => console.log(day.date),
+	selectedDate: new Date('2022-07-11'),
 });
 ```
 
