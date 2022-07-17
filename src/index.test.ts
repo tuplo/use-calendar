@@ -225,6 +225,13 @@ describe('calhook', () => {
 
 			expect(actual.months[0].weeks[1][0]!.isSelected).toBe(false);
 		});
+
+		it('still returns current month if not provided selected date', () => {
+			const hook = renderHook(() => useCalendar());
+			const { current: actual } = hook.result;
+
+			expect(actual.months).toHaveLength(1);
+		});
 	});
 
 	describe('availableDates', () => {
@@ -233,6 +240,15 @@ describe('calhook', () => {
 			const { current: actual } = hook.result;
 
 			expect(actual.months[0].weeks[0][5]!.isSelectable).toBe(false);
+		});
+
+		it('returns all months from now to single available date', () => {
+			const availableDates = [new Date('2022-12-25')];
+			const hook = renderHook(() => useCalendar({ availableDates }));
+			const { current: actual } = hook.result;
+
+			expect(actual.months).toHaveLength(1);
+			expect(actual.months[0].month).toBe(6);
 		});
 	});
 

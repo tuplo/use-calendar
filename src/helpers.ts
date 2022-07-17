@@ -191,13 +191,28 @@ export function getMinMaxDate(options?: Partial<UseCalendarOptions>) {
 		maxDate,
 		selectedDate = new Date(Date.now()),
 	} = options || {};
-	const date = getValidDate(selectedDate) || new Date(Date.now());
+	const today = new Date(Date.now());
+	const date = getValidDate(selectedDate) || today;
 	let min = minDate || df.getFirstDayOfMonth(date);
 	let max = maxDate || df.getLastDayOfMonth(date);
 	if (availableDates) {
 		const { 0: firstDate, length, [length - 1]: lastDate } = availableDates;
-		min = firstDate;
-		max = lastDate;
+		const firstDayOfCurrentMonth = df.getFirstDayOfMonth(today);
+		const lastDayOfCurrentMonth = df.getLastDayOfMonth(today);
+
+		min = firstDayOfCurrentMonth;
+		if (firstDate) {
+			min = new Date(
+				Math.min(firstDate.getTime(), firstDayOfCurrentMonth.getTime())
+			);
+		}
+
+		max = lastDayOfCurrentMonth;
+		if (lastDate) {
+			max = new Date(
+				Math.max(lastDate.getTime(), lastDayOfCurrentMonth.getTime())
+			);
+		}
 	}
 
 	return { minDate: min, maxDate: max };

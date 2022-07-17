@@ -236,6 +236,7 @@ describe('use-calendar helpers', () => {
 			};
 			expect(actual).toStrictEqual(expected);
 		});
+
 		it('gets min and max dates: with given min/max Date', () => {
 			const actual = getMinMaxDate({
 				minDate: new Date('2022-07-01'),
@@ -249,14 +250,26 @@ describe('use-calendar helpers', () => {
 			expect(actual).toStrictEqual(expected);
 		});
 
-		it('gets min and max dates: with availableDates', () => {
+		it('always includes the current month with availableDates only (minDate)', () => {
 			const actual = getMinMaxDate({
 				availableDates: df.getDaysOfMonth({ year: 2022, month: 9 }),
 			});
 
 			const expected = {
-				minDate: new Date('2022-10-01'),
+				minDate: new Date('2022-07-01'),
 				maxDate: new Date('2022-10-31'),
+			};
+			expect(actual).toStrictEqual(expected);
+		});
+
+		it('always includes the current month with availableDates only (maxDate)', () => {
+			const actual = getMinMaxDate({
+				availableDates: df.getDaysOfMonth({ year: 2021, month: 9 }),
+			});
+
+			const expected = {
+				minDate: new Date('2021-10-01'),
+				maxDate: new Date('2022-07-31'),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
