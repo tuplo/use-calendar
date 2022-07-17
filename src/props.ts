@@ -1,5 +1,10 @@
 import * as df from './date-fns';
-import { Day, GetDayPropsOptions, Month } from './calhook.d';
+import type {
+	Day,
+	GetDayPropsOptions,
+	Month,
+	GetBackForwardPropsReturns,
+} from './calhook.d';
 
 type BuildGetDayPropsArgs = {
 	setSelected: (newSelected: Date) => void;
@@ -48,6 +53,8 @@ export function buildGetBackForwardProps(args: BuildGetBackForwardPropsArgs) {
 	const { 0: firstMonth, length, [length - 1]: lastMonth } = months;
 	const month = direction === 'back' ? firstMonth : lastMonth;
 	const delta = direction === 'back' ? -1 : 1;
+	if (!month) return () => ({} as GetBackForwardPropsReturns);
+
 	const adjacentMonth = new Date(month.year, month.month + delta);
 
 	const monthsInRange = df.getMonthsInRange({ start: minDate, end: maxDate });

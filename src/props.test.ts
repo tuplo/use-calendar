@@ -164,6 +164,20 @@ describe('props functions', () => {
 
 			expect(actual.disabled).toBe(true);
 		});
+
+		it('handles empty list of months', () => {
+			const months: Month[] = [];
+			const fn = buildGetBackForwardProps({
+				direction: 'back',
+				months,
+				minDate: new Date(2022, 5, 1),
+				setVisibleMonth: jest.fn(),
+			});
+			const actual = fn();
+
+			const expected = {};
+			expect(actual).toStrictEqual(expected);
+		});
 	});
 
 	describe('getForwardProps', () => {

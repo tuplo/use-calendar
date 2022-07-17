@@ -219,6 +219,15 @@ describe('calhook', () => {
 		});
 	});
 
+	describe('availableDates', () => {
+		it('handles empty list of available dates', () => {
+			const hook = renderHook(() => useCalendar({ availableDates: [] }));
+			const { current: actual } = hook.result;
+
+			expect(actual.months[0].weeks[0][5]!.isSelectable).toBe(false);
+		});
+	});
+
 	describe('events', () => {
 		it.each(['2022-07-17', '2022-07-17T09:00:00.000Z'])(
 			'gets calendar with events: %s',
