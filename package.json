@@ -1,5 +1,6 @@
 {
 	"name": "@tuplo/calhook",
+	"description": "Headless calendar hook for React",
 	"version": "0.0.0-development",
 	"repository": "git@github.com:tuplo/calhook.git",
 	"author": "Rui Costa",

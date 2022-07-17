@@ -57,6 +57,6 @@ export interface UseCalendarOptions {
 	firstDayOfWeek: number;
 	minDate: Date;
 	maxDate: Date;
-	selectedDate?: Date;
+	selectedDate?: string | number | Date;
 	onDateSelected: (day: Day) => void;
 }

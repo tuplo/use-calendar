@@ -124,7 +124,7 @@ Called when the user selects a date.
 
 ### selectedDate
 
-> `Date` | defaults to `new Date()`
+> `Date | string | number` | optional
 
 Used to calculate what month to display on initial render.
 

@@ -217,6 +217,14 @@ describe('calhook', () => {
 
 			expect(actual.months[0].weeks[1][0]!.isSelected).toBe(true);
 		});
+
+		it('handles invalid dates', () => {
+			const selectedDate = 'foobar';
+			const hook = renderHook(() => useCalendar({ selectedDate }));
+			const { current: actual } = hook.result;
+
+			expect(actual.months[0].weeks[1][0]!.isSelected).toBe(false);
+		});
 	});
 
 	describe('availableDates', () => {

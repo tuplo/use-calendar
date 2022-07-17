@@ -1,6 +1,23 @@
 import * as df from './date-fns';
 import type { Day, Month, UseCalendarOptions, Week, Event } from './calhook.d';
 
+export function isValidDate(d: string | number | Date | undefined) {
+	if (d === null) return false;
+	if (typeof d === 'boolean') return false;
+	if (typeof d === 'undefined') return false;
+	if (typeof d === 'string') return /^\d{4}-\d{2}-\d{2}/.test(d);
+
+	const dd = new Date(d);
+	return dd instanceof Date && !Number.isNaN(dd);
+}
+
+export function getValidDate(d: string | number | Date | undefined) {
+	if (typeof d === 'undefined') return undefined;
+	if (!isValidDate(d)) return undefined;
+
+	return new Date(d);
+}
+
 type PadAdjacentMonthDaysArgs = {
 	week: Week;
 	firstDayOfWeek: number;
@@ -174,8 +191,9 @@ export function getMinMaxDate(options?: Partial<UseCalendarOptions>) {
 		maxDate,
 		selectedDate = new Date(Date.now()),
 	} = options || {};
-	let min = minDate || df.getFirstDayOfMonth(selectedDate);
-	let max = maxDate || df.getLastDayOfMonth(selectedDate);
+	const date = getValidDate(selectedDate) || new Date(Date.now());
+	let min = minDate || df.getFirstDayOfMonth(date);
+	let max = maxDate || df.getLastDayOfMonth(date);
 	if (availableDates) {
 		const { 0: firstDate, length, [length - 1]: lastDate } = availableDates;
 		min = firstDate;

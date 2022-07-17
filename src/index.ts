@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import type { CalendarProps, UseCalendarOptions } from './calhook.d';
 import * as df from './date-fns';
-import { getCalendarMonth, getMinMaxDate } from './helpers';
+import { getCalendarMonth, getMinMaxDate, getValidDate } from './helpers';
 import { buildGetBackForwardProps, buildGetDayProps } from './props';
 
 export type {
@@ -30,7 +30,8 @@ export function useCalendar(
 		selectedDate,
 		onDateSelected,
 	} = options || {};
-	const [selected, setSelected] = useState<Date | undefined>(selectedDate);
+	const s = getValidDate(selectedDate);
+	const [selected, setSelected] = useState<Date | undefined>(s);
 	const [visibleMonth, setVisibleMonth] = useState(
 		selected || new Date(Date.now())
 	);

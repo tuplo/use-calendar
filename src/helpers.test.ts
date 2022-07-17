@@ -1,14 +1,50 @@
 import * as df from './date-fns';
 import {
 	getDayEvents,
+	getValidDate,
 	getMinMaxDate,
 	getNewDay,
 	getWeeks,
 	padAdjacentMonthDays,
+	isValidDate,
 } from './helpers';
 
 describe('use-calendar helpers', () => {
 	jest.useFakeTimers().setSystemTime(new Date('2022-07-02'));
+
+	describe('isValidDate', () => {
+		it.each([null, false])('handles untyped values', (d) => {
+			// @ts-expect-error - we're testing this
+			const actual = isValidDate(d);
+			expect(actual).toBe(false);
+		});
+
+		it.each([
+			[undefined, false],
+			['2020-01-01', true],
+			['01-01-2020', false],
+			['foobar', false],
+			[0, true],
+			[new Date('2022-12-25'), true],
+		])('checks if date is valid: %s', (d, expected) => {
+			const actual = isValidDate(d);
+			expect(actual).toBe(expected);
+		});
+	});
+
+	describe('getValidDate', () => {
+		it.each([
+			[undefined, undefined],
+			['2020-01-01', new Date('2020-01-01')],
+			['01-01-2020', undefined],
+			['foobar', undefined],
+			[0, new Date('1970-01-01T00:00:00.000Z')],
+			[new Date('2022-12-25'), new Date('2022-12-25')],
+		])('converts to date: %s', (d, expected) => {
+			const actual = getValidDate(d);
+			expect(actual).toStrictEqual(expected);
+		});
+	});
 
 	describe('pad adjacent month days', () => {
 		it.each([
