@@ -1,9 +1,10 @@
 import * as df from './date-fns';
 import {
-	padAdjacentMonthDays,
-	getWeeks,
-	newDay,
+	getDayEvents,
 	getMinMaxDate,
+	getNewDay,
+	getWeeks,
+	padAdjacentMonthDays,
 } from './helpers';
 
 describe('use-calendar helpers', () => {
@@ -67,13 +68,13 @@ describe('use-calendar helpers', () => {
 		});
 	});
 
-	describe('newDay', () => {
+	describe('getNewDay', () => {
 		it.each([
 			['2022-07-02', { isSelectable: true, isToday: true }],
 			['2022-07-11', { isSelectable: true, isToday: false }],
 			['2022-06-11', { isSelectable: false, isToday: false }],
 		])('creates a new Day object: %s', (dateStr, expectedAttrs) => {
-			const actual = newDay({
+			const actual = getNewDay({
 				date: new Date(dateStr),
 				minDate: new Date('2022-07-01'),
 				maxDate: new Date('2022-07-31'),
@@ -94,7 +95,7 @@ describe('use-calendar helpers', () => {
 		])(
 			'creates a new Day object with available dates list: %s',
 			(dateStr, expectedAttrs) => {
-				const actual = newDay({
+				const actual = getNewDay({
 					date: new Date(dateStr),
 					availableDates: df.getDaysOfMonth({ year: 2022, month: 6 }),
 				});
@@ -109,7 +110,7 @@ describe('use-calendar helpers', () => {
 		);
 
 		it('creates a selected Day', () => {
-			const actual = newDay({
+			const actual = getNewDay({
 				date: new Date('2022-07-02'),
 				availableDates: df.getDaysOfMonth({ year: 2022, month: 6 }),
 				selected: new Date('2022-07-02'),
@@ -117,6 +118,76 @@ describe('use-calendar helpers', () => {
 
 			expect(actual.isSelectable).toBe(true);
 		});
+
+		it('creates a day with events', () => {
+			const actual = getNewDay({
+				date: new Date('2022-07-17'),
+				events: [
+					{ start: new Date('2022-07-17'), meta: { title: 'Birthday Party' } },
+				],
+			});
+
+			const expected = {
+				date: new Date('2022-07-17'),
+				events: [
+					{
+						meta: { title: 'Birthday Party' },
+						start: new Date('2022-07-17'),
+					},
+				],
+				isSelectable: true,
+				isSelected: false,
+				isToday: false,
+			};
+			expect(actual).toStrictEqual(expected);
+		});
+	});
+
+	describe('getDayEvents', () => {
+		it('works with no events', () => {
+			const actual = getDayEvents({ date: new Date('2022-07-17') });
+			expect(actual).toStrictEqual([]);
+		});
+
+		it.each([
+			['2022-06-22', []],
+			['2022-07-02', [{ start: new Date('2022-07-02') }]],
+			[
+				'2022-07-02T09:00:00.000Z',
+				[{ start: new Date('2022-07-02T09:00:00.000Z') }],
+			],
+			['2022-09-12', []],
+		])(
+			'gets events for a day, single event with only a start date',
+			(dtStart, expected) => {
+				const actual = getDayEvents({
+					date: new Date('2022-07-02'),
+					events: [{ start: new Date(dtStart) }],
+				});
+
+				expect(actual).toStrictEqual(expected);
+			}
+		);
+
+		it.each([
+			['2022-06-22', '2022-07-16', []],
+			[
+				'2022-07-17',
+				'2022-07-20',
+				[{ start: new Date('2022-07-17'), end: new Date('2022-07-20') }],
+			],
+			['2022-09-12', '2022-09-13', []],
+		])(
+			'gets events for a day, single event with only a start date',
+			(dtStart, dtEnd, expected) => {
+				const actual = getDayEvents({
+					date: new Date('2022-07-17'),
+					events: [{ start: new Date(dtStart), end: new Date(dtEnd) }],
+				});
+
+				expect(actual).toStrictEqual(expected);
+			}
+		);
 	});
 
 	describe('getMinMaxDate', () => {

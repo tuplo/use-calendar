@@ -1,5 +1,5 @@
 import * as df from './date-fns';
-import type { Day, Month, UseCalendarOptions, Week } from './calhook.d';
+import type { Day, Month, UseCalendarOptions, Week, Event } from './calhook.d';
 
 type PadAdjacentMonthDaysArgs = {
 	week: Week;
@@ -36,15 +36,39 @@ export function padAdjacentMonthDays(args: PadAdjacentMonthDaysArgs) {
 	return newWeek;
 }
 
+type GetDayEventsArgs = {
+	date: Date;
+	events?: Event[];
+};
+export function getDayEvents(args: GetDayEventsArgs) {
+	const { date, events = [] } = args;
+
+	return events.filter((ev) =>
+		df.isInRange({
+			date,
+			minDate: ev.start,
+			maxDate: new Date(ev.end || ev.start),
+		})
+	);
+}
+
 type NewDayArgs = {
 	availableDates?: Date[];
 	date: Date;
-	minDate?: Date;
+	events?: Event[];
 	maxDate?: Date;
+	minDate?: Date;
 	selected?: Date;
 };
-export function newDay(args: NewDayArgs): Day {
-	const { availableDates, date, minDate, maxDate, selected } = args;
+export function getNewDay(args: NewDayArgs): Day {
+	const {
+		availableDates,
+		date,
+		events = [],
+		minDate,
+		maxDate,
+		selected,
+	} = args;
 	const today = new Date(Date.now());
 
 	let isSelectable = df.isInRange({ date, minDate, maxDate });
@@ -52,16 +76,24 @@ export function newDay(args: NewDayArgs): Day {
 		isSelectable = availableDates.findIndex((a) => df.isSameDay(date, a)) > -1;
 	}
 
-	return {
+	const day: Day = {
 		date,
-		isToday: df.isSameDay(date, today),
 		isSelectable,
 		isSelected: selected ? df.isSameDay(date, selected) : false,
+		isToday: df.isSameDay(date, today),
 	};
+
+	const dayEvents = getDayEvents({ date, events });
+	if (dayEvents.length > 0) {
+		day.events = dayEvents;
+	}
+
+	return day;
 }
 
 type GetWeekArgs = {
 	availableDates?: Date[];
+	events?: Event[];
 	firstDayOfWeek: number;
 	maxDate?: Date;
 	minDate?: Date;
@@ -72,12 +104,13 @@ type GetWeekArgs = {
 export function getWeeks(args: GetWeekArgs): Week[] {
 	const {
 		availableDates,
-		year,
-		month,
+		events,
 		firstDayOfWeek,
-		minDate,
 		maxDate,
+		minDate,
+		month,
 		selected,
+		year,
 	} = args;
 	const days = df.getDaysOfMonth({ year, month });
 
@@ -101,7 +134,7 @@ export function getWeeks(args: GetWeekArgs): Week[] {
 			weeks[currentWeekIndex] = [];
 		}
 		weeks[currentWeekIndex].push(
-			newDay({ date, minDate, maxDate, availableDates, selected })
+			getNewDay({ availableDates, date, events, maxDate, minDate, selected })
 		);
 
 		// pad first days of next month
@@ -119,6 +152,7 @@ export function getWeeks(args: GetWeekArgs): Week[] {
 
 type GetCalendarMonthArgs = {
 	availableDates?: Date[];
+	events?: Event[];
 	firstDayOfWeek: number;
 	maxDate?: Date;
 	minDate?: Date;

@@ -1,5 +1,11 @@
+export interface Event {
+	start: Date;
+	end?: Date;
+	[key: string]: unknown;
+}
 export interface Day {
 	date: Date;
+	events?: Event[];
 	isToday: boolean;
 	isSelectable: boolean;
 	isSelected: boolean;
@@ -46,6 +52,7 @@ export interface CalendarProps {
 
 export interface UseCalendarOptions {
 	availableDates: Date[];
+	events: Event[];
 	firstDayOfWeek: number;
 	minDate: Date;
 	maxDate: Date;

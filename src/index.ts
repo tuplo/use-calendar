@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import type { CalendarProps, UseCalendarOptions } from './calhook';
+import type { CalendarProps, UseCalendarOptions } from './calhook.d';
 import * as df from './date-fns';
 import { getCalendarMonth, getMinMaxDate } from './helpers';
 import { buildGetBackForwardProps, buildGetDayProps } from './props';
@@ -8,6 +8,7 @@ import { buildGetBackForwardProps, buildGetDayProps } from './props';
 export type {
 	CalendarProps,
 	Day,
+	Event,
 	GetBackForwardPropsReturns,
 	GetBackPropsFn,
 	GetDayPropsFn,
@@ -24,6 +25,7 @@ export function useCalendar(
 ): CalendarProps {
 	const {
 		availableDates,
+		events = [],
 		firstDayOfWeek = 0,
 		selectedDate,
 		onDateSelected,
@@ -38,11 +40,12 @@ export function useCalendar(
 		.map((month) =>
 			getCalendarMonth({
 				...month,
-				selected,
 				availableDates,
+				events,
 				firstDayOfWeek,
-				minDate,
 				maxDate,
+				minDate,
+				selected,
 			})
 		)
 		.filter(

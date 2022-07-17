@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+// eslint-disable @typescript-eslint/no-non-null-assertion
 import { renderHook } from '@testing-library/react';
 
 import { useCalendar } from './index';
+import type { Event } from './calhook.d';
 
 describe('calhook', () => {
 	jest.useFakeTimers().setSystemTime(new Date('2022-07-02'));
@@ -212,8 +215,34 @@ describe('calhook', () => {
 			);
 			const { current: actual } = hook.result;
 
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			expect(actual.months[0].weeks[1][0]!.isSelected).toBe(true);
 		});
+	});
+
+	describe('events', () => {
+		it.each(['2022-07-17', '2022-07-17T09:00:00.000Z'])(
+			'gets calendar with events: %s',
+			(dtStart) => {
+				interface MyEvent extends Event {
+					title: string;
+				}
+				const events: MyEvent[] = [
+					{
+						start: new Date(dtStart),
+						title: "Alice's Birthday Party",
+					},
+				];
+				const hook = renderHook(() => useCalendar({ events }));
+				const { current: actual } = hook.result;
+
+				const expected = [
+					{
+						start: new Date(dtStart),
+						title: "Alice's Birthday Party",
+					},
+				];
+				expect(actual.months[0].weeks[3][0]!.events).toStrictEqual(expected);
+			}
+		);
 	});
 });
