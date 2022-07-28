@@ -7,8 +7,7 @@
     <img src="https://img.shields.io/npm/v/@tuplo/calhook">
     <img src="https://img.shields.io/bundlephobia/minzip/@tuplo/calhook">
   	 <a href="https://codeclimate.com/github/tuplo/calhook/test_coverage">
-  	   <img src="https://api.codeclimate.com/v1/badges/a7b3c39ad40c1b1bdd6d/test_coverage">
-  	 </a>
+  	   <img src="https://api.codeclimate.com/v1/badges/6ec7eaab92666129eaad/test_coverage" /></a>
   	 <img src="https://github.com/tuplo/calhook/actions/workflows/build.yml/badge.svg">
   </p>
 </div>
