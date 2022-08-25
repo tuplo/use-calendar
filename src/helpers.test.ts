@@ -10,7 +10,13 @@ import {
 } from './helpers';
 
 describe('use-calendar helpers', () => {
-	jest.useFakeTimers().setSystemTime(new Date('2022-07-02'));
+	const dateNowSpy = jest
+		.spyOn(Date, 'now')
+		.mockReturnValue(new Date('2022-07-02').getTime());
+
+	afterAll(() => {
+		dateNowSpy.mockRestore();
+	});
 
 	describe('isValidDate', () => {
 		it.each([null, false])('handles untyped values', (d) => {

@@ -8,6 +8,14 @@ const commonProps = {
 };
 
 describe('props functions', () => {
+	const dateNowSpy = jest
+		.spyOn(Date, 'now')
+		.mockReturnValue(new Date('2022-07-02').getTime());
+
+	afterAll(() => {
+		dateNowSpy.mockRestore();
+	});
+
 	describe('buildGetDayProps', () => {
 		it.each([
 			[true, 1],
@@ -41,9 +49,6 @@ describe('props functions', () => {
 		});
 
 		describe('locale', () => {
-			const dateNowSpy = jest
-				.spyOn(Date, 'now')
-				.mockReturnValue(new Date('2022-12-25').getTime());
 			const originalNavigator = JSON.parse(JSON.stringify(global.navigator));
 
 			afterEach(() => {
@@ -51,10 +56,6 @@ describe('props functions', () => {
 					writable: true,
 					value: originalNavigator,
 				});
-			});
-
-			afterAll(() => {
-				dateNowSpy.mockRestore();
 			});
 
 			it('uses locale provided as option', () => {
@@ -67,13 +68,13 @@ describe('props functions', () => {
 				};
 				const actual = fn({ day });
 
-				const expected = '٢٥ ديسمبر ٢٠٢٢';
+				const expected = '٢ يوليو ٢٠٢٢';
 				expect(actual['aria-label']).toBe(expected);
 			});
 
 			it.each([
-				['ar', '٢٥ ديسمبر ٢٠٢٢'],
-				[undefined, 'December 25, 2022'],
+				['ar', '٢ يوليو ٢٠٢٢'],
+				[undefined, 'July 2, 2022'],
 			])('uses navigator.language as locale: %s', (language, expected) => {
 				Object.defineProperty(global.navigator, 'language', {
 					configurable: true,
@@ -107,7 +108,7 @@ describe('props functions', () => {
 				};
 				const actual = fn({ day });
 
-				const expected = 'December 25, 2022';
+				const expected = 'July 2, 2022';
 				expect(actual['aria-label']).toBe(expected);
 			});
 		});

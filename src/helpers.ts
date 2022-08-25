@@ -1,5 +1,5 @@
+import type { Day, Event, Month, UseCalendarOptions, Week } from './calhook.d';
 import * as df from './date-fns';
-import type { Day, Month, UseCalendarOptions, Week, Event } from './calhook.d';
 
 export function isValidDate(d: string | number | Date | undefined) {
 	if (d === null) return false;

@@ -6,12 +6,18 @@ import { useCalendar } from './index';
 import type { Event } from './calhook.d';
 
 describe('calhook', () => {
-	jest.useFakeTimers().setSystemTime(new Date('2022-07-02'));
+	const dateNowSpy = jest
+		.spyOn(Date, 'now')
+		.mockReturnValue(new Date('2022-07-02').getTime());
+
+	afterAll(() => {
+		dateNowSpy.mockRestore();
+	});
 
 	describe('default', () => {
 		it('returns default props', () => {
-			const hook = renderHook(() => useCalendar());
-			const { current: actual } = hook.result;
+			const { result } = renderHook(() => useCalendar());
+			const { current: actual } = result;
 
 			const expected = {
 				getDayProps: expect.any(Function),
@@ -45,13 +51,13 @@ describe('calhook', () => {
 		});
 
 		it('pads last days of last month', () => {
-			const hook = renderHook(() =>
+			const { result } = renderHook(() =>
 				useCalendar({
 					minDate: new Date('2022-07-01'),
 					maxDate: new Date('2022-07-31'),
 				})
 			);
-			const { current: actual } = hook.result;
+			const { current: actual } = result;
 
 			const expected = [
 				null,
@@ -76,13 +82,13 @@ describe('calhook', () => {
 		});
 
 		it('pads first days of next month', () => {
-			const hook = renderHook(() =>
+			const { result } = renderHook(() =>
 				useCalendar({
 					minDate: new Date('2022-07-01'),
 					maxDate: new Date('2022-07-31'),
 				})
 			);
-			const { current: actual } = hook.result;
+			const { current: actual } = result;
 
 			const expected = [
 				{
@@ -104,14 +110,14 @@ describe('calhook', () => {
 
 	describe('firstDayOfWeek', () => {
 		it('returns weeks starting', () => {
-			const hook = renderHook(() =>
+			const { result } = renderHook(() =>
 				useCalendar({
 					firstDayOfWeek: 1,
 					minDate: new Date('2022-07-01'),
 					maxDate: new Date('2022-07-31'),
 				})
 			);
-			const { current: actual } = hook.result;
+			const { current: actual } = result;
 
 			const expected = {
 				getDayProps: expect.any(Function),
@@ -144,14 +150,14 @@ describe('calhook', () => {
 		});
 
 		it('pads last days of last month', () => {
-			const hook = renderHook(() =>
+			const { result } = renderHook(() =>
 				useCalendar({
 					firstDayOfWeek: 1,
 					minDate: new Date('2022-07-01'),
 					maxDate: new Date('2022-07-31'),
 				})
 			);
-			const { current: actual } = hook.result;
+			const { current: actual } = result;
 
 			const expected = [
 				null,
@@ -181,14 +187,14 @@ describe('calhook', () => {
 		});
 
 		it('pads first days of next month', () => {
-			const hook = renderHook(() =>
+			const { result } = renderHook(() =>
 				useCalendar({
 					firstDayOfWeek: 1,
 					minDate: new Date('2022-07-01'),
 					maxDate: new Date('2022-07-31'),
 				})
 			);
-			const { current: actual } = hook.result;
+			const { current: actual } = result;
 
 			const expected = [
 				'2022-07-25',
@@ -210,25 +216,25 @@ describe('calhook', () => {
 
 	describe('with selected', () => {
 		it('returns selected date', () => {
-			const hook = renderHook(() =>
+			const { result } = renderHook(() =>
 				useCalendar({ selectedDate: new Date('2022-07-03') })
 			);
-			const { current: actual } = hook.result;
+			const { current: actual } = result;
 
 			expect(actual.months[0].weeks[1][0]!.isSelected).toBe(true);
 		});
 
 		it('handles invalid dates', () => {
 			const selectedDate = 'foobar';
-			const hook = renderHook(() => useCalendar({ selectedDate }));
-			const { current: actual } = hook.result;
+			const { result } = renderHook(() => useCalendar({ selectedDate }));
+			const { current: actual } = result;
 
 			expect(actual.months[0].weeks[1][0]!.isSelected).toBe(false);
 		});
 
 		it('still returns current month if not provided selected date', () => {
-			const hook = renderHook(() => useCalendar());
-			const { current: actual } = hook.result;
+			const { result } = renderHook(() => useCalendar());
+			const { current: actual } = result;
 
 			expect(actual.months).toHaveLength(1);
 		});
@@ -236,16 +242,29 @@ describe('calhook', () => {
 
 	describe('availableDates', () => {
 		it('handles empty list of available dates', () => {
-			const hook = renderHook(() => useCalendar({ availableDates: [] }));
-			const { current: actual } = hook.result;
+			const { result } = renderHook(() => useCalendar({ availableDates: [] }));
+			const { current: actual } = result;
 
 			expect(actual.months[0].weeks[0][5]!.isSelectable).toBe(false);
 		});
 
 		it('returns all months from now to single available date', () => {
 			const availableDates = [new Date('2022-12-25')];
-			const hook = renderHook(() => useCalendar({ availableDates }));
-			const { current: actual } = hook.result;
+			const { result } = renderHook(() => useCalendar({ availableDates }));
+			const { current: actual } = result;
+
+			expect(actual.months).toHaveLength(1);
+			expect(actual.months[0].month).toBe(6);
+		});
+
+		it('handles 60 days of available dates', () => {
+			const today = new Date();
+			const day = 24 * 60 * 60 * 1_000;
+			const availableDates = new Array(60)
+				.fill(null)
+				.map((_, i) => new Date(today.getTime() + i * day));
+			const { result } = renderHook(() => useCalendar({ availableDates }));
+			const { current: actual } = result;
 
 			expect(actual.months).toHaveLength(1);
 			expect(actual.months[0].month).toBe(6);
@@ -265,8 +284,8 @@ describe('calhook', () => {
 						title: "Alice's Birthday Party",
 					},
 				];
-				const hook = renderHook(() => useCalendar({ events }));
-				const { current: actual } = hook.result;
+				const { result } = renderHook(() => useCalendar({ events }));
+				const { current: actual } = result;
 
 				const expected = [
 					{
