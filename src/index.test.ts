@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-// eslint-disable @typescript-eslint/no-non-null-assertion
-import { renderHook } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 
 import { useCalendar } from './index';
-import type { Event } from './calhook.d';
+import type { Event, Day, GetDayPropsReturns } from './calhook.d';
 
 describe('calhook', () => {
 	const dateNowSpy = jest
@@ -23,6 +22,7 @@ describe('calhook', () => {
 				getDayProps: expect.any(Function),
 				getBackProps: expect.any(Function),
 				getForwardProps: expect.any(Function),
+				resetState: expect.any(Function),
 				months: [
 					{
 						month: 6,
@@ -123,6 +123,7 @@ describe('calhook', () => {
 				getDayProps: expect.any(Function),
 				getBackProps: expect.any(Function),
 				getForwardProps: expect.any(Function),
+				resetState: expect.any(Function),
 				months: [
 					{
 						month: 6,
@@ -296,5 +297,58 @@ describe('calhook', () => {
 				expect(actual.months[0].weeks[3][0]!.events).toStrictEqual(expected);
 			}
 		);
+	});
+
+	describe('resetState', () => {
+		it('goes back to first month', () => {
+			const { result } = renderHook(() =>
+				useCalendar({ maxDate: new Date('2022-08-31') })
+			);
+			const { getForwardProps } = result.current;
+			const button = getForwardProps();
+
+			// goes to next month
+			act(() => button.onClick());
+			expect(result.current.months[0]).toMatchObject({ month: 7, year: 2022 });
+
+			// goes back to initial month
+			const { resetState } = result.current;
+			act(() => resetState());
+			expect(result.current.months[0]).toMatchObject({ month: 6, year: 2022 });
+		});
+
+		it('goes back to selected date', () => {
+			const { result } = renderHook(() =>
+				useCalendar({ selectedDate: new Date('2022-07-10') })
+			);
+			const { getDayProps } = result.current;
+			const day: Day = {
+				date: new Date('2022-07-13'),
+				isSelected: false,
+				isSelectable: true,
+				isToday: false,
+			};
+			const button = getDayProps({ day }) as GetDayPropsReturns;
+
+			// picks a day
+			act(() => button.onClick());
+			expect(result.current.months[0].weeks[2][3]).toStrictEqual({
+				date: new Date('2022-07-13'),
+				isSelectable: true,
+				isSelected: true,
+				isToday: false,
+			});
+
+			// goes back to initial selected day
+			const { resetState } = result.current;
+			act(() => resetState());
+			expect(result.current.months[0].weeks[2][3]?.isSelected).toBe(false);
+			expect(result.current.months[0].weeks[2][0]).toStrictEqual({
+				date: new Date('2022-07-10'),
+				isSelectable: true,
+				isSelected: true,
+				isToday: false,
+			});
+		});
 	});
 });

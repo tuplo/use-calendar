@@ -1,10 +1,10 @@
-import * as df from './date-fns';
 import type {
 	Day,
+	GetBackForwardPropsReturns,
 	GetDayPropsOptions,
 	Month,
-	GetBackForwardPropsReturns,
 } from './calhook.d';
+import * as df from './date-fns';
 
 type BuildGetDayPropsArgs = {
 	setSelected: (newSelected: Date) => void;
@@ -56,7 +56,6 @@ export function buildGetBackForwardProps(args: BuildGetBackForwardPropsArgs) {
 	if (!month) return () => ({} as GetBackForwardPropsReturns);
 
 	const adjacentMonth = new Date(month.year, month.month + delta);
-
 	const monthsInRange = df.getMonthsInRange({ start: minDate, end: maxDate });
 	const disabled =
 		monthsInRange.findIndex(
@@ -64,10 +63,8 @@ export function buildGetBackForwardProps(args: BuildGetBackForwardPropsArgs) {
 				m.month === adjacentMonth.getMonth() &&
 				m.year === adjacentMonth.getFullYear()
 		) === -1;
-
 	const ariaLabel =
 		direction === 'back' ? 'Go back 1 month' : 'Go forward 1 month';
-
 	const onClick = () => {
 		if (disabled) return;
 		setVisibleMonth(adjacentMonth);

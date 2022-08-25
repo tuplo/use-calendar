@@ -49,6 +49,7 @@ export interface CalendarProps {
 	getDayProps: GetDayPropsFn;
 	getBackProps: GetBackPropsFn;
 	getForwardProps: GetForwardPropsFn;
+	resetState: () => void;
 }
 
 export interface UseCalendarOptions {

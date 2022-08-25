@@ -1,10 +1,12 @@
 import '@testing-library/jest-dom';
 import { act, render, screen } from '@testing-library/react';
-import user from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 
 import Calendar from './index';
 
 describe('useCalendar UI', () => {
+	const user = userEvent.setup();
+
 	it('renders', () => {
 		const { container } = render(<Calendar />);
 
@@ -49,10 +51,7 @@ describe('useCalendar UI', () => {
 					availableDates={availableDates}
 				/>
 			);
-
-			await act(async () => {
-				await user.click(screen.getByText('25'));
-			});
+			await user.click(screen.getByText('25'));
 
 			expect(onDateSelectedSpy).toHaveBeenCalledTimes(0);
 		});

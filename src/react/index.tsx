@@ -1,6 +1,7 @@
-import { useCalendar, type UseCalendarOptions } from '../index';
+import { useCalendar } from '../index';
+import type { UseCalendarOptions } from '../index';
 
-export default function Calendar(props?: Partial<UseCalendarOptions>) {
+function Calendar(props?: Partial<UseCalendarOptions>) {
 	const { months, getDayProps, getBackProps, getForwardProps } =
 		useCalendar(props);
 
@@ -36,3 +37,5 @@ export default function Calendar(props?: Partial<UseCalendarOptions>) {
 		</>
 	);
 }
+
+export default Calendar;

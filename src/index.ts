@@ -66,5 +66,10 @@ export function useCalendar(
 		})
 	);
 
-	return { months, getDayProps, getBackProps, getForwardProps };
+	const resetState = () => {
+		setSelected(getValidDate(selectedDate));
+		setVisibleMonth(new Date(Date.now()));
+	};
+
+	return { months, getDayProps, getBackProps, getForwardProps, resetState };
 }
