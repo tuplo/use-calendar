@@ -1,22 +1,22 @@
-import type { Month } from './calhook';
-import { buildGetBackForwardProps, buildGetDayProps } from './props';
+import type { IMonth } from "./use-calendar";
+import { buildGetBackForwardProps, buildGetDayProps } from "./props";
 
 const commonProps = {
-	role: 'button',
-	type: 'button',
+	role: "button",
+	type: "button",
 	onClick: expect.any(Function),
 };
 
-describe('props functions', () => {
+describe("props functions", () => {
 	const dateNowSpy = jest
-		.spyOn(Date, 'now')
-		.mockReturnValue(new Date('2022-07-02').getTime());
+		.spyOn(Date, "now")
+		.mockReturnValue(new Date("2022-07-02").getTime());
 
 	afterAll(() => {
 		dateNowSpy.mockRestore();
 	});
 
-	describe('buildGetDayProps', () => {
+	describe("buildGetDayProps", () => {
 		it.each([
 			[true, 1],
 			[false, 0],
@@ -38,7 +38,7 @@ describe('props functions', () => {
 			}
 		);
 
-		it('null day', () => {
+		it("null day", () => {
 			const setSelectedSpy = jest.fn();
 			const fn = buildGetDayProps({ setSelected: setSelectedSpy });
 			const actual = fn({ day: null });
@@ -48,18 +48,18 @@ describe('props functions', () => {
 			expect(setSelectedSpy).toHaveBeenCalledTimes(0);
 		});
 
-		describe('locale', () => {
+		describe("locale", () => {
 			const originalNavigator = JSON.parse(JSON.stringify(global.navigator));
 
 			afterEach(() => {
-				Object.defineProperty(global, 'navigator', {
+				Object.defineProperty(global, "navigator", {
 					writable: true,
 					value: originalNavigator,
 				});
 			});
 
-			it('uses locale provided as option', () => {
-				const fn = buildGetDayProps({ setSelected: jest.fn(), locale: 'ar' });
+			it("uses locale provided as option", () => {
+				const fn = buildGetDayProps({ setSelected: jest.fn(), locale: "ar" });
 				const day = {
 					date: new Date(Date.now()),
 					isToday: false,
@@ -68,15 +68,15 @@ describe('props functions', () => {
 				};
 				const actual = fn({ day });
 
-				const expected = '٢ يوليو ٢٠٢٢';
-				expect(actual['aria-label']).toBe(expected);
+				const expected = "٢ يوليو ٢٠٢٢";
+				expect(actual["aria-label"]).toBe(expected);
 			});
 
 			it.each([
-				['ar', '٢ يوليو ٢٠٢٢'],
-				[undefined, 'July 2, 2022'],
-			])('uses navigator.language as locale: %s', (language, expected) => {
-				Object.defineProperty(global.navigator, 'language', {
+				["ar", "٢ يوليو ٢٠٢٢"],
+				[undefined, "July 2, 2022"],
+			])("uses navigator.language as locale: %s", (language, expected) => {
+				Object.defineProperty(global.navigator, "language", {
 					configurable: true,
 					writable: false,
 					value: language,
@@ -90,11 +90,11 @@ describe('props functions', () => {
 				};
 				const actual = fn({ day });
 
-				expect(actual['aria-label']).toBe(expected);
+				expect(actual["aria-label"]).toBe(expected);
 			});
 
-			it('still works when not on browser(?): defaults to en', () => {
-				Object.defineProperty(global, 'navigator', {
+			it("still works when not on browser(?): defaults to en", () => {
+				Object.defineProperty(global, "navigator", {
 					value: undefined,
 					writable: true,
 				});
@@ -108,13 +108,13 @@ describe('props functions', () => {
 				};
 				const actual = fn({ day });
 
-				const expected = 'July 2, 2022';
-				expect(actual['aria-label']).toBe(expected);
+				const expected = "July 2, 2022";
+				expect(actual["aria-label"]).toBe(expected);
 			});
 		});
 
-		describe('onDateSelected', () => {
-			it('when a callback is provided, call it on click', () => {
+		describe("onDateSelected", () => {
+			it("when a callback is provided, call it on click", () => {
 				const onDateSelectedSpy = jest.fn();
 				const fn = buildGetDayProps({
 					setSelected: jest.fn(),
@@ -134,11 +134,11 @@ describe('props functions', () => {
 		});
 	});
 
-	describe('getBackProps', () => {
-		it('builds gets back props function', () => {
-			const months = [{ month: 6, year: 2022 }] as Month[];
+	describe("getBackProps", () => {
+		it("builds gets back props function", () => {
+			const months = [{ month: 6, year: 2022 }] as IMonth[];
 			const fn = buildGetBackForwardProps({
-				direction: 'back',
+				direction: "back",
 				months,
 				minDate: new Date(2022, 5, 1),
 				setVisibleMonth: jest.fn(),
@@ -147,16 +147,16 @@ describe('props functions', () => {
 
 			const expected = {
 				...commonProps,
-				'aria-label': 'Go back 1 month',
+				"aria-label": "Go back 1 month",
 				disabled: false,
 			};
 			expect(actual).toStrictEqual(expected);
 		});
 
-		it('disabled back button', () => {
-			const months = [{ month: 6, year: 2022 }] as Month[];
+		it("disabled back button", () => {
+			const months = [{ month: 6, year: 2022 }] as IMonth[];
 			const fn = buildGetBackForwardProps({
-				direction: 'back',
+				direction: "back",
 				months,
 				minDate: new Date(2022, 6, 1),
 				setVisibleMonth: jest.fn(),
@@ -166,10 +166,10 @@ describe('props functions', () => {
 			expect(actual.disabled).toBe(true);
 		});
 
-		it('handles empty list of months', () => {
-			const months: Month[] = [];
+		it("handles empty list of months", () => {
+			const months: IMonth[] = [];
 			const fn = buildGetBackForwardProps({
-				direction: 'back',
+				direction: "back",
 				months,
 				minDate: new Date(2022, 5, 1),
 				setVisibleMonth: jest.fn(),
@@ -181,11 +181,11 @@ describe('props functions', () => {
 		});
 	});
 
-	describe('getForwardProps', () => {
-		it('builds gets back props function', () => {
-			const months = [{ month: 6, year: 2022 }] as Month[];
+	describe("getForwardProps", () => {
+		it("builds gets back props function", () => {
+			const months = [{ month: 6, year: 2022 }] as IMonth[];
 			const fn = buildGetBackForwardProps({
-				direction: 'forward',
+				direction: "forward",
 				months,
 				maxDate: new Date(2022, 7, 1),
 				setVisibleMonth: jest.fn(),
@@ -194,16 +194,16 @@ describe('props functions', () => {
 
 			const expected = {
 				...commonProps,
-				'aria-label': 'Go forward 1 month',
+				"aria-label": "Go forward 1 month",
 				disabled: false,
 			};
 			expect(actual).toStrictEqual(expected);
 		});
 
-		it('disabled forward button', () => {
-			const months = [{ month: 6, year: 2022 }] as Month[];
+		it("disabled forward button", () => {
+			const months = [{ month: 6, year: 2022 }] as IMonth[];
 			const fn = buildGetBackForwardProps({
-				direction: 'forward',
+				direction: "forward",
 				months,
 				maxDate: new Date(2022, 6, 31),
 				setVisibleMonth: jest.fn(),
@@ -214,15 +214,15 @@ describe('props functions', () => {
 		});
 	});
 
-	describe('onClick', () => {
+	describe("onClick", () => {
 		it.each([
-			['back', '2022-06-01'],
-			['forward', '2022-08-01'],
+			["back", "2022-06-01"],
+			["forward", "2022-08-01"],
 		])(
-			'when clicking %s, set month as visible',
+			"when clicking %s, set month as visible",
 			(direction, expectedDateStr) => {
 				const setVisibleMonthSpy = jest.fn();
-				const months = [{ month: 6, year: 2022 }] as Month[];
+				const months = [{ month: 6, year: 2022 }] as IMonth[];
 				const fn = buildGetBackForwardProps({
 					direction,
 					months,
@@ -239,11 +239,11 @@ describe('props functions', () => {
 			}
 		);
 
-		it.each([['back'], ['forward']])(
-			'when clicking disabled %s, do nothing',
+		it.each([["back"], ["forward"]])(
+			"when clicking disabled %s, do nothing",
 			(direction) => {
 				const setVisibleMonthSpy = jest.fn();
-				const months = [{ month: 6, year: 2022 }] as Month[];
+				const months = [{ month: 6, year: 2022 }] as IMonth[];
 				const fn = buildGetBackForwardProps({
 					direction,
 					months,

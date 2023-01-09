@@ -1,21 +1,21 @@
+import * as df from "./date-fns";
 import type {
-	Day,
-	GetBackForwardPropsReturns,
-	GetDayPropsOptions,
-	Month,
-} from './calhook.d';
-import * as df from './date-fns';
+	IDay,
+	IGetBackForwardPropsReturns,
+	IGetDayPropsOptions,
+	IMonth,
+} from "./use-calendar.d";
 
-type BuildGetDayPropsArgs = {
+interface IBuildGetDayPropsArgs {
 	setSelected: (newSelected: Date) => void;
-	onDateSelected?: (day: Day) => void;
+	onDateSelected?: (day: IDay) => void;
 	locale?: string;
-};
+}
 
-export function buildGetDayProps(args: BuildGetDayPropsArgs) {
+export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 	const { setSelected, onDateSelected } = args;
 
-	return (options: GetDayPropsOptions) => {
+	return (options: IGetDayPropsOptions) => {
 		const { day } = options;
 		if (!day) {
 			return {
@@ -23,12 +23,12 @@ export function buildGetDayProps(args: BuildGetDayPropsArgs) {
 			};
 		}
 
-		const locale = args.locale || navigator?.language || 'en';
-		const dtf = new Intl.DateTimeFormat(locale, { dateStyle: 'long' });
+		const locale = args.locale || navigator?.language || "en";
+		const dtf = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
 
 		return {
-			'aria-label': dtf.format(new Date(day.date)),
-			role: 'button',
+			"aria-label": dtf.format(new Date(day.date)),
+			role: "button",
 			onClick: () => {
 				const { isSelectable } = day;
 				if (!isSelectable) return;
@@ -40,20 +40,20 @@ export function buildGetDayProps(args: BuildGetDayPropsArgs) {
 	};
 }
 
-type BuildGetBackForwardPropsArgs = {
+interface IBuildGetBackForwardPropsArgs {
 	direction: string;
-	months: Month[];
+	months: IMonth[];
 	minDate?: Date;
 	maxDate?: Date;
 	setVisibleMonth: (newVisibleMonth: Date) => void;
-};
+}
 
-export function buildGetBackForwardProps(args: BuildGetBackForwardPropsArgs) {
+export function buildGetBackForwardProps(args: IBuildGetBackForwardPropsArgs) {
 	const { months, minDate, maxDate, direction, setVisibleMonth } = args;
 	const { 0: firstMonth, length, [length - 1]: lastMonth } = months;
-	const month = direction === 'back' ? firstMonth : lastMonth;
-	const delta = direction === 'back' ? -1 : 1;
-	if (!month) return () => ({} as GetBackForwardPropsReturns);
+	const month = direction === "back" ? firstMonth : lastMonth;
+	const delta = direction === "back" ? -1 : 1;
+	if (!month) return () => ({} as IGetBackForwardPropsReturns);
 
 	const adjacentMonth = new Date(month.year, month.month + delta);
 	const monthsInRange = df.getMonthsInRange({ start: minDate, end: maxDate });
@@ -64,7 +64,7 @@ export function buildGetBackForwardProps(args: BuildGetBackForwardPropsArgs) {
 				m.year === adjacentMonth.getFullYear()
 		) === -1;
 	const ariaLabel =
-		direction === 'back' ? 'Go back 1 month' : 'Go forward 1 month';
+		direction === "back" ? "Go back 1 month" : "Go forward 1 month";
 	const onClick = () => {
 		if (disabled) return;
 		setVisibleMonth(adjacentMonth);
@@ -72,9 +72,9 @@ export function buildGetBackForwardProps(args: BuildGetBackForwardPropsArgs) {
 
 	return () => ({
 		disabled,
-		role: 'button',
-		type: 'button' as const,
-		'aria-label': ariaLabel,
+		role: "button",
+		type: "button" as const,
+		"aria-label": ariaLabel,
 		onClick,
 	});
 }

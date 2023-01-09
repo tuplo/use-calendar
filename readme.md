@@ -1,14 +1,12 @@
 <br />
 <div align="center">
   <img src="logo.png" alt="Logo" width="120" height="120">
-  <h1 align="center">calhook</h3>
+  <h1 align="center">use-calendar</h3>
   <p align="center">Headless calendar hook for React</p>
   <p align="center">
-    <img src="https://img.shields.io/npm/v/@tuplo/calhook">
-    <img src="https://img.shields.io/bundlephobia/minzip/@tuplo/calhook">
-  	 <a href="https://codeclimate.com/github/tuplo/calhook/test_coverage">
-  	   <img src="https://api.codeclimate.com/v1/badges/6ec7eaab92666129eaad/test_coverage" /></a>
-  	 <img src="https://github.com/tuplo/calhook/actions/workflows/build.yml/badge.svg">
+    <img src="https://img.shields.io/npm/v/@tuplo/use-calendar">
+    <img src="https://img.shields.io/bundlephobia/minzip/@tuplo/use-calendar">
+  	 <a href="https://codeclimate.com/github/tuplo/use-calendar/test_coverage"><img src="https://api.codeclimate.com/v1/badges/950de43b7d3e5b4b84c7/test_coverage" /></a>
   </p>
 </div>
 
@@ -23,10 +21,10 @@ Other similar solutions were a bit too heavy on dependencies or didn't support a
 ## Install
 
 ```bash
-$ npm install @tuplo/calhook
+$ npm install @tuplo/use-calendar
 
 # or with yarn
-$ yarn add @tuplo/calhook
+$ yarn add @tuplo/use-calendar
 ```
 
 ## Usage
@@ -34,7 +32,7 @@ $ yarn add @tuplo/calhook
 Minimal example
 
 ```jsx
-import { useCalendar } from '@tuplo/calhook'
+import { useCalendar } from '@tuplo/use-calendar'
 
 function Calendar() {
   const {

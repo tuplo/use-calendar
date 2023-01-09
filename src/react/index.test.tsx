@@ -1,37 +1,37 @@
-import '@testing-library/jest-dom';
-import { act, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import "@testing-library/jest-dom";
+import { act, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
-import Calendar from './index';
+import Calendar from "./index";
 
-describe('useCalendar UI', () => {
+describe("useCalendar UI", () => {
 	const user = userEvent.setup();
 
-	it('renders', () => {
+	it("renders", () => {
 		const { container } = render(<Calendar />);
 
 		expect(container).toMatchSnapshot();
-		expect(screen.getByText('6 2022')).toBeInTheDocument();
+		expect(screen.getByText("6 2022")).toBeInTheDocument();
 	});
 
-	describe('onDateSelected', () => {
+	describe("onDateSelected", () => {
 		const dateNowSpy = jest
-			.spyOn(Date, 'now')
-			.mockReturnValue(new Date('2022-07-25').getTime());
+			.spyOn(Date, "now")
+			.mockReturnValue(new Date("2022-07-25").getTime());
 
 		afterAll(() => {
 			dateNowSpy.mockRestore();
 		});
 
-		it('calls provided handler when user clicks day', async () => {
+		it("calls provided handler when user clicks day", async () => {
 			const onDateSelectedSpy = jest.fn();
 			render(<Calendar onDateSelected={onDateSelectedSpy} />);
 			await act(async () => {
-				await user.click(screen.getByText('12'));
+				await user.click(screen.getByText("12"));
 			});
 
 			const expected = {
-				date: new Date('2022-07-12T00:00:00.000Z'),
+				date: new Date("2022-07-12T00:00:00.000Z"),
 				isSelectable: true,
 				isSelected: false,
 				isToday: false,
@@ -51,7 +51,7 @@ describe('useCalendar UI', () => {
 					availableDates={availableDates}
 				/>
 			);
-			await user.click(screen.getByText('25'));
+			await user.click(screen.getByText("25"));
 
 			expect(onDateSelectedSpy).toHaveBeenCalledTimes(0);
 		});

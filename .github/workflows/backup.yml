@@ -13,4 +13,4 @@ jobs:
         with:
           bitbucket_app_user: ${{ secrets.BACKUP_APP_USER }}
           bitbucket_app_password: ${{ secrets.BACKUP_APP_PASSWORD }}
-          target_repo: tuplo/calhook
+          target_repo: tuplo/use-calendar

@@ -1,28 +1,28 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import type { CalendarProps, UseCalendarOptions } from './calhook.d';
-import * as df from './date-fns';
-import { getCalendarMonth, getMinMaxDate, getValidDate } from './helpers';
-import { buildGetBackForwardProps, buildGetDayProps } from './props';
+import * as df from "./date-fns";
+import { getCalendarMonth, getMinMaxDate, getValidDate } from "./helpers";
+import { buildGetBackForwardProps, buildGetDayProps } from "./props";
+import type { ICalendarProps, IUseCalendarOptions } from "./use-calendar";
 
 export type {
-	CalendarProps,
-	Day,
-	Event,
-	GetBackForwardPropsReturns,
-	GetBackPropsFn,
-	GetDayPropsFn,
-	GetDayPropsOptions,
-	GetDayPropsReturns,
-	GetForwardPropsFn,
-	Month,
-	UseCalendarOptions,
-	Week,
-} from './calhook.d';
+	ICalendarProps,
+	IDay,
+	IEvent,
+	IGetBackForwardPropsReturns,
+	IGetBackPropsFn,
+	IGetDayPropsFn,
+	IGetDayPropsOptions,
+	IGetDayPropsReturns,
+	IGetForwardPropsFn,
+	IMonth,
+	IUseCalendarOptions,
+	IWeek,
+} from "./use-calendar.d";
 
 export function useCalendar(
-	options?: Partial<UseCalendarOptions>
-): CalendarProps {
+	options?: Partial<IUseCalendarOptions>
+): ICalendarProps {
 	const {
 		availableDates,
 		events = [],
@@ -56,7 +56,7 @@ export function useCalendar(
 
 	const getDayProps = buildGetDayProps({ setSelected, onDateSelected });
 
-	const [getBackProps, getForwardProps] = ['back', 'forward'].map((direction) =>
+	const [getBackProps, getForwardProps] = ["back", "forward"].map((direction) =>
 		buildGetBackForwardProps({
 			direction,
 			months,

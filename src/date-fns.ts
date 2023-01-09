@@ -1,11 +1,12 @@
-type GetDateFromArgs = {
+interface IGetDateFromArgs {
 	date: Date;
 	days?: number;
 	weeks?: number;
 	months?: number;
 	years?: number;
-};
-export function getDateFrom(args: GetDateFromArgs) {
+}
+
+export function getDateFrom(args: IGetDateFromArgs) {
 	const { date, days, weeks, months, years } = args;
 
 	let d = days || 0;
@@ -56,11 +57,12 @@ export function isFirstDayOfMonth(date: Date) {
 	return date.getDate() === 1;
 }
 
-type GetDaysOfMonthArgs = {
+interface IGetDaysOfMonthArgs {
 	year: number;
 	month: number;
-};
-export function getDaysOfMonth(args: GetDaysOfMonthArgs) {
+}
+
+export function getDaysOfMonth(args: IGetDaysOfMonthArgs) {
 	const { year, month } = args;
 	let date = new Date(year, month, 1);
 
@@ -73,8 +75,12 @@ export function getDaysOfMonth(args: GetDaysOfMonthArgs) {
 	return days;
 }
 
-type GetMonthsInRangeArgs = { start?: Date; end?: Date };
-export function getMonthsInRange(args: GetMonthsInRangeArgs) {
+interface IGetMonthsInRangeArgs {
+	start?: Date;
+	end?: Date;
+}
+
+export function getMonthsInRange(args: IGetMonthsInRangeArgs) {
 	const { start = new Date(Date.now()), end = new Date(Date.now()) } = args;
 	const months = [];
 
@@ -106,8 +112,13 @@ export function getLastDayOfMonth(date: Date = new Date(Date.now())) {
 	return new Date(year, month + 1, 0);
 }
 
-type IsInRangeArgs = { date: Date; minDate?: Date; maxDate?: Date };
-export function isInRange(args: IsInRangeArgs) {
+interface IIsInRangeArgs {
+	date: Date;
+	minDate?: Date;
+	maxDate?: Date;
+}
+
+export function isInRange(args: IIsInRangeArgs) {
 	const {
 		date,
 		minDate = new Date(Date.now()),

@@ -1,29 +1,36 @@
-import type { Day, Event, Month, UseCalendarOptions, Week } from './calhook.d';
-import * as df from './date-fns';
+import * as df from "./date-fns";
+import type {
+	IDay,
+	IEvent,
+	IMonth,
+	IUseCalendarOptions,
+	IWeek,
+} from "./use-calendar.d";
 
 export function isValidDate(d: string | number | Date | undefined) {
 	if (d === null) return false;
-	if (typeof d === 'boolean') return false;
-	if (typeof d === 'undefined') return false;
-	if (typeof d === 'string') return /^\d{4}-\d{2}-\d{2}/.test(d);
+	if (typeof d === "boolean") return false;
+	if (typeof d === "undefined") return false;
+	if (typeof d === "string") return /^\d{4}-\d{2}-\d{2}/.test(d);
 
 	const dd = new Date(d);
 	return dd instanceof Date && !Number.isNaN(dd);
 }
 
 export function getValidDate(d: string | number | Date | undefined) {
-	if (typeof d === 'undefined') return undefined;
+	if (typeof d === "undefined") return undefined;
 	if (!isValidDate(d)) return undefined;
 
 	return new Date(d);
 }
 
-type PadAdjacentMonthDaysArgs = {
-	week: Week;
+interface IPadAdjacentMonthDaysArgs {
+	week: IWeek;
 	firstDayOfWeek: number;
 	date: Date;
-};
-export function padAdjacentMonthDays(args: PadAdjacentMonthDaysArgs) {
+}
+
+export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
 	const { week, firstDayOfWeek, date } = args;
 	const isFirstDayOfMonth = df.isFirstDayOfMonth(date);
 	const isLastDayOfMonth = df.isLastDayOfMonth(date);
@@ -53,11 +60,12 @@ export function padAdjacentMonthDays(args: PadAdjacentMonthDaysArgs) {
 	return newWeek;
 }
 
-type GetDayEventsArgs = {
+interface IGetDayEventsArgs {
 	date: Date;
-	events?: Event[];
-};
-export function getDayEvents(args: GetDayEventsArgs) {
+	events?: IEvent[];
+}
+
+export function getDayEvents(args: IGetDayEventsArgs) {
 	const { date, events = [] } = args;
 
 	return events.filter((ev) =>
@@ -69,15 +77,16 @@ export function getDayEvents(args: GetDayEventsArgs) {
 	);
 }
 
-type NewDayArgs = {
+interface INewDayArgs {
 	availableDates?: Date[];
 	date: Date;
-	events?: Event[];
+	events?: IEvent[];
 	maxDate?: Date;
 	minDate?: Date;
 	selected?: Date;
-};
-export function getNewDay(args: NewDayArgs): Day {
+}
+
+export function getNewDay(args: INewDayArgs): IDay {
 	const {
 		availableDates,
 		date,
@@ -93,7 +102,7 @@ export function getNewDay(args: NewDayArgs): Day {
 		isSelectable = availableDates.findIndex((a) => df.isSameDay(date, a)) > -1;
 	}
 
-	const day: Day = {
+	const day: IDay = {
 		date,
 		isSelectable,
 		isSelected: selected ? df.isSameDay(date, selected) : false,
@@ -108,17 +117,18 @@ export function getNewDay(args: NewDayArgs): Day {
 	return day;
 }
 
-type GetWeekArgs = {
+interface IGetWeekArgs {
 	availableDates?: Date[];
-	events?: Event[];
+	events?: IEvent[];
 	firstDayOfWeek: number;
 	maxDate?: Date;
 	minDate?: Date;
 	month: number;
 	selected?: Date;
 	year: number;
-};
-export function getWeeks(args: GetWeekArgs): Week[] {
+}
+
+export function getWeeks(args: IGetWeekArgs): IWeek[] {
 	const {
 		availableDates,
 		events,
@@ -132,7 +142,7 @@ export function getWeeks(args: GetWeekArgs): Week[] {
 	const days = df.getDaysOfMonth({ year, month });
 
 	let currentWeekIndex = 0;
-	const weeks: Week[] = [];
+	const weeks: IWeek[] = [];
 	for (const date of days) {
 		weeks[currentWeekIndex] = weeks[currentWeekIndex] || [];
 		const weekDay = date.getDay();
@@ -167,24 +177,25 @@ export function getWeeks(args: GetWeekArgs): Week[] {
 	return weeks;
 }
 
-type GetCalendarMonthArgs = {
+interface IGetCalendarMonthArgs {
 	availableDates?: Date[];
-	events?: Event[];
+	events?: IEvent[];
 	firstDayOfWeek: number;
 	maxDate?: Date;
 	minDate?: Date;
 	month: number;
 	selected?: Date;
 	year: number;
-};
-export function getCalendarMonth(args: GetCalendarMonthArgs): Month {
+}
+
+export function getCalendarMonth(args: IGetCalendarMonthArgs): IMonth {
 	const { month, year } = args;
 	const weeks = getWeeks(args);
 
 	return { weeks, month, year };
 }
 
-export function getMinMaxDate(options?: Partial<UseCalendarOptions>) {
+export function getMinMaxDate(options?: Partial<IUseCalendarOptions>) {
 	const {
 		availableDates,
 		minDate,

@@ -1,7 +1,7 @@
-import { useCalendar } from '../index';
-import type { UseCalendarOptions } from '../index';
+import type { IUseCalendarOptions } from "../index";
+import { useCalendar } from "../index";
 
-function Calendar(props?: Partial<UseCalendarOptions>) {
+function Calendar(props?: Partial<IUseCalendarOptions>) {
 	const { months, getDayProps, getBackProps, getForwardProps } =
 		useCalendar(props);
 
