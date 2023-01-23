@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { renderHook, act } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
+import { vi } from "vitest";
 
 import { useCalendar } from "./index";
-import type { IEvent, IDay, IGetDayPropsReturns } from "./use-calendar";
+import type { IDay, IEvent, IGetDayPropsReturns } from "./use-calendar";
 
 describe("use-calendar", () => {
-	const dateNowSpy = jest
+	const dateNowSpy = vi
 		.spyOn(Date, "now")
 		.mockReturnValue(new Date("2022-07-02").getTime());
 

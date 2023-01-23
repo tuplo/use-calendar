@@ -1,3 +1,5 @@
+import { vi } from "vitest";
+
 import * as df from "./date-fns";
 import {
 	getDayEvents,
@@ -10,7 +12,7 @@ import {
 } from "./helpers";
 
 describe("use-calendar helpers", () => {
-	const dateNowSpy = jest
+	const dateNowSpy = vi
 		.spyOn(Date, "now")
 		.mockReturnValue(new Date("2022-07-02").getTime());
 

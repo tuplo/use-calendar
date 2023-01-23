@@ -1,5 +1,7 @@
-import type { IMonth } from "./use-calendar";
+import { vi } from "vitest";
+
 import { buildGetBackForwardProps, buildGetDayProps } from "./props";
+import type { IMonth } from "./use-calendar";
 
 const commonProps = {
 	role: "button",
@@ -8,7 +10,7 @@ const commonProps = {
 };
 
 describe("props functions", () => {
-	const dateNowSpy = jest
+	const dateNowSpy = vi
 		.spyOn(Date, "now")
 		.mockReturnValue(new Date("2022-07-02").getTime());
 
@@ -23,7 +25,7 @@ describe("props functions", () => {
 		])(
 			"calls/doesn't setSelected when day is selectable: %s",
 			(isSelectable, expected) => {
-				const setSelectedSpy = jest.fn();
+				const setSelectedSpy = vi.fn();
 				const fn = buildGetDayProps({ setSelected: setSelectedSpy });
 				const day = {
 					date: new Date(Date.now()),
@@ -39,7 +41,7 @@ describe("props functions", () => {
 		);
 
 		it("null day", () => {
-			const setSelectedSpy = jest.fn();
+			const setSelectedSpy = vi.fn();
 			const fn = buildGetDayProps({ setSelected: setSelectedSpy });
 			const actual = fn({ day: null });
 
@@ -59,7 +61,7 @@ describe("props functions", () => {
 			});
 
 			it("uses locale provided as option", () => {
-				const fn = buildGetDayProps({ setSelected: jest.fn(), locale: "ar" });
+				const fn = buildGetDayProps({ setSelected: vi.fn(), locale: "ar" });
 				const day = {
 					date: new Date(Date.now()),
 					isToday: false,
@@ -81,7 +83,7 @@ describe("props functions", () => {
 					writable: false,
 					value: language,
 				});
-				const fn = buildGetDayProps({ setSelected: jest.fn() });
+				const fn = buildGetDayProps({ setSelected: vi.fn() });
 				const day = {
 					date: new Date(Date.now()),
 					isToday: false,
@@ -99,7 +101,7 @@ describe("props functions", () => {
 					writable: true,
 				});
 
-				const fn = buildGetDayProps({ setSelected: jest.fn() });
+				const fn = buildGetDayProps({ setSelected: vi.fn() });
 				const day = {
 					date: new Date(Date.now()),
 					isToday: false,
@@ -115,9 +117,9 @@ describe("props functions", () => {
 
 		describe("onDateSelected", () => {
 			it("when a callback is provided, call it on click", () => {
-				const onDateSelectedSpy = jest.fn();
+				const onDateSelectedSpy = vi.fn();
 				const fn = buildGetDayProps({
-					setSelected: jest.fn(),
+					setSelected: vi.fn(),
 					onDateSelected: onDateSelectedSpy,
 				});
 				const day = {
@@ -141,7 +143,7 @@ describe("props functions", () => {
 				direction: "back",
 				months,
 				minDate: new Date(2022, 5, 1),
-				setVisibleMonth: jest.fn(),
+				setVisibleMonth: vi.fn(),
 			});
 			const actual = fn();
 
@@ -159,7 +161,7 @@ describe("props functions", () => {
 				direction: "back",
 				months,
 				minDate: new Date(2022, 6, 1),
-				setVisibleMonth: jest.fn(),
+				setVisibleMonth: vi.fn(),
 			});
 			const actual = fn();
 
@@ -172,7 +174,7 @@ describe("props functions", () => {
 				direction: "back",
 				months,
 				minDate: new Date(2022, 5, 1),
-				setVisibleMonth: jest.fn(),
+				setVisibleMonth: vi.fn(),
 			});
 			const actual = fn();
 
@@ -188,7 +190,7 @@ describe("props functions", () => {
 				direction: "forward",
 				months,
 				maxDate: new Date(2022, 7, 1),
-				setVisibleMonth: jest.fn(),
+				setVisibleMonth: vi.fn(),
 			});
 			const actual = fn();
 
@@ -206,7 +208,7 @@ describe("props functions", () => {
 				direction: "forward",
 				months,
 				maxDate: new Date(2022, 6, 31),
-				setVisibleMonth: jest.fn(),
+				setVisibleMonth: vi.fn(),
 			});
 			const actual = fn();
 
@@ -221,7 +223,7 @@ describe("props functions", () => {
 		])(
 			"when clicking %s, set month as visible",
 			(direction, expectedDateStr) => {
-				const setVisibleMonthSpy = jest.fn();
+				const setVisibleMonthSpy = vi.fn();
 				const months = [{ month: 6, year: 2022 }] as IMonth[];
 				const fn = buildGetBackForwardProps({
 					direction,
@@ -242,7 +244,7 @@ describe("props functions", () => {
 		it.each([["back"], ["forward"]])(
 			"when clicking disabled %s, do nothing",
 			(direction) => {
-				const setVisibleMonthSpy = jest.fn();
+				const setVisibleMonthSpy = vi.fn();
 				const months = [{ month: 6, year: 2022 }] as IMonth[];
 				const fn = buildGetBackForwardProps({
 					direction,

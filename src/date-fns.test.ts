@@ -1,4 +1,5 @@
-/* eslint-disable jest/no-conditional-in-test */
+import { vi } from "vitest";
+
 import * as df from "./date-fns";
 
 describe("date-fns", () => {
@@ -34,8 +35,9 @@ describe("date-fns", () => {
 
 	describe("getFirstDayOfMonth", () => {
 		it("returns the first day of the month: current month", () => {
-			jest.useFakeTimers().setSystemTime(new Date("2022-07-11"));
+			vi.useFakeTimers().setSystemTime(new Date("2022-07-11"));
 			const actual = df.getFirstDayOfMonth();
+
 			const expected = new Date("2022-07-01");
 			expect(actual).toStrictEqual(expected);
 		});
@@ -49,8 +51,9 @@ describe("date-fns", () => {
 
 	describe("getLastDayOfMonth", () => {
 		it("returns the last day of the month: current month", () => {
-			jest.useFakeTimers().setSystemTime(new Date("2022-07-11"));
+			vi.useFakeTimers().setSystemTime(new Date("2022-07-11"));
 			const actual = df.getLastDayOfMonth();
+
 			const expected = new Date("2022-07-31");
 			expect(actual).toStrictEqual(expected);
 		});
@@ -78,12 +81,13 @@ describe("date-fns", () => {
 			["2022-08-12", undefined, "2022-07-31", false],
 			["2022-08-12", "2022-07-01", "2022-07-31", false],
 		])("is in range: %s", (dateStr, minDate, maxDate, expected) => {
-			jest.useFakeTimers().setSystemTime(new Date("2022-07-02"));
+			vi.useFakeTimers().setSystemTime(new Date("2022-07-02"));
 			const actual = df.isInRange({
 				date: new Date(dateStr),
 				minDate: minDate ? new Date(minDate) : undefined,
 				maxDate: maxDate ? new Date(maxDate) : undefined,
 			});
+
 			expect(actual).toBe(expected);
 		});
 	});

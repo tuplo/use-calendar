@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom";
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
 
 import Calendar from "./index";
 
@@ -15,7 +16,7 @@ describe("useCalendar UI", () => {
 	});
 
 	describe("onDateSelected", () => {
-		const dateNowSpy = jest
+		const dateNowSpy = vi
 			.spyOn(Date, "now")
 			.mockReturnValue(new Date("2022-07-25").getTime());
 
@@ -24,7 +25,7 @@ describe("useCalendar UI", () => {
 		});
 
 		it("calls provided handler when user clicks day", async () => {
-			const onDateSelectedSpy = jest.fn();
+			const onDateSelectedSpy = vi.fn();
 			render(<Calendar onDateSelected={onDateSelectedSpy} />);
 			await act(async () => {
 				await user.click(screen.getByText("12"));
@@ -41,7 +42,7 @@ describe("useCalendar UI", () => {
 		});
 
 		it("doesn't call when user clicks not available dates", async () => {
-			const onDateSelectedSpy = jest.fn();
+			const onDateSelectedSpy = vi.fn();
 			const availableDates = [10, 12, 13, 14, 15].map(
 				(date) => new Date(`2022-07-${date}`)
 			);
