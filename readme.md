@@ -77,6 +77,7 @@ const calendarProps = useCalendar({
   firstDayOfWeek: 1,
   minDate: new Date('2022-07-01'),
   maxDate: new Date('2022-07-31'),
+  monthsToDisplay: 1,
   onDateSelected: (day) => console.log(day.date),
   selectedDate: new Date('2022-07-11'),
 });
@@ -112,6 +113,13 @@ Used to calculate the minimum month to render.
 > `Date` | optional
 
 Used to calculate the maximum month to render.
+
+### monthsToDisplay
+
+> `number` | defaults to `1`
+
+Number of months returned, based off the `selectedDate`. `Infinity` will display all months with available dates.
+
 
 ### onDateSelected
 

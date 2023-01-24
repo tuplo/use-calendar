@@ -287,6 +287,14 @@ describe("use-calendar", () => {
 
 			expect(months).toHaveLength(4);
 		});
+
+		it("returns number of months for available dates", () => {
+			const args = { monthsToDisplay: Infinity };
+			const { result } = renderHook(() => useCalendar(args));
+			const { months } = result.current;
+
+			expect(months).toHaveLength(1);
+		});
 	});
 
 	describe("availableDates", () => {
