@@ -27,6 +27,7 @@ export function useCalendar(
 		availableDates,
 		events = [],
 		firstDayOfWeek = 0,
+		monthsToDisplay = 1,
 		selectedDate,
 		onDateSelected,
 	} = options || {};
@@ -49,10 +50,12 @@ export function useCalendar(
 				selected,
 			})
 		)
-		.filter(
-			({ month, year }) =>
-				visibleMonth.getMonth() === month && visibleMonth.getFullYear() === year
-		);
+		.filter(({ month, year }) => {
+			const a = new Date(year, month);
+			const b = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth());
+			return a >= b;
+		})
+		.slice(0, monthsToDisplay);
 
 	const getDayProps = buildGetDayProps({ setSelected, onDateSelected });
 

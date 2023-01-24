@@ -3,7 +3,7 @@ import { act, renderHook } from "@testing-library/react";
 import { vi } from "vitest";
 
 import { useCalendar } from "./index";
-import type { IDay, IEvent, IGetDayPropsReturns } from "./use-calendar";
+import type { IDay, IEvent, IGetDayPropsReturns } from "./use-calendar.d";
 
 describe("use-calendar", () => {
 	const dateNowSpy = vi
@@ -239,6 +239,53 @@ describe("use-calendar", () => {
 			const { current: actual } = result;
 
 			expect(actual.months).toHaveLength(1);
+		});
+	});
+
+	describe.only("monthsToDisplay", () => {
+		it("returns default number of months to display (1)", () => {
+			const { result } = renderHook(() => useCalendar());
+			const { months } = result.current;
+
+			expect(months).toHaveLength(1);
+		});
+
+		it("returns all months for available dates, only selected month (1)", () => {
+			const args = {
+				minDate: new Date("2022-12-25"),
+				maxDate: new Date("2023-03-25"),
+				selectedDate: new Date("2022-12-25"),
+			};
+			const { result } = renderHook(() => useCalendar(args));
+			const { months } = result.current;
+
+			expect(months).toHaveLength(1);
+		});
+
+		it("returns number of months for available dates", () => {
+			const args = {
+				monthsToDisplay: 3,
+				minDate: new Date("2022-12-25"),
+				maxDate: new Date("2023-03-25"),
+				selectedDate: new Date("2022-12-25"),
+			};
+			const { result } = renderHook(() => useCalendar(args));
+			const { months } = result.current;
+
+			expect(months).toHaveLength(3);
+		});
+
+		it("returns number of months for available dates", () => {
+			const args = {
+				monthsToDisplay: Infinity,
+				minDate: new Date("2022-12-25"),
+				maxDate: new Date("2023-03-25"),
+				selectedDate: new Date("2022-12-25"),
+			};
+			const { result } = renderHook(() => useCalendar(args));
+			const { months } = result.current;
+
+			expect(months).toHaveLength(4);
 		});
 	});
 

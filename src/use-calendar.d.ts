@@ -1,14 +1,14 @@
 export interface IEvent {
-	start: Date;
-	end?: Date;
 	[key: string]: unknown;
+	end?: Date;
+	start: Date;
 }
 export interface IDay {
 	date: Date;
 	events?: IEvent[];
-	isToday: boolean;
 	isSelectable: boolean;
 	isSelected: boolean;
+	isToday: boolean;
 }
 
 export type IWeek = (IDay | null)[];
@@ -49,10 +49,10 @@ export interface IGetForwardPropsFn {
 }
 
 export interface ICalendarProps {
-	months: IMonth[];
-	getDayProps: IGetDayPropsFn;
 	getBackProps: IGetBackPropsFn;
+	getDayProps: IGetDayPropsFn;
 	getForwardProps: IGetForwardPropsFn;
+	months: IMonth[];
 	resetState: () => void;
 }
 
@@ -60,8 +60,9 @@ export interface IUseCalendarOptions {
 	availableDates: Date[];
 	events: IEvent[];
 	firstDayOfWeek: number;
-	minDate: Date;
 	maxDate: Date;
-	selectedDate?: string | number | Date;
+	minDate: Date;
+	monthsToDisplay?: number;
 	onDateSelected: (day: IDay) => void;
+	selectedDate?: string | number | Date;
 }
