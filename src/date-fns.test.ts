@@ -3,11 +3,16 @@ import { vi } from "vitest";
 import * as df from "./date-fns";
 
 describe("date-fns", () => {
-	it("gets all days in a month", () => {
-		const days = df.getDaysOfMonth({ month: 0, year: 2020 });
-		expect(days).toHaveLength(31);
-		expect(days[0]).toStrictEqual(new Date("2020-01-01"));
-		expect(days[30]).toStrictEqual(new Date("2020-01-31"));
+	describe("getDaysOfMonth", () => {
+		it("gets all days in a month", () => {
+			const actual = df.getDaysOfMonth({ month: 3, year: 2023 });
+
+			expect(actual).toHaveLength(30);
+			// eslint-disable-next-line no-useless-computed-key
+			const { [0]: first, length, [length - 1]: last } = actual;
+			expect(first.toISOString()).toBe("2023-04-01T00:00:00.000Z");
+			expect(last.toISOString()).toBe("2023-04-30T00:00:00.000Z");
+		});
 	});
 
 	it.each([

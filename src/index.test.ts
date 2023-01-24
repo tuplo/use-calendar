@@ -242,7 +242,7 @@ describe("use-calendar", () => {
 		});
 	});
 
-	describe.only("monthsToDisplay", () => {
+	describe("monthsToDisplay", () => {
 		it("returns default number of months to display (1)", () => {
 			const { result } = renderHook(() => useCalendar());
 			const { months } = result.current;

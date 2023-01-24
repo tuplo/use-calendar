@@ -57,6 +57,11 @@ export function isFirstDayOfMonth(date: Date) {
 	return date.getDate() === 1;
 }
 
+export function getUTCDate(date: Date) {
+	const utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+	return new Date(utc);
+}
+
 interface IGetDaysOfMonthArgs {
 	year: number;
 	month: number;
@@ -72,7 +77,7 @@ export function getDaysOfMonth(args: IGetDaysOfMonthArgs) {
 		date = getDateFrom({ date, days: 1 });
 	}
 
-	return days;
+	return days.map(getUTCDate);
 }
 
 interface IGetMonthsInRangeArgs {
