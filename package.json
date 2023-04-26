@@ -13,13 +13,19 @@
 		"WAI-ARIA"
 	],
 	"types": "dist/index.d.ts",
-	"module": "./dist/index.mjs",
 	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
 	"exports": {
 		".": [
 			{
-				"import": "./dist/index.mjs",
-				"require": "./dist/index.cjs",
+				"import": {
+					"types": "./dist/index.d.ts",
+					"default": "./dist/index.mjs"
+				},
+				"require": {
+					"types": "./dist/index.d.ts",
+					"default": "./dist/index.cjs"
+				},
 				"default": "./dist/index.mjs"
 			},
 			"./dist/index.mjs"
@@ -36,7 +42,7 @@
 		"coverage": "tsx sh/coverage.ts",
 		"format": "prettier --write src sh",
 		"lint:ts": "tsc --noEmit",
-		"lint": "eslint src --ext ts,tsx",
+		"lint": "eslint src",
 		"test:ci": "TZ=utc vitest run",
 		"test": "TZ=utc vitest --watch"
 	},
@@ -44,29 +50,28 @@
 		"react": "^16.8.6 || ^17.0.0 || ^18.0.0"
 	},
 	"devDependencies": {
-		"@testing-library/dom": "8.20.0",
+		"@testing-library/dom": "9.2.0",
 		"@testing-library/jest-dom": "5.16.5",
-		"@testing-library/react": "13.4.0",
+		"@testing-library/react": "14.0.0",
 		"@testing-library/user-event": "14.4.3",
-		"@types/jest": "29.2.6",
-		"@typescript-eslint/eslint-plugin": "5.49.0",
-		"@typescript-eslint/parser": "5.49.0",
-		"@vitejs/plugin-react": "3.0.1",
-		"@vitest/coverage-c8": "0.28.1",
-		"esbuild": "0.17.4",
-		"eslint": "8.32.0",
+		"@typescript-eslint/eslint-plugin": "5.59.1",
+		"@typescript-eslint/parser": "5.59.1",
+		"@vitejs/plugin-react": "4.0.0",
+		"@vitest/coverage-c8": "0.30.1",
+		"esbuild": "0.17.18",
+		"eslint": "8.39.0",
 		"eslint-config-airbnb-base": "15.0.0",
-		"eslint-config-prettier": "8.6.0",
+		"eslint-config-prettier": "8.8.0",
 		"eslint-plugin-import": "2.27.5",
-		"eslint-plugin-testing-library": "5.10.0",
-		"jsdom": "21.1.0",
+		"eslint-plugin-testing-library": "5.10.3",
+		"jsdom": "21.1.1",
 		"nyc": "15.1.0",
-		"prettier": "2.8.3",
+		"prettier": "2.8.8",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
-		"tsx": "3.12.2",
-		"typescript": "4.9.4",
-		"vitest": "0.28.1",
-		"zx": "7.1.1"
+		"tsx": "3.12.6",
+		"typescript": "5.0.4",
+		"vitest": "0.30.1",
+		"zx": "7.2.1"
 	}
 }
