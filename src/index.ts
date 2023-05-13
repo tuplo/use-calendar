@@ -3,7 +3,7 @@ import { useState } from "react";
 import * as df from "./date-fns";
 import { getCalendarMonth, getMinMaxDate, getValidDate } from "./helpers";
 import { buildGetBackForwardProps, buildGetDayProps } from "./props";
-import type { ICalendarProps, IUseCalendarOptions } from "./use-calendar";
+import type { ICalendarProps, IUseCalendarOptions } from "./use-calendar.d";
 
 export type {
 	ICalendarProps,
