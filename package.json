@@ -32,10 +32,10 @@
 		]
 	},
 	"files": [
-		"dist/use-calendar.d.ts",
 		"dist/index.cjs",
 		"dist/index.d.ts",
-		"dist/index.mjs"
+		"dist/index.mjs",
+		"dist/use-calendar.d.ts"
 	],
 	"scripts": {
 		"build": "tsx sh/build.ts",
