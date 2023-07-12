@@ -56,9 +56,7 @@ function Calendar() {
           {
             weeks.map((week) =>
               week.map((day) =>
-                day
-                  ? <button {...getDayProps({ day })}>{day.date.getDate()}</button>
-                  : <span />
+                <button {...getDayProps({ day })}>{day.date.getDate()}</button>
               ))
           }
         </div>
@@ -132,6 +130,55 @@ Called when the user selects a date.
 > `Date | string | number` | optional
 
 Used to calculate what month to display on initial render.
+
+
+## Outputs
+
+The hook will return an object with the following shape:
+
+```typescript
+interface ICalendarProps {
+  getBackProps: IGetBackPropsFn;
+  getDayProps: IGetDayPropsFn;
+  getForwardProps: IGetForwardPropsFn;
+  months: IMonth[];
+  resetState: () => void;
+}
+```
+
+Each month has the shape:
+
+```typescript
+interface IMonth {
+  weeks: IDay[][];
+  month: number;
+  year: number;
+}
+```
+
+Each day returned on each week of the months to display is:
+
+```typescript
+interface IDay {
+  date: Date;
+  events?: IEvent[];
+  isSelectable?: boolean;
+  isSelected?: boolean;
+  isToday?: boolean;
+  isWeekend?: boolean;
+  isAdjacentMonth?: boolean;
+}
+```
+
+An event is represented by (it can hold any extra data needed):
+
+```typescript
+interface IEvent {
+  \[key: string\]: unknown;
+  end?: Date;
+  start: Date;
+}
+```
 
 ## License
 
