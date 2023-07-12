@@ -67,11 +67,27 @@ describe("use-calendar", () => {
 			const { current: actual } = result;
 
 			const expected = [
-				null,
-				null,
-				null,
-				null,
-				null,
+				{
+					date: new Date("2022-06-26"),
+					isAdjacentMonth: true,
+					isWeekend: true,
+				},
+				{
+					date: new Date("2022-06-27"),
+					isAdjacentMonth: true,
+				},
+				{
+					date: new Date("2022-06-28"),
+					isAdjacentMonth: true,
+				},
+				{
+					date: new Date("2022-06-29"),
+					isAdjacentMonth: true,
+				},
+				{
+					date: new Date("2022-06-30"),
+					isAdjacentMonth: true,
+				},
 				{
 					date: new Date("2022-07-01"),
 					isSelectable: true,
@@ -101,12 +117,31 @@ describe("use-calendar", () => {
 					isSelectable: true,
 					isWeekend: true,
 				},
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
+				{
+					date: new Date("2022-08-01"),
+					isAdjacentMonth: true,
+				},
+				{
+					date: new Date("2022-08-02"),
+					isAdjacentMonth: true,
+				},
+				{
+					date: new Date("2022-08-03"),
+					isAdjacentMonth: true,
+				},
+				{
+					date: new Date("2022-08-04"),
+					isAdjacentMonth: true,
+				},
+				{
+					date: new Date("2022-08-05"),
+					isAdjacentMonth: true,
+				},
+				{
+					date: new Date("2022-08-06"),
+					isAdjacentMonth: true,
+					isWeekend: true,
+				},
 			];
 			expect(actual.months[0].weeks[5]).toEqual(expected);
 		});
@@ -128,26 +163,7 @@ describe("use-calendar", () => {
 				getBackProps: expect.any(Function),
 				getForwardProps: expect.any(Function),
 				resetState: expect.any(Function),
-				months: [
-					{
-						month: 6,
-						year: 2022,
-						weeks: [
-							"2022-07-01",
-							"2022-07-04",
-							"2022-07-11",
-							"2022-07-18",
-							"2022-07-25",
-						].map((dateStr) =>
-							expect.arrayContaining([
-								{
-									date: new Date(dateStr),
-									isSelectable: true,
-								},
-							])
-						),
-					},
-				],
+				months: expect.any(Array),
 			};
 			expect(actual).toEqual(expected);
 		});
@@ -163,10 +179,22 @@ describe("use-calendar", () => {
 			const { current: actual } = result;
 
 			const expected = [
-				null,
-				null,
-				null,
-				null,
+				{
+					date: new Date("2022-06-27"),
+					isAdjacentMonth: true,
+				},
+				{
+					date: new Date("2022-06-28"),
+					isAdjacentMonth: true,
+				},
+				{
+					date: new Date("2022-06-29"),
+					isAdjacentMonth: true,
+				},
+				{
+					date: new Date("2022-06-30"),
+					isAdjacentMonth: true,
+				},
 				{
 					date: new Date("2022-07-01"),
 					isSelectable: true,

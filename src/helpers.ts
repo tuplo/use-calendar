@@ -24,42 +24,6 @@ export function getValidDate(d: string | number | Date | undefined) {
 	return new Date(d);
 }
 
-interface IPadAdjacentMonthDaysArgs {
-	week: IWeek;
-	firstDayOfWeek: number;
-	date: Date;
-}
-
-export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
-	const { week, firstDayOfWeek, date } = args;
-	const isFirstDayOfMonth = df.isFirstDayOfMonth(date);
-	const isLastDayOfMonth = df.isLastDayOfMonth(date);
-	const lastDayOfWeek = firstDayOfWeek - 1 >= 0 ? firstDayOfWeek - 1 : 6;
-	const newWeek = week.slice();
-
-	if (isFirstDayOfMonth) {
-		const lastDays = [];
-		let lastDate = df.getDateFrom({ date, days: -1 });
-		while (lastDate.getDay() !== lastDayOfWeek) {
-			lastDays.push(null);
-			lastDate = df.getDateFrom({ date: lastDate, days: -1 });
-		}
-		newWeek.unshift(...lastDays.reverse());
-	}
-
-	if (isLastDayOfMonth) {
-		const nextDays = [];
-		let nextDate = df.getDateFrom({ date, days: 1 });
-		while (nextDate.getDay() !== firstDayOfWeek) {
-			nextDays.push(null);
-			nextDate = df.getDateFrom({ date: nextDate, days: 1 });
-		}
-		newWeek.push(...nextDays);
-	}
-
-	return newWeek;
-}
-
 interface IGetDayEventsArgs {
 	date: Date;
 	events?: IEvent[];
@@ -84,6 +48,7 @@ interface INewDayArgs {
 	maxDate?: Date;
 	minDate?: Date;
 	selected?: Date;
+	isAdjacentMonth?: boolean;
 }
 
 export function getNewDay(args: INewDayArgs): IDay {
@@ -94,6 +59,7 @@ export function getNewDay(args: INewDayArgs): IDay {
 		minDate,
 		maxDate,
 		selected,
+		isAdjacentMonth,
 	} = args;
 	const today = new Date(Date.now());
 
@@ -115,6 +81,9 @@ export function getNewDay(args: INewDayArgs): IDay {
 	if (date.getDay() === 0 || date.getDay() === 6) {
 		day.isWeekend = true;
 	}
+	if (isAdjacentMonth) {
+		day.isAdjacentMonth = true;
+	}
 
 	const dayEvents = getDayEvents({ date, events });
 	if (dayEvents.length > 0) {
@@ -122,6 +91,42 @@ export function getNewDay(args: INewDayArgs): IDay {
 	}
 
 	return day;
+}
+
+interface IPadAdjacentMonthDaysArgs {
+	week: IWeek;
+	firstDayOfWeek: number;
+	date: Date;
+}
+
+export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
+	const { week, firstDayOfWeek, date } = args;
+	const isFirstDayOfMonth = df.isFirstDayOfMonth(date);
+	const isLastDayOfMonth = df.isLastDayOfMonth(date);
+	const lastDayOfWeek = firstDayOfWeek - 1 >= 0 ? firstDayOfWeek - 1 : 6;
+	const newWeek = week.slice();
+
+	if (isFirstDayOfMonth) {
+		const lastDays = [];
+		let lastDate = df.getDateFrom({ date, days: -1 });
+		while (lastDate.getDay() !== lastDayOfWeek) {
+			lastDays.push(getNewDay({ date: lastDate, isAdjacentMonth: true }));
+			lastDate = df.getDateFrom({ date: lastDate, days: -1 });
+		}
+		newWeek.unshift(...lastDays.reverse());
+	}
+
+	if (isLastDayOfMonth) {
+		const nextDays = [];
+		let nextDate = df.getDateFrom({ date, days: 1 });
+		while (nextDate.getDay() !== firstDayOfWeek) {
+			nextDays.push(getNewDay({ date: nextDate, isAdjacentMonth: true }));
+			nextDate = df.getDateFrom({ date: nextDate, days: 1 });
+		}
+		newWeek.push(...nextDays);
+	}
+
+	return newWeek;
 }
 
 interface IGetWeekArgs {

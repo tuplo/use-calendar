@@ -10,9 +10,10 @@ export interface IDay {
 	isSelected?: boolean;
 	isToday?: boolean;
 	isWeekend?: boolean;
+	isAdjacentMonth?: boolean;
 }
 
-export type IWeek = (IDay | null)[];
+export type IWeek = IDay[];
 
 export interface IMonth {
 	weeks: IWeek[];

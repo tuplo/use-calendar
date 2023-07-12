@@ -56,8 +56,35 @@ describe("use-calendar helpers", () => {
 
 	describe("pad adjacent month days", () => {
 		it.each([
-			["default", [], "2022-07-01", 0, [null, null, null, null, null]],
-			["firstDayOfWeek=1", [], "2022-07-01", 1, [null, null, null, null]],
+			[
+				"default",
+				[],
+				"2022-07-01",
+				0,
+				[
+					{
+						date: new Date("2022-06-26"),
+						isAdjacentMonth: true,
+						isWeekend: true,
+					},
+					{ date: new Date("2022-06-27"), isAdjacentMonth: true },
+					{ date: new Date("2022-06-28"), isAdjacentMonth: true },
+					{ date: new Date("2022-06-29"), isAdjacentMonth: true },
+					{ date: new Date("2022-06-30"), isAdjacentMonth: true },
+				],
+			],
+			[
+				"firstDayOfWeek=1",
+				[],
+				"2022-07-01",
+				1,
+				[
+					{ date: new Date("2022-06-27"), isAdjacentMonth: true },
+					{ date: new Date("2022-06-28"), isAdjacentMonth: true },
+					{ date: new Date("2022-06-29"), isAdjacentMonth: true },
+					{ date: new Date("2022-06-30"), isAdjacentMonth: true },
+				],
+			],
 		])(
 			"pads last days of previous month: %s",
 			(_, week, strDate, firstDayOfWeek, expected) => {
@@ -68,8 +95,39 @@ describe("use-calendar helpers", () => {
 		);
 
 		it.each([
-			["default", [], "2022-07-31", 0, [null, null, null, null, null, null]],
-			["default", [], "2022-08-31", 0, [null, null, null]],
+			[
+				"default",
+				[],
+				"2022-07-31",
+				0,
+				[
+					{ date: new Date("2022-08-01"), isAdjacentMonth: true },
+					{ date: new Date("2022-08-02"), isAdjacentMonth: true },
+					{ date: new Date("2022-08-03"), isAdjacentMonth: true },
+					{ date: new Date("2022-08-04"), isAdjacentMonth: true },
+					{ date: new Date("2022-08-05"), isAdjacentMonth: true },
+					{
+						date: new Date("2022-08-06"),
+						isAdjacentMonth: true,
+						isWeekend: true,
+					},
+				],
+			],
+			[
+				"default",
+				[],
+				"2022-08-31",
+				0,
+				[
+					{ date: new Date("2022-09-01"), isAdjacentMonth: true },
+					{ date: new Date("2022-09-02"), isAdjacentMonth: true },
+					{
+						date: new Date("2022-09-03"),
+						isAdjacentMonth: true,
+						isWeekend: true,
+					},
+				],
+			],
 			["firstDayOfWeek=1", [], "2022-07-31", 1, []],
 		])(
 			"pads first days of next month: %s",
