@@ -142,7 +142,7 @@ describe("props functions", () => {
 			const fn = buildGetBackForwardProps({
 				direction: "back",
 				months,
-				minDate: new Date(2022, 5, 1),
+				monthsInRange: [{ month: 5, year: 2022 }],
 				setVisibleMonth: vi.fn(),
 			});
 			const actual = fn();
@@ -160,11 +160,10 @@ describe("props functions", () => {
 			const fn = buildGetBackForwardProps({
 				direction: "back",
 				months,
-				minDate: new Date(2022, 6, 1),
+				monthsInRange: [{ month: 6, year: 2022 }],
 				setVisibleMonth: vi.fn(),
 			});
 			const actual = fn();
-
 			expect(actual.disabled).toBe(true);
 		});
 
@@ -173,7 +172,7 @@ describe("props functions", () => {
 			const fn = buildGetBackForwardProps({
 				direction: "back",
 				months,
-				minDate: new Date(2022, 5, 1),
+				monthsInRange: [{ month: 5, year: 2022 }],
 				setVisibleMonth: vi.fn(),
 			});
 			const actual = fn();
@@ -189,7 +188,11 @@ describe("props functions", () => {
 			const fn = buildGetBackForwardProps({
 				direction: "forward",
 				months,
-				maxDate: new Date(2022, 7, 1),
+				monthsInRange: [
+					{ month: 5, year: 2022 },
+					{ month: 6, year: 2022 },
+					{ month: 7, year: 2022 },
+				],
 				setVisibleMonth: vi.fn(),
 			});
 			const actual = fn();
@@ -207,7 +210,10 @@ describe("props functions", () => {
 			const fn = buildGetBackForwardProps({
 				direction: "forward",
 				months,
-				maxDate: new Date(2022, 6, 31),
+				monthsInRange: [
+					{ month: 5, year: 2022 },
+					{ month: 6, year: 2022 },
+				],
 				setVisibleMonth: vi.fn(),
 			});
 			const actual = fn();
@@ -228,8 +234,11 @@ describe("props functions", () => {
 				const fn = buildGetBackForwardProps({
 					direction,
 					months,
-					minDate: new Date(2022, 5, 1),
-					maxDate: new Date(2022, 7, 30),
+					monthsInRange: [
+						{ month: 5, year: 2022 },
+						{ month: 6, year: 2022 },
+						{ month: 7, year: 2022 },
+					],
 					setVisibleMonth: setVisibleMonthSpy,
 				});
 				const actual = fn();
@@ -249,8 +258,7 @@ describe("props functions", () => {
 				const fn = buildGetBackForwardProps({
 					direction,
 					months,
-					minDate: new Date(2022, 6, 1),
-					maxDate: new Date(2022, 6, 31),
+					monthsInRange: [{ month: 6, year: 2022 }],
 					setVisibleMonth: setVisibleMonthSpy,
 				});
 				const actual = fn();

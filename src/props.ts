@@ -1,4 +1,3 @@
-import * as df from "./date-fns";
 import type {
 	IDay,
 	IGetBackForwardPropsReturns,
@@ -27,14 +26,20 @@ export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 		const dtf = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
 
 		return {
+			"aria-selected": day.isSelected,
 			"aria-label": dtf.format(new Date(day.date)),
+			key: day.date.toISOString(),
 			role: "button",
 			onClick: () => {
 				const { isSelectable } = day;
-				if (!isSelectable) return;
+				if (!isSelectable) {
+					return;
+				}
 
 				setSelected(day.date);
-				if (onDateSelected) onDateSelected(day);
+				if (onDateSelected) {
+					onDateSelected(day);
+				}
 			},
 		};
 	};
@@ -43,20 +48,20 @@ export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 interface IBuildGetBackForwardPropsArgs {
 	direction: string;
 	months: IMonth[];
-	minDate?: Date;
-	maxDate?: Date;
 	setVisibleMonth: (newVisibleMonth: Date) => void;
+	monthsInRange: Partial<IMonth>[];
 }
 
 export function buildGetBackForwardProps(args: IBuildGetBackForwardPropsArgs) {
-	const { months, minDate, maxDate, direction, setVisibleMonth } = args;
+	const { months, direction, monthsInRange, setVisibleMonth } = args;
 	const { 0: firstMonth, length, [length - 1]: lastMonth } = months;
 	const month = direction === "back" ? firstMonth : lastMonth;
 	const delta = direction === "back" ? -1 : 1;
-	if (!month) return () => ({} as IGetBackForwardPropsReturns);
+	if (!month) {
+		return () => ({}) as IGetBackForwardPropsReturns;
+	}
 
 	const adjacentMonth = new Date(month.year, month.month + delta);
-	const monthsInRange = df.getMonthsInRange({ start: minDate, end: maxDate });
 	const disabled =
 		monthsInRange.findIndex(
 			(m) =>
@@ -66,7 +71,10 @@ export function buildGetBackForwardProps(args: IBuildGetBackForwardPropsArgs) {
 	const ariaLabel =
 		direction === "back" ? "Go back 1 month" : "Go forward 1 month";
 	const onClick = () => {
-		if (disabled) return;
+		if (disabled) {
+			return;
+		}
+
 		setVisibleMonth(adjacentMonth);
 	};
 

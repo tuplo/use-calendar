@@ -27,7 +27,6 @@ export function useCalendar(
 		availableDates,
 		events = [],
 		firstDayOfWeek = 0,
-		monthsToDisplay = 1,
 		selectedDate,
 		onDateSelected,
 	} = options || {};
@@ -36,9 +35,28 @@ export function useCalendar(
 	const [visibleMonth, setVisibleMonth] = useState(
 		selected || new Date(Date.now())
 	);
+
 	const { minDate, maxDate } = getMinMaxDate(options);
-	const months = df
-		.getMonthsInRange({ start: minDate, end: maxDate })
+
+	let monthsToDisplay = options?.monthsToDisplay || 1;
+	if (monthsToDisplay === Infinity) {
+		const d1 = options?.minDate || df.getFirstDayOfMonth(visibleMonth);
+		const d2 = options?.maxDate || df.getLastDayOfMonth(visibleMonth);
+		monthsToDisplay = df.differenceInMonths(d1, d2) + 1;
+	}
+
+	const monthsInRange = df.getMonthsInRange({
+		start: df.getDateFrom({ date: visibleMonth, months: -1 }),
+		end: df.getDateFrom({ date: visibleMonth, months: monthsToDisplay }),
+	});
+
+	const months = monthsInRange
+		.filter(({ month, year }) => {
+			const a = new Date(year, month);
+			const b = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth());
+			return a >= b;
+		})
+		.slice(0, monthsToDisplay)
 		.map((month) =>
 			getCalendarMonth({
 				...month,
@@ -49,13 +67,7 @@ export function useCalendar(
 				minDate,
 				selected,
 			})
-		)
-		.filter(({ month, year }) => {
-			const a = new Date(year, month);
-			const b = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth());
-			return a >= b;
-		})
-		.slice(0, monthsToDisplay);
+		);
 
 	const getDayProps = buildGetDayProps({ setSelected, onDateSelected });
 
@@ -63,9 +75,8 @@ export function useCalendar(
 		buildGetBackForwardProps({
 			direction,
 			months,
-			minDate,
-			maxDate,
 			setVisibleMonth,
+			monthsInRange,
 		})
 	);
 

@@ -41,6 +41,15 @@ export function getDateFrom(args: IGetDateFromArgs) {
 	return date;
 }
 
+export function differenceInMonths(d1: Date, d2: Date) {
+	let months;
+	months = (d2.getFullYear() - d1.getFullYear()) * 12;
+	months -= d1.getMonth();
+	months += d2.getMonth();
+
+	return months <= 0 ? 0 : months;
+}
+
 export function isSameDay(date1: Date, date2: Date): boolean {
 	return (
 		date1.getFullYear() === date2.getFullYear() &&

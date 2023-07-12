@@ -239,8 +239,8 @@ describe("use-calendar helpers", () => {
 			const actual = getMinMaxDate();
 
 			const expected = {
-				minDate: new Date("2022-07-01"),
-				maxDate: new Date("2022-07-31"),
+				minDate: new Date("0000-01-01"),
+				maxDate: new Date("3022-07-02"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
