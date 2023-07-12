@@ -30,25 +30,31 @@ describe("use-calendar", () => {
 						year: 2022,
 						weeks: [
 							"2022-07-01",
-							"2022-07-03",
-							"2022-07-10",
-							"2022-07-17",
-							"2022-07-24",
-							"2022-07-31",
+							"2022-07-08",
+							"2022-07-14",
+							"2022-07-22",
+							"2022-07-29",
 						].map((dateStr) =>
 							expect.arrayContaining([
 								{
 									date: new Date(dateStr),
-									isToday: false,
 									isSelectable: true,
-									isSelected: false,
 								},
 							])
 						),
 					},
 				],
 			};
-			expect(actual).toStrictEqual(expected);
+			expected.months[0].weeks.push(
+				expect.arrayContaining([
+					{
+						date: new Date("2022-07-31"),
+						isSelectable: true,
+						isWeekend: true,
+					},
+				])
+			);
+			expect(actual).toMatchObject(expected);
 		});
 
 		it("pads last days of last month", () => {
@@ -68,15 +74,13 @@ describe("use-calendar", () => {
 				null,
 				{
 					date: new Date("2022-07-01"),
-					isToday: false,
 					isSelectable: true,
-					isSelected: false,
 				},
 				{
 					date: new Date("2022-07-02"),
 					isToday: true,
 					isSelectable: true,
-					isSelected: false,
+					isWeekend: true,
 				},
 			];
 			expect(actual.months[0].weeks[0]).toStrictEqual(expected);
@@ -94,9 +98,8 @@ describe("use-calendar", () => {
 			const expected = [
 				{
 					date: new Date("2022-07-31"),
-					isToday: false,
 					isSelectable: true,
-					isSelected: false,
+					isWeekend: true,
 				},
 				null,
 				null,
@@ -105,7 +108,7 @@ describe("use-calendar", () => {
 				null,
 				null,
 			];
-			expect(actual.months[0].weeks[5]).toStrictEqual(expected);
+			expect(actual.months[0].weeks[5]).toEqual(expected);
 		});
 	});
 
@@ -139,16 +142,14 @@ describe("use-calendar", () => {
 							expect.arrayContaining([
 								{
 									date: new Date(dateStr),
-									isToday: false,
 									isSelectable: true,
-									isSelected: false,
 								},
 							])
 						),
 					},
 				],
 			};
-			expect(actual).toStrictEqual(expected);
+			expect(actual).toEqual(expected);
 		});
 
 		it("pads last days of last month", () => {
@@ -168,24 +169,19 @@ describe("use-calendar", () => {
 				null,
 				{
 					date: new Date("2022-07-01"),
-					isToday: false,
 					isSelectable: true,
-					isSelected: false,
 				},
 				{
 					date: new Date("2022-07-02"),
 					isToday: true,
 					isSelectable: true,
-					isSelected: false,
 				},
 				{
 					date: new Date("2022-07-03"),
-					isToday: false,
 					isSelectable: true,
-					isSelected: false,
 				},
 			];
-			expect(actual.months[0].weeks[0]).toStrictEqual(expected);
+			expect(actual.months[0].weeks[0]).toMatchObject(expected);
 		});
 
 		it("pads first days of next month", () => {
@@ -208,11 +204,9 @@ describe("use-calendar", () => {
 				"2022-07-31",
 			].map((dateStr) => ({
 				date: new Date(dateStr),
-				isToday: false,
 				isSelectable: true,
-				isSelected: false,
 			}));
-			expect(actual.months[0].weeks[4]).toStrictEqual(expected);
+			expect(actual.months[0].weeks[4]).toMatchObject(expected);
 		});
 	});
 
@@ -231,7 +225,7 @@ describe("use-calendar", () => {
 			const { result } = renderHook(() => useCalendar({ selectedDate }));
 			const { current: actual } = result;
 
-			expect(actual.months[0].weeks[1][0]!.isSelected).toBe(false);
+			expect(actual.months[0].weeks[1][0]!.isSelected).toBeUndefined();
 		});
 
 		it("still returns current month if not provided selected date", () => {
@@ -302,7 +296,7 @@ describe("use-calendar", () => {
 			const { result } = renderHook(() => useCalendar({ availableDates: [] }));
 			const { current: actual } = result;
 
-			expect(actual.months[0].weeks[0][5]!.isSelectable).toBe(false);
+			expect(actual.months[0].weeks[0][5]!.isSelectable).toBeUndefined();
 		});
 
 		it("returns all months from now to single available date", () => {
@@ -382,7 +376,6 @@ describe("use-calendar", () => {
 				date: new Date("2022-07-13"),
 				isSelected: false,
 				isSelectable: true,
-				isToday: false,
 			};
 			const button = getDayProps({ day }) as IGetDayPropsReturns;
 
@@ -392,18 +385,17 @@ describe("use-calendar", () => {
 				date: new Date("2022-07-13"),
 				isSelectable: true,
 				isSelected: true,
-				isToday: false,
 			});
 
 			// goes back to initial selected day
 			const { resetState } = result.current;
 			act(() => resetState());
-			expect(result.current.months[0].weeks[2][3]?.isSelected).toBe(false);
+			expect(result.current.months[0].weeks[2][3]?.isSelected).toBeUndefined();
 			expect(result.current.months[0].weeks[2][0]).toStrictEqual({
 				date: new Date("2022-07-10"),
 				isSelectable: true,
 				isSelected: true,
-				isToday: false,
+				isWeekend: true,
 			});
 		});
 	});

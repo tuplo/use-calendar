@@ -102,12 +102,19 @@ export function getNewDay(args: INewDayArgs): IDay {
 		isSelectable = availableDates.findIndex((a) => df.isSameDay(date, a)) > -1;
 	}
 
-	const day: IDay = {
-		date,
-		isSelectable,
-		isSelected: selected ? df.isSameDay(date, selected) : false,
-		isToday: df.isSameDay(date, today),
-	};
+	const day: IDay = { date };
+	if (isSelectable) {
+		day.isSelectable = true;
+	}
+	if (selected && df.isSameDay(date, selected)) {
+		day.isSelected = true;
+	}
+	if (df.isSameDay(date, today)) {
+		day.isToday = true;
+	}
+	if (date.getDay() === 0 || date.getDay() === 6) {
+		day.isWeekend = true;
+	}
 
 	const dayEvents = getDayEvents({ date, events });
 	if (dayEvents.length > 0) {

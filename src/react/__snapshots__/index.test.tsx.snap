@@ -33,217 +33,186 @@ exports[`useCalendar UI > renders 1`] = `
     <span />
     <button
       aria-label="July 1, 2022"
-      aria-selected="false"
       role="button"
     >
       1
     </button>
     <button
       aria-label="July 2, 2022"
-      aria-selected="false"
       role="button"
     >
       2
     </button>
     <button
       aria-label="July 3, 2022"
-      aria-selected="false"
       role="button"
     >
       3
     </button>
     <button
       aria-label="July 4, 2022"
-      aria-selected="false"
       role="button"
     >
       4
     </button>
     <button
       aria-label="July 5, 2022"
-      aria-selected="false"
       role="button"
     >
       5
     </button>
     <button
       aria-label="July 6, 2022"
-      aria-selected="false"
       role="button"
     >
       6
     </button>
     <button
       aria-label="July 7, 2022"
-      aria-selected="false"
       role="button"
     >
       7
     </button>
     <button
       aria-label="July 8, 2022"
-      aria-selected="false"
       role="button"
     >
       8
     </button>
     <button
       aria-label="July 9, 2022"
-      aria-selected="false"
       role="button"
     >
       9
     </button>
     <button
       aria-label="July 10, 2022"
-      aria-selected="false"
       role="button"
     >
       10
     </button>
     <button
       aria-label="July 11, 2022"
-      aria-selected="false"
       role="button"
     >
       11
     </button>
     <button
       aria-label="July 12, 2022"
-      aria-selected="false"
       role="button"
     >
       12
     </button>
     <button
       aria-label="July 13, 2022"
-      aria-selected="false"
       role="button"
     >
       13
     </button>
     <button
       aria-label="July 14, 2022"
-      aria-selected="false"
       role="button"
     >
       14
     </button>
     <button
       aria-label="July 15, 2022"
-      aria-selected="false"
       role="button"
     >
       15
     </button>
     <button
       aria-label="July 16, 2022"
-      aria-selected="false"
       role="button"
     >
       16
     </button>
     <button
       aria-label="July 17, 2022"
-      aria-selected="false"
       role="button"
     >
       17
     </button>
     <button
       aria-label="July 18, 2022"
-      aria-selected="false"
       role="button"
     >
       18
     </button>
     <button
       aria-label="July 19, 2022"
-      aria-selected="false"
       role="button"
     >
       19
     </button>
     <button
       aria-label="July 20, 2022"
-      aria-selected="false"
       role="button"
     >
       20
     </button>
     <button
       aria-label="July 21, 2022"
-      aria-selected="false"
       role="button"
     >
       21
     </button>
     <button
       aria-label="July 22, 2022"
-      aria-selected="false"
       role="button"
     >
       22
     </button>
     <button
       aria-label="July 23, 2022"
-      aria-selected="false"
       role="button"
     >
       23
     </button>
     <button
       aria-label="July 24, 2022"
-      aria-selected="false"
       role="button"
     >
       24
     </button>
     <button
       aria-label="July 25, 2022"
-      aria-selected="false"
       role="button"
     >
       25
     </button>
     <button
       aria-label="July 26, 2022"
-      aria-selected="false"
       role="button"
     >
       26
     </button>
     <button
       aria-label="July 27, 2022"
-      aria-selected="false"
       role="button"
     >
       27
     </button>
     <button
       aria-label="July 28, 2022"
-      aria-selected="false"
       role="button"
     >
       28
     </button>
     <button
       aria-label="July 29, 2022"
-      aria-selected="false"
       role="button"
     >
       29
     </button>
     <button
       aria-label="July 30, 2022"
-      aria-selected="false"
       role="button"
     >
       30
     </button>
     <button
       aria-label="July 31, 2022"
-      aria-selected="false"
       role="button"
     >
       31

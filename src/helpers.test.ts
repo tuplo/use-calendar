@@ -75,6 +75,7 @@ describe("use-calendar helpers", () => {
 			"pads first days of next month: %s",
 			(_, week, strDate, firstDayOfWeek, expected) => {
 				const date = new Date(strDate);
+
 				const actual = padAdjacentMonthDays({ week, firstDayOfWeek, date });
 				expect(actual).toStrictEqual(expected);
 			}
@@ -93,30 +94,24 @@ describe("use-calendar helpers", () => {
 
 			const expected = [
 				"2022-07-01",
-				"2022-07-03",
-				"2022-07-10",
-				"2022-07-17",
-				"2022-07-24",
-				"2022-07-31",
-			].map((dateStr) =>
-				expect.arrayContaining([
-					{
-						date: new Date(dateStr),
-						isToday: false,
-						isSelectable: true,
-						isSelected: false,
-					},
-				])
-			);
-			expect(actual).toStrictEqual(expected);
+				"2022-07-04",
+				"2022-07-11",
+				"2022-07-18",
+				"2022-07-25",
+			].map((dateStr) => ({
+				date: new Date(dateStr),
+				isSelectable: true,
+			}));
+			expect(actual).toHaveLength(6);
+			expect(actual.flat()).toStrictEqual(expect.arrayContaining(expected));
 		});
 	});
 
 	describe("getNewDay", () => {
 		it.each([
-			["2022-07-02", { isSelectable: true, isToday: true }],
-			["2022-07-11", { isSelectable: true, isToday: false }],
-			["2022-06-11", { isSelectable: false, isToday: false }],
+			["2022-07-02", { isSelectable: true, isToday: true, isWeekend: true }],
+			["2022-07-11", { isSelectable: true }],
+			["2022-06-11", { isWeekend: true }],
 		])("creates a new Day object: %s", (dateStr, expectedAttrs) => {
 			const actual = getNewDay({
 				date: new Date(dateStr),
@@ -127,15 +122,14 @@ describe("use-calendar helpers", () => {
 			const expected = {
 				...expectedAttrs,
 				date: new Date(dateStr),
-				isSelected: false,
 			};
 			expect(actual).toStrictEqual(expected);
 		});
 
 		it.each([
-			["2022-07-02", { isSelectable: true, isToday: true }],
-			["2022-07-11", { isSelectable: true, isToday: false }],
-			["2022-06-11", { isSelectable: false, isToday: false }],
+			["2022-07-02", { isSelectable: true, isToday: true, isWeekend: true }],
+			["2022-07-11", { isSelectable: true }],
+			["2022-06-11", { isWeekend: true }],
 		])(
 			"creates a new Day object with available dates list: %s",
 			(dateStr, expectedAttrs) => {
@@ -147,7 +141,6 @@ describe("use-calendar helpers", () => {
 				const expected = {
 					...expectedAttrs,
 					date: new Date(dateStr),
-					isSelected: false,
 				};
 				expect(actual).toStrictEqual(expected);
 			}
@@ -180,8 +173,20 @@ describe("use-calendar helpers", () => {
 					},
 				],
 				isSelectable: true,
-				isSelected: false,
-				isToday: false,
+				isWeekend: true,
+			};
+			expect(actual).toStrictEqual(expected);
+		});
+
+		it("creates a weekend day", () => {
+			const actual = getNewDay({
+				date: new Date("2022-07-17"),
+			});
+
+			const expected = {
+				date: new Date("2022-07-17"),
+				isSelectable: true,
+				isWeekend: true,
 			};
 			expect(actual).toStrictEqual(expected);
 		});

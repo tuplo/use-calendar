@@ -34,8 +34,6 @@ describe("useCalendar UI", () => {
 			const expected = {
 				date: new Date("2022-07-12T00:00:00.000Z"),
 				isSelectable: true,
-				isSelected: false,
-				isToday: false,
 			};
 			expect(onDateSelectedSpy).toHaveBeenCalledTimes(1);
 			expect(onDateSelectedSpy).toHaveBeenCalledWith(expected);

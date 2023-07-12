@@ -6,9 +6,10 @@ export interface IEvent {
 export interface IDay {
 	date: Date;
 	events?: IEvent[];
-	isSelectable: boolean;
-	isSelected: boolean;
-	isToday: boolean;
+	isSelectable?: boolean;
+	isSelected?: boolean;
+	isToday?: boolean;
+	isWeekend?: boolean;
 }
 
 export type IWeek = (IDay | null)[];
