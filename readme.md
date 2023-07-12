@@ -59,10 +59,10 @@ function Calendar() {
                 day
                   ? <button {...getDayProps({ day })}>{day.date.getDate()}</button>
                   : <span />
-              )
+              ))
           }
         </div>
-      ))
+      ))}
     </>
   )
 }
