@@ -11,6 +11,10 @@ interface IBuildGetDayPropsArgs {
 	locale?: string;
 }
 
+function getBrowserLocale() {
+	return typeof navigator !== "undefined" && navigator?.language;
+}
+
 export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 	const { setSelected, onDateSelected } = args;
 
@@ -22,7 +26,7 @@ export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 			};
 		}
 
-		const locale = args.locale || navigator?.language || "en";
+		const locale = args.locale || getBrowserLocale() || "en";
 		const dtf = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
 
 		return {
