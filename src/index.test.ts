@@ -286,15 +286,12 @@ describe("use-calendar", () => {
 
 		it("returns number of months for available dates", () => {
 			const args = {
-				monthsToDisplay: 3,
-				minDate: new Date("2022-12-25"),
-				maxDate: new Date("2023-03-25"),
-				selectedDate: new Date("2022-12-25"),
+				availableDates: [new Date("2022-12-25"), new Date("2023-02-25")],
 			};
 			const { result } = renderHook(() => useCalendar(args));
 			const { months } = result.current;
 
-			expect(months).toHaveLength(3);
+			expect(months).toHaveLength(1);
 		});
 
 		it("returns number of months for available dates", () => {
@@ -347,6 +344,28 @@ describe("use-calendar", () => {
 
 			expect(actual.months).toHaveLength(1);
 			expect(actual.months[0].month).toBe(6);
+		});
+
+		it("returns getBackProps", () => {
+			const args = {
+				availableDates: [new Date("2022-12-25")],
+			};
+			const { result } = renderHook(() => useCalendar(args));
+			const { getBackProps } = result.current;
+			const actual = getBackProps();
+
+			expect(actual.disabled).toBe(true);
+		});
+
+		it("returns getForwardProps", () => {
+			const args = {
+				availableDates: [new Date("2022-06-02")],
+			};
+			const { result } = renderHook(() => useCalendar(args));
+			const { getForwardProps } = result.current;
+			const actual = getForwardProps();
+
+			expect(actual.disabled).toBe(true);
 		});
 	});
 

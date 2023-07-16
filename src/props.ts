@@ -72,13 +72,11 @@ export function buildGetBackForwardProps(args: IBuildGetBackForwardPropsArgs) {
 				m.month === adjacentMonth.getMonth() &&
 				m.year === adjacentMonth.getFullYear()
 		) === -1;
-	const ariaLabel =
-		direction === "back" ? "Go back 1 month" : "Go forward 1 month";
+	const label = direction === "back" ? "Go back 1 month" : "Go forward 1 month";
 	const onClick = () => {
 		if (disabled) {
 			return;
 		}
-
 		setVisibleMonth(adjacentMonth);
 	};
 
@@ -86,7 +84,7 @@ export function buildGetBackForwardProps(args: IBuildGetBackForwardPropsArgs) {
 		disabled,
 		role: "button",
 		type: "button" as const,
-		"aria-label": ariaLabel,
+		"aria-label": label,
 		onClick,
 	});
 }

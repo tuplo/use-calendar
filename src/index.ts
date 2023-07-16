@@ -45,10 +45,18 @@ export function useCalendar(
 		monthsToDisplay = df.differenceInMonths(d1, d2) + 1;
 	}
 
-	const monthsInRange = df.getMonthsInRange({
-		start: df.getDateFrom({ date: visibleMonth, months: -1 }),
-		end: df.getDateFrom({ date: visibleMonth, months: monthsToDisplay }),
-	});
+	let start = df.getDateFrom({ date: visibleMonth, months: -1 });
+	let end = df.getDateFrom({ date: visibleMonth, months: monthsToDisplay });
+	if (availableDates) {
+		const numberDates = [...availableDates, Date.now()]
+			.map((d) => new Date(d).getTime())
+			.sort();
+		// eslint-disable-next-line no-useless-computed-key
+		const { [0]: minNumDate, length, [length - 1]: maxNumDate } = numberDates;
+		start = new Date(minNumDate);
+		end = new Date(maxNumDate);
+	}
+	const monthsInRange = df.getMonthsInRange({ start, end });
 
 	const months = monthsInRange
 		.filter(({ month, year }) => {
