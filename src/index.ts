@@ -8,9 +8,9 @@ import {
 	getValidDate,
 } from "./helpers";
 import {
+	buildGetDayProps,
 	buildGetPrevNextMonthProps,
 	buildGetPrevNextYearProps,
-	buildGetDayProps,
 } from "./props";
 import type { ICalendarProps, IUseCalendarOptions } from "./use-calendar.d";
 
@@ -18,10 +18,11 @@ export type {
 	ICalendarProps,
 	IDay,
 	IEvent,
-	IGetPrevNextPropsReturns,
 	IGetDayPropsFn,
 	IGetDayPropsOptions,
 	IGetDayPropsReturns,
+	IGetPrevNextPropsFn,
+	IGetPrevNextPropsReturns,
 	IMonth,
 	IUseCalendarOptions,
 	IWeek,
