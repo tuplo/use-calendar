@@ -94,13 +94,14 @@ export function getNewDay(args: INewDayArgs): IDay {
 }
 
 interface IPadAdjacentMonthDaysArgs {
-	week: IWeek;
-	firstDayOfWeek: number;
+	availableDates?: Date[];
 	date: Date;
+	firstDayOfWeek: number;
+	week: IWeek;
 }
 
 export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
-	const { week, firstDayOfWeek, date } = args;
+	const { availableDates, week, firstDayOfWeek, date } = args;
 	const isFirstDayOfMonth = df.isFirstDayOfMonth(date);
 	const isLastDayOfMonth = df.isLastDayOfMonth(date);
 	const lastDayOfWeek = firstDayOfWeek - 1 >= 0 ? firstDayOfWeek - 1 : 6;
@@ -110,7 +111,13 @@ export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
 		const lastDays = [];
 		let lastDate = df.getDateFrom({ date, days: -1 });
 		while (lastDate.getDay() !== lastDayOfWeek) {
-			lastDays.push(getNewDay({ date: lastDate, isAdjacentMonth: true }));
+			lastDays.push(
+				getNewDay({
+					availableDates,
+					date: df.getUTCDate(lastDate),
+					isAdjacentMonth: true,
+				})
+			);
 			lastDate = df.getDateFrom({ date: lastDate, days: -1 });
 		}
 		newWeek.unshift(...lastDays.reverse());
@@ -120,7 +127,13 @@ export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
 		const nextDays = [];
 		let nextDate = df.getDateFrom({ date, days: 1 });
 		while (nextDate.getDay() !== firstDayOfWeek) {
-			nextDays.push(getNewDay({ date: nextDate, isAdjacentMonth: true }));
+			nextDays.push(
+				getNewDay({
+					availableDates,
+					date: df.getUTCDate(nextDate),
+					isAdjacentMonth: true,
+				})
+			);
 			nextDate = df.getDateFrom({ date: nextDate, days: 1 });
 		}
 		newWeek.push(...nextDays);
@@ -162,6 +175,7 @@ export function getWeeks(args: IGetWeekArgs): IWeek[] {
 		// pad last days of last month
 		if (date === days[0]) {
 			weeks[currentWeekIndex] = padAdjacentMonthDays({
+				availableDates,
 				week: weeks[currentWeekIndex],
 				firstDayOfWeek,
 				date,
@@ -172,6 +186,7 @@ export function getWeeks(args: IGetWeekArgs): IWeek[] {
 			currentWeekIndex += 1;
 			weeks[currentWeekIndex] = [];
 		}
+
 		weeks[currentWeekIndex].push(
 			getNewDay({ availableDates, date, events, maxDate, minDate, selected })
 		);
@@ -179,6 +194,7 @@ export function getWeeks(args: IGetWeekArgs): IWeek[] {
 		// pad first days of next month
 		if (date === days[days.length - 1]) {
 			weeks[currentWeekIndex] = padAdjacentMonthDays({
+				availableDates,
 				week: weeks[currentWeekIndex],
 				firstDayOfWeek,
 				date,

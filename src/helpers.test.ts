@@ -10,6 +10,7 @@ import {
 	isValidDate,
 	padAdjacentMonthDays,
 } from "./helpers";
+import type { IDay } from "./use-calendar.d";
 
 describe("use-calendar helpers", () => {
 	const dateNowSpy = vi
@@ -93,6 +94,29 @@ describe("use-calendar helpers", () => {
 				expect(actual).toStrictEqual(expected);
 			}
 		);
+
+		it("pads adjacent month days according to available dates", () => {
+			const actual = padAdjacentMonthDays({
+				week: [],
+				firstDayOfWeek: 0,
+				date: new Date("2022-07-01"),
+				availableDates: df.getDaysOfMonth({ year: 2022, month: 5 }),
+			});
+
+			const expected: IDay[] = [
+				"2022-06-26",
+				"2022-06-27",
+				"2022-06-28",
+				"2022-06-29",
+				"2022-06-30",
+			].map((date) => ({
+				date: new Date(date),
+				isAdjacentMonth: true,
+				isSelectable: true,
+			}));
+			expected[0].isWeekend = true;
+			expect(actual).toStrictEqual(expected);
+		});
 
 		it.each([
 			[
