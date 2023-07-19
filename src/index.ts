@@ -59,6 +59,7 @@ export function useCalendar(
 
 	const monthsInRange = useMemo(
 		() => df.getMonthsInRange({ start, end }),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[start.toISOString(), end.toISOString()]
 	);
 
