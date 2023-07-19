@@ -95,29 +95,6 @@ describe("use-calendar helpers", () => {
 			}
 		);
 
-		it("pads adjacent month days according to available dates", () => {
-			const actual = padAdjacentMonthDays({
-				week: [],
-				firstDayOfWeek: 0,
-				date: new Date("2022-07-01"),
-				availableDates: df.getDaysOfMonth({ year: 2022, month: 5 }),
-			});
-
-			const expected: IDay[] = [
-				"2022-06-26",
-				"2022-06-27",
-				"2022-06-28",
-				"2022-06-29",
-				"2022-06-30",
-			].map((date) => ({
-				date: new Date(date),
-				isAdjacentMonth: true,
-				isSelectable: true,
-			}));
-			expected[0].isWeekend = true;
-			expect(actual).toStrictEqual(expected);
-		});
-
 		it.each([
 			[
 				"default",
@@ -162,6 +139,53 @@ describe("use-calendar helpers", () => {
 				expect(actual).toStrictEqual(expected);
 			}
 		);
+
+		it("pads adjacent month days according to available dates", () => {
+			const actual = padAdjacentMonthDays({
+				week: [],
+				firstDayOfWeek: 0,
+				date: new Date("2022-07-01"),
+				availableDates: df.getDaysOfMonth({ year: 2022, month: 5 }),
+			});
+
+			const expected: IDay[] = [
+				"2022-06-26",
+				"2022-06-27",
+				"2022-06-28",
+				"2022-06-29",
+				"2022-06-30",
+			].map((date) => ({
+				date: new Date(date),
+				isAdjacentMonth: true,
+				isSelectable: true,
+			}));
+			expected[0].isWeekend = true;
+			expect(actual).toStrictEqual(expected);
+		});
+
+		it('pads adjacent month days with "selected" date', () => {
+			const actual = padAdjacentMonthDays({
+				week: [],
+				firstDayOfWeek: 0,
+				date: new Date("2022-07-01"),
+				selected: new Date("2022-06-27"),
+				availableDates: df.getDaysOfMonth({ year: 2022, month: 5 }),
+			});
+			const expected: IDay[] = [
+				"2022-06-26",
+				"2022-06-27",
+				"2022-06-28",
+				"2022-06-29",
+				"2022-06-30",
+			].map((date) => ({
+				date: new Date(date),
+				isAdjacentMonth: true,
+				isSelectable: true,
+			}));
+			expected[0].isWeekend = true;
+			expected[1].isSelected = true;
+			expect(actual).toStrictEqual(expected);
+		});
 	});
 
 	describe("getWeeks", () => {

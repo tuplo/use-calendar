@@ -97,11 +97,12 @@ interface IPadAdjacentMonthDaysArgs {
 	availableDates?: Date[];
 	date: Date;
 	firstDayOfWeek: number;
+	selected?: Date;
 	week: IWeek;
 }
 
 export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
-	const { availableDates, week, firstDayOfWeek, date } = args;
+	const { availableDates, week, firstDayOfWeek, date, selected } = args;
 	const isFirstDayOfMonth = df.isFirstDayOfMonth(date);
 	const isLastDayOfMonth = df.isLastDayOfMonth(date);
 	const lastDayOfWeek = firstDayOfWeek - 1 >= 0 ? firstDayOfWeek - 1 : 6;
@@ -116,6 +117,7 @@ export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
 					availableDates,
 					date: df.getUTCDate(lastDate),
 					isAdjacentMonth: true,
+					selected,
 				})
 			);
 			lastDate = df.getDateFrom({ date: lastDate, days: -1 });
@@ -132,6 +134,7 @@ export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
 					availableDates,
 					date: df.getUTCDate(nextDate),
 					isAdjacentMonth: true,
+					selected,
 				})
 			);
 			nextDate = df.getDateFrom({ date: nextDate, days: 1 });
@@ -176,9 +179,10 @@ export function getWeeks(args: IGetWeekArgs): IWeek[] {
 		if (date === days[0]) {
 			weeks[currentWeekIndex] = padAdjacentMonthDays({
 				availableDates,
-				week: weeks[currentWeekIndex],
-				firstDayOfWeek,
 				date,
+				firstDayOfWeek,
+				selected,
+				week: weeks[currentWeekIndex],
 			});
 		}
 
@@ -195,9 +199,10 @@ export function getWeeks(args: IGetWeekArgs): IWeek[] {
 		if (date === days[days.length - 1]) {
 			weeks[currentWeekIndex] = padAdjacentMonthDays({
 				availableDates,
-				week: weeks[currentWeekIndex],
-				firstDayOfWeek,
 				date,
+				firstDayOfWeek,
+				selected,
+				week: weeks[currentWeekIndex],
 			});
 		}
 	}
