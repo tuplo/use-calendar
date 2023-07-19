@@ -393,6 +393,19 @@ describe("use-calendar helpers", () => {
 			};
 			expect(actual).toStrictEqual(expected);
 		});
+
+		it.only("handles maxDate < minDate", () => {
+			const actual = getMinMaxDate({
+				minDate: new Date("2022-07-31"),
+				maxDate: new Date("2022-07-01"),
+			});
+
+			const expected = {
+				minDate: new Date("2022-07-01"),
+				maxDate: new Date("2022-07-31"),
+			};
+			expect(actual).toStrictEqual(expected);
+		});
 	});
 
 	describe("getStartEndDate", () => {

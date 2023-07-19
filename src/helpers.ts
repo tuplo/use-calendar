@@ -241,6 +241,10 @@ export function getMinMaxDate(options?: Partial<IUseCalendarOptions>) {
 	let min = minDate || df.getDateFrom({ date, years: -10 });
 	let max = maxDate || df.getDateFrom({ date, years: 10 });
 
+	if (min > max) {
+		[min, max] = [max, min];
+	}
+
 	if (availableDates) {
 		const { 0: firstDate, length, [length - 1]: lastDate } = availableDates;
 		const firstDayOfCurrentMonth = df.getFirstDayOfMonth(today);
