@@ -38,7 +38,7 @@ export interface IGetDayPropsFn {
 	(options: IGetDayPropsOptions): Partial<IGetDayPropsReturns>;
 }
 
-export interface IGetBackForwardPropsReturns {
+export interface IGetPrevNextPropsReturns {
 	"aria-label": string;
 	disabled: boolean;
 	role: string;
@@ -46,17 +46,16 @@ export interface IGetBackForwardPropsReturns {
 	onClick: () => void;
 }
 
-export interface IGetBackPropsFn {
-	(): IGetBackForwardPropsReturns;
-}
-export interface IGetForwardPropsFn {
-	(): IGetBackForwardPropsReturns;
+export interface IGetPrevNextPropsFn {
+	(): IGetPrevNextPropsReturns;
 }
 
 export interface ICalendarProps {
-	getBackProps: IGetBackPropsFn;
+	getPrevYearProps: IGetPrevNextPropsFn;
+	getPrevMonthProps: IGetPrevNextPropsFn;
 	getDayProps: IGetDayPropsFn;
-	getForwardProps: IGetForwardPropsFn;
+	getNextMonthProps: IGetPrevNextPropsFn;
+	getNextYearProps: IGetPrevNextPropsFn;
 	months: IMonth[];
 	resetState: () => void;
 }

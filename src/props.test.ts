@@ -1,6 +1,6 @@
 import { vi } from "vitest";
 
-import { buildGetBackForwardProps, buildGetDayProps } from "./props";
+import { buildGetPrevNextMonthProps, buildGetDayProps } from "./props";
 import type { IMonth } from "./use-calendar.d";
 
 const commonProps = {
@@ -136,10 +136,10 @@ describe("props functions", () => {
 		});
 	});
 
-	describe("getBackProps", () => {
+	describe("getPrevMonth", () => {
 		it("builds gets back props function", () => {
 			const months = [{ month: 6, year: 2022 }] as IMonth[];
-			const fn = buildGetBackForwardProps({
+			const fn = buildGetPrevNextMonthProps({
 				direction: "back",
 				months,
 				monthsInRange: [{ month: 5, year: 2022 }],
@@ -155,9 +155,9 @@ describe("props functions", () => {
 			expect(actual).toStrictEqual(expected);
 		});
 
-		it("disabled back button", () => {
+		it("disabled previous month button", () => {
 			const months = [{ month: 6, year: 2022 }] as IMonth[];
-			const fn = buildGetBackForwardProps({
+			const fn = buildGetPrevNextMonthProps({
 				direction: "back",
 				months,
 				monthsInRange: [{ month: 6, year: 2022 }],
@@ -169,7 +169,7 @@ describe("props functions", () => {
 
 		it("handles empty list of months", () => {
 			const months: IMonth[] = [];
-			const fn = buildGetBackForwardProps({
+			const fn = buildGetPrevNextMonthProps({
 				direction: "back",
 				months,
 				monthsInRange: [{ month: 5, year: 2022 }],
@@ -182,10 +182,10 @@ describe("props functions", () => {
 		});
 	});
 
-	describe("getForwardProps", () => {
+	describe("getNextMonth", () => {
 		it("builds gets back props function", () => {
 			const months = [{ month: 6, year: 2022 }] as IMonth[];
-			const fn = buildGetBackForwardProps({
+			const fn = buildGetPrevNextMonthProps({
 				direction: "forward",
 				months,
 				monthsInRange: [
@@ -205,9 +205,9 @@ describe("props functions", () => {
 			expect(actual).toStrictEqual(expected);
 		});
 
-		it("disabled forward button", () => {
+		it("disabled next button", () => {
 			const months = [{ month: 6, year: 2022 }] as IMonth[];
-			const fn = buildGetBackForwardProps({
+			const fn = buildGetPrevNextMonthProps({
 				direction: "forward",
 				months,
 				monthsInRange: [
@@ -231,7 +231,7 @@ describe("props functions", () => {
 			(direction, expectedDateStr) => {
 				const setVisibleMonthSpy = vi.fn();
 				const months = [{ month: 6, year: 2022 }] as IMonth[];
-				const fn = buildGetBackForwardProps({
+				const fn = buildGetPrevNextMonthProps({
 					direction,
 					months,
 					monthsInRange: [
@@ -255,7 +255,7 @@ describe("props functions", () => {
 			(direction) => {
 				const setVisibleMonthSpy = vi.fn();
 				const months = [{ month: 6, year: 2022 }] as IMonth[];
-				const fn = buildGetBackForwardProps({
+				const fn = buildGetPrevNextMonthProps({
 					direction,
 					months,
 					monthsInRange: [{ month: 6, year: 2022 }],

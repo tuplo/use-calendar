@@ -38,8 +38,8 @@ function Calendar() {
   const {
     months,
     getDayProps,
-    getBackProps,
-    getForwardProps
+    getPrevMonthProps,
+    getNextMonthProps
   } = useCalendar()
 
   return (
@@ -50,8 +50,8 @@ function Calendar() {
             <h1>{month} {year}</h1>
           </header>
           <nav>
-            <button {...getBackProps()}>Prev</button>
-            <button {...getForwardProps()}>Next</button>
+            <button {...getPrevMonthProps()}>Prev</button>
+            <button {...getNextMonthProps()}>Next</button>
           </nav>
           {
             weeks.map((week) =>
@@ -138,9 +138,11 @@ The hook will return an object with the following shape:
 
 ```typescript
 interface ICalendarProps {
-  getBackProps: IGetBackPropsFn;
   getDayProps: IGetDayPropsFn;
-  getForwardProps: IGetForwardPropsFn;
+  getPrevMonthProps: IGetPrevNextPropsFn;
+  getNextMonthProps: IGetPrevNextPropsFn;
+  getPrevYearProps: IGetPrevNextPropsFn;
+  getNextYearProps: IGetPrevNextPropsFn;
   months: IMonth[];
   resetState: () => void;
 }

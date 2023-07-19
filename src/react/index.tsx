@@ -2,7 +2,7 @@ import type { IUseCalendarOptions } from "../index";
 import { useCalendar } from "../index";
 
 function Calendar(props?: Partial<IUseCalendarOptions>) {
-	const { months, getDayProps, getBackProps, getForwardProps } =
+	const { months, getDayProps, getPrevMonthProps, getNextMonthProps } =
 		useCalendar(props);
 
 	return (
@@ -15,8 +15,8 @@ function Calendar(props?: Partial<IUseCalendarOptions>) {
 						</h1>
 					</header>
 					<nav>
-						<button {...getBackProps()}>Prev</button>
-						<button {...getForwardProps()}>Next</button>
+						<button {...getPrevMonthProps()}>Prev</button>
+						<button {...getNextMonthProps()}>Next</button>
 					</nav>
 					{weeks.map((week, weekIndex) =>
 						week.map((day, dayIndex) =>

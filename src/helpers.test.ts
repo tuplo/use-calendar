@@ -394,7 +394,7 @@ describe("use-calendar helpers", () => {
 			expect(actual).toStrictEqual(expected);
 		});
 
-		it.only("handles maxDate < minDate", () => {
+		it("handles maxDate < minDate", () => {
 			const actual = getMinMaxDate({
 				minDate: new Date("2022-07-31"),
 				maxDate: new Date("2022-07-01"),

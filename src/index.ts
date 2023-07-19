@@ -7,19 +7,21 @@ import {
 	getStartEndDate,
 	getValidDate,
 } from "./helpers";
-import { buildGetBackForwardProps, buildGetDayProps } from "./props";
+import {
+	buildGetPrevNextMonthProps,
+	buildGetPrevNextYearProps,
+	buildGetDayProps,
+} from "./props";
 import type { ICalendarProps, IUseCalendarOptions } from "./use-calendar.d";
 
 export type {
 	ICalendarProps,
 	IDay,
 	IEvent,
-	IGetBackForwardPropsReturns,
-	IGetBackPropsFn,
+	IGetPrevNextPropsReturns,
 	IGetDayPropsFn,
 	IGetDayPropsOptions,
 	IGetDayPropsReturns,
-	IGetForwardPropsFn,
 	IMonth,
 	IUseCalendarOptions,
 	IWeek,
@@ -87,13 +89,24 @@ export function useCalendar(
 
 	const getDayProps = buildGetDayProps({ setSelected, onDateSelected });
 
-	const [getBackProps, getForwardProps] = ["back", "forward"].map((direction) =>
-		buildGetBackForwardProps({
-			direction,
-			months,
-			setVisibleMonth,
-			monthsInRange,
-		})
+	const [getPrevMonthProps, getNextMonthProps] = ["back", "forward"].map(
+		(direction) =>
+			buildGetPrevNextMonthProps({
+				direction,
+				months,
+				setVisibleMonth,
+				monthsInRange,
+			})
+	);
+
+	const [getPrevYearProps, getNextYearProps] = ["back", "forward"].map(
+		(direction) =>
+			buildGetPrevNextYearProps({
+				direction,
+				monthsInRange,
+				setVisibleMonth,
+				visibleMonth,
+			})
 	);
 
 	const resetState = () => {
@@ -101,5 +114,13 @@ export function useCalendar(
 		setVisibleMonth(new Date(Date.now()));
 	};
 
-	return { months, getDayProps, getBackProps, getForwardProps, resetState };
+	return {
+		months,
+		getDayProps,
+		getPrevYearProps,
+		getPrevMonthProps,
+		getNextMonthProps,
+		getNextYearProps,
+		resetState,
+	};
 }

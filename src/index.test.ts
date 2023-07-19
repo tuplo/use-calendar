@@ -21,8 +21,10 @@ describe("use-calendar", () => {
 
 			const expected = {
 				getDayProps: expect.any(Function),
-				getBackProps: expect.any(Function),
-				getForwardProps: expect.any(Function),
+				getPrevMonthProps: expect.any(Function),
+				getNextMonthProps: expect.any(Function),
+				getPrevYearProps: expect.any(Function),
+				getNextYearProps: expect.any(Function),
 				resetState: expect.any(Function),
 				months: [
 					{
@@ -160,8 +162,10 @@ describe("use-calendar", () => {
 
 			const expected = {
 				getDayProps: expect.any(Function),
-				getBackProps: expect.any(Function),
-				getForwardProps: expect.any(Function),
+				getPrevMonthProps: expect.any(Function),
+				getNextMonthProps: expect.any(Function),
+				getPrevYearProps: expect.any(Function),
+				getNextYearProps: expect.any(Function),
 				resetState: expect.any(Function),
 				months: expect.any(Array),
 			};
@@ -346,24 +350,24 @@ describe("use-calendar", () => {
 			expect(actual.months[0].month).toBe(6);
 		});
 
-		it("returns getBackProps", () => {
+		it("returns getPrevMonthProps", () => {
 			const args = {
 				availableDates: [new Date("2022-12-25")],
 			};
 			const { result } = renderHook(() => useCalendar(args));
-			const { getBackProps } = result.current;
-			const actual = getBackProps();
+			const { getPrevMonthProps } = result.current;
+			const actual = getPrevMonthProps();
 
 			expect(actual.disabled).toBe(true);
 		});
 
-		it("returns getForwardProps", () => {
+		it("returns getNextMonthProps", () => {
 			const args = {
 				availableDates: [new Date("2022-06-02")],
 			};
 			const { result } = renderHook(() => useCalendar(args));
-			const { getForwardProps } = result.current;
-			const actual = getForwardProps();
+			const { getNextMonthProps } = result.current;
+			const actual = getNextMonthProps();
 
 			expect(actual.disabled).toBe(true);
 		});
@@ -401,7 +405,7 @@ describe("use-calendar", () => {
 			const { result } = renderHook(() =>
 				useCalendar({ maxDate: new Date("2022-08-31") })
 			);
-			const { getForwardProps } = result.current;
+			const { getNextMonthProps: getForwardProps } = result.current;
 			const button = getForwardProps();
 
 			// goes to next month
