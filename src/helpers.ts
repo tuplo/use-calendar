@@ -235,10 +235,12 @@ export function getMinMaxDate(options?: Partial<IUseCalendarOptions>) {
 		maxDate,
 		selectedDate = new Date(Date.now()),
 	} = options || {};
+
 	const today = new Date(Date.now());
 	const date = getValidDate(selectedDate) || today;
-	let min = minDate || new Date("0000-01-01");
-	let max = maxDate || df.getDateFrom({ date, years: 1_000 });
+	let min = minDate || df.getDateFrom({ date, years: -10 });
+	let max = maxDate || df.getDateFrom({ date, years: 10 });
+
 	if (availableDates) {
 		const { 0: firstDate, length, [length - 1]: lastDate } = availableDates;
 		const firstDayOfCurrentMonth = df.getFirstDayOfMonth(today);
@@ -260,4 +262,38 @@ export function getMinMaxDate(options?: Partial<IUseCalendarOptions>) {
 	}
 
 	return { minDate: min, maxDate: max };
+}
+
+interface IGetStartEndDateArgs {
+	availableDates?: Date[];
+	monthsToDisplay: number;
+	minDate?: Date;
+	maxDate?: Date;
+	visibleMonth: Date;
+}
+
+export function getStartEndDate(args: IGetStartEndDateArgs) {
+	const { availableDates, monthsToDisplay, minDate, maxDate, visibleMonth } =
+		args;
+
+	// default 1 visible month
+	let start = df.getDateFrom({ date: visibleMonth, months: -1 });
+	let end = df.getDateFrom({ date: visibleMonth, months: monthsToDisplay });
+
+	// min/max dates from user
+	start = minDate || start;
+	end = maxDate || end;
+
+	// min/max dates from available dates
+	if (availableDates) {
+		const numberDates = [...availableDates, Date.now()]
+			.map((d) => new Date(d).getTime())
+			.sort();
+		// eslint-disable-next-line no-useless-computed-key
+		const { [0]: minNumDate, length, [length - 1]: maxNumDate } = numberDates;
+		start = new Date(minNumDate);
+		end = new Date(maxNumDate);
+	}
+
+	return { start, end };
 }

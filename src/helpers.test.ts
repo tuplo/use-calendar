@@ -5,6 +5,7 @@ import {
 	getDayEvents,
 	getMinMaxDate,
 	getNewDay,
+	getStartEndDate,
 	getValidDate,
 	getWeeks,
 	isValidDate,
@@ -350,8 +351,8 @@ describe("use-calendar helpers", () => {
 			const actual = getMinMaxDate();
 
 			const expected = {
-				minDate: new Date("0000-01-01"),
-				maxDate: new Date("3022-07-02"),
+				minDate: new Date("2012-07-02"),
+				maxDate: new Date("2032-07-02"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
@@ -389,6 +390,85 @@ describe("use-calendar helpers", () => {
 			const expected = {
 				minDate: new Date("2021-10-01"),
 				maxDate: new Date("2022-07-31"),
+			};
+			expect(actual).toStrictEqual(expected);
+		});
+	});
+
+	describe("getStartEndDate", () => {
+		const visibleMonth = new Date("2022-07-02");
+		const monthsToDisplay = 1;
+
+		it("default 1 visible month", () => {
+			const actual = getStartEndDate({ visibleMonth, monthsToDisplay });
+
+			const expected = {
+				start: new Date("2022-06-02"),
+				end: new Date("2022-08-02"),
+			};
+			expect(actual).toStrictEqual(expected);
+		});
+
+		it("based on minDate", () => {
+			const minDate = new Date("2022-06-04");
+			const actual = getStartEndDate({
+				visibleMonth,
+				minDate,
+				monthsToDisplay,
+			});
+
+			const expected = {
+				start: new Date("2022-06-04"),
+				end: new Date("2022-08-02"),
+			};
+			expect(actual).toStrictEqual(expected);
+		});
+
+		it("based on maxDate", () => {
+			const maxDate = new Date("2022-08-04");
+			const actual = getStartEndDate({
+				visibleMonth,
+				maxDate,
+				monthsToDisplay,
+			});
+
+			const expected = {
+				start: new Date("2022-06-02"),
+				end: new Date("2022-08-04"),
+			};
+			expect(actual).toStrictEqual(expected);
+		});
+
+		it("based on minDate/maxDate", () => {
+			const minDate = new Date("2022-06-22");
+			const maxDate = new Date("2022-08-04");
+			const actual = getStartEndDate({
+				visibleMonth,
+				minDate,
+				maxDate,
+				monthsToDisplay,
+			});
+
+			const expected = {
+				start: new Date("2022-06-22"),
+				end: new Date("2022-08-04"),
+			};
+			expect(actual).toStrictEqual(expected);
+		});
+
+		it("based on available dates", () => {
+			const availableDates = ["2022-06-04", "2022-07-29"].map(
+				(d) => new Date(d)
+			);
+			const actual = getStartEndDate({
+				availableDates,
+				visibleMonth,
+				monthsToDisplay,
+			});
+
+			const expected = {
+				start: new Date("2022-06-04"),
+				end: new Date("2022-07-29"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});

@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import * as df from "./date-fns";
-import { getCalendarMonth, getMinMaxDate, getValidDate } from "./helpers";
+import {
+	getCalendarMonth,
+	getMinMaxDate,
+	getStartEndDate,
+	getValidDate,
+} from "./helpers";
 import { buildGetBackForwardProps, buildGetDayProps } from "./props";
 import type { ICalendarProps, IUseCalendarOptions } from "./use-calendar.d";
 
@@ -36,8 +41,6 @@ export function useCalendar(
 		selected || new Date(Date.now())
 	);
 
-	const { minDate, maxDate } = getMinMaxDate(options);
-
 	let monthsToDisplay = options?.monthsToDisplay || 1;
 	if (monthsToDisplay === Infinity) {
 		const d1 = options?.minDate || df.getFirstDayOfMonth(visibleMonth);
@@ -45,26 +48,30 @@ export function useCalendar(
 		monthsToDisplay = df.differenceInMonths(d1, d2) + 1;
 	}
 
-	let start = df.getDateFrom({ date: visibleMonth, months: -1 });
-	let end = df.getDateFrom({ date: visibleMonth, months: monthsToDisplay });
-	if (availableDates) {
-		const numberDates = [...availableDates, Date.now()]
-			.map((d) => new Date(d).getTime())
-			.sort();
-		// eslint-disable-next-line no-useless-computed-key
-		const { [0]: minNumDate, length, [length - 1]: maxNumDate } = numberDates;
-		start = new Date(minNumDate);
-		end = new Date(maxNumDate);
-	}
-	const monthsInRange = df.getMonthsInRange({ start, end });
+	const { minDate, maxDate } = getMinMaxDate(options);
+	const { start, end } = getStartEndDate({
+		availableDates,
+		monthsToDisplay,
+		minDate,
+		maxDate,
+		visibleMonth,
+	});
 
+	const monthsInRange = useMemo(
+		() => df.getMonthsInRange({ start, end }),
+		[start.toISOString(), end.toISOString()]
+	);
+
+	const visibleMonthDate = new Date(
+		visibleMonth.getFullYear(),
+		visibleMonth.getMonth()
+	);
 	const months = monthsInRange
 		.filter(({ month, year }) => {
 			const a = new Date(year, month);
-			const b = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth());
-			return a >= b;
+			return a >= visibleMonthDate;
 		})
-		.slice(0, monthsToDisplay)
+		.slice(0, monthsToDisplay || 1)
 		.map((month) =>
 			getCalendarMonth({
 				...month,
