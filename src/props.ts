@@ -32,6 +32,7 @@ export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 		return {
 			"aria-selected": day.isSelected,
 			"aria-label": dtf.format(new Date(day.date)),
+			disabled: !day.isSelectable,
 			key: day.date.toISOString(),
 			role: "button",
 			onClick: () => {

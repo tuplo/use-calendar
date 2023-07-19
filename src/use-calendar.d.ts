@@ -26,7 +26,10 @@ export interface IGetDayPropsOptions {
 }
 
 export interface IGetDayPropsReturns {
+	"aria-selected": boolean;
 	"aria-label": string;
+	disabled: boolean;
+	key: string;
 	role: string;
 	onClick: () => void;
 }

@@ -28,30 +28,35 @@ exports[`useCalendar UI > renders 1`] = `
     </nav>
     <button
       aria-label="June 26, 2022"
+      disabled=""
       role="button"
     >
       26
     </button>
     <button
       aria-label="June 27, 2022"
+      disabled=""
       role="button"
     >
       27
     </button>
     <button
       aria-label="June 28, 2022"
+      disabled=""
       role="button"
     >
       28
     </button>
     <button
       aria-label="June 29, 2022"
+      disabled=""
       role="button"
     >
       29
     </button>
     <button
       aria-label="June 30, 2022"
+      disabled=""
       role="button"
     >
       30
@@ -244,36 +249,42 @@ exports[`useCalendar UI > renders 1`] = `
     </button>
     <button
       aria-label="August 1, 2022"
+      disabled=""
       role="button"
     >
       1
     </button>
     <button
       aria-label="August 2, 2022"
+      disabled=""
       role="button"
     >
       2
     </button>
     <button
       aria-label="August 3, 2022"
+      disabled=""
       role="button"
     >
       3
     </button>
     <button
       aria-label="August 4, 2022"
+      disabled=""
       role="button"
     >
       4
     </button>
     <button
       aria-label="August 5, 2022"
+      disabled=""
       role="button"
     >
       5
     </button>
     <button
       aria-label="August 6, 2022"
+      disabled=""
       role="button"
     >
       6
