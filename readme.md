@@ -1,6 +1,6 @@
 <br />
 <div align="center">
-  <img src="logo.png" alt="Logo" width="120" height="120">
+  <img src="docs/logo.png" alt="Logo" width="120" height="120">
   <h1 align="center">use-calendar</h3>
   <p align="center">Headless calendar hook for React</p>
   <p align="center">
@@ -15,8 +15,15 @@
 Other similar solutions were a bit too heavy on dependencies or didn't support all features we needed.
 
 * No dependencies
+* Available dates, minimum and maximum dates
+* Weekends, adjacent month's days
+* Previous and next month/year navigation
+* Events
 * WAI-ARIA compliant
-* Events	 
+
+<div align="center">
+  <img src="docs/screenshot.png" alt="Logo" width="240">
+</div>
 
 ## Install
 
