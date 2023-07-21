@@ -12,10 +12,8 @@
 
 ## Why
 
-Other similar solutions were a bit too heavy on dependencies or didn't support all features we needed.
-
-* No dependencies
-* Available dates, minimum and maximum dates
+* No dependencies, tiny footprint
+* Configurable available dates, minimum and maximum dates
 * Weekends, adjacent month's days
 * Previous and next month/year navigation
 * Events
