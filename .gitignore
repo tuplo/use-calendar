@@ -4,3 +4,4 @@
 coverage
 tsconfig.tsbuildinfo
 /cjs
+*.log

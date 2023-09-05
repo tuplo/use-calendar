@@ -2,13 +2,13 @@
   "compilerOptions": {
     "baseUrl": ".",
     "esModuleInterop": true,
-    "jsx": "react-jsx",
+    "incremental": true,
     "isolatedModules": true,
+    "jsx": "react-jsx",
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
     "target": "es6",
-    "incremental": true,
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "sh/**/*.ts"],
   "exclude": ["node_modules"]
