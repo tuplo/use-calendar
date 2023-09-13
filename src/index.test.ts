@@ -2,8 +2,12 @@
 import { act, renderHook } from "@testing-library/react";
 import { vi } from "vitest";
 
-import { useCalendar } from "./index";
-import type { IDay, IEvent, IGetDayPropsReturns } from "./use-calendar.d";
+import {
+	useCalendar,
+	type IEvent,
+	type IDay,
+	type IGetDayPropsReturns,
+} from "./index";
 
 describe("use-calendar", () => {
 	const dateNowSpy = vi

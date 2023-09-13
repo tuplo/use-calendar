@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 
 import { buildGetPrevNextMonthProps, buildGetDayProps } from "./props";
-import type { IMonth } from "./use-calendar.d";
+import { type IMonth } from "./use-calendar.d";
 
 const commonProps = {
 	role: "button",

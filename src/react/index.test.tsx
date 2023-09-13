@@ -55,4 +55,13 @@ describe("useCalendar UI", () => {
 			expect(onDateSelectedSpy).toHaveBeenCalledTimes(0);
 		});
 	});
+
+	describe("selectedDate", () => {
+		it("selects a date by default", async () => {
+			const selectedDate = new Date("2022-07-12");
+			render(<Calendar selectedDate={selectedDate} />);
+
+			expect(screen.getByText("12")).toHaveAttribute("aria-selected", "true");
+		});
+	});
 });

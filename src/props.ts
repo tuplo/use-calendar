@@ -1,8 +1,8 @@
-import type {
-	IDay,
-	IGetPrevNextPropsReturns,
-	IGetDayPropsOptions,
-	IMonth,
+import {
+	type IDay,
+	type IGetPrevNextPropsReturns,
+	type IGetDayPropsOptions,
+	type IMonth,
 } from "./use-calendar.d";
 import * as df from "./date-fns";
 

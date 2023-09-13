@@ -1,10 +1,10 @@
 import * as df from "./date-fns";
-import type {
-	IDay,
-	IEvent,
-	IMonth,
-	IUseCalendarOptions,
-	IWeek,
+import {
+	type IDay,
+	type IEvent,
+	type IMonth,
+	type IUseCalendarOptions,
+	type IWeek,
 } from "./use-calendar.d";
 
 export function isValidDate(d: string | number | Date | undefined) {
@@ -41,7 +41,7 @@ export function getDayEvents(args: IGetDayEventsArgs) {
 	);
 }
 
-interface INewDayArgs {
+interface IGetNewDayArgs {
 	availableDates?: Date[];
 	date: Date;
 	events?: IEvent[];
@@ -51,7 +51,7 @@ interface INewDayArgs {
 	isAdjacentMonth?: boolean;
 }
 
-export function getNewDay(args: INewDayArgs): IDay {
+export function getNewDay(args: IGetNewDayArgs): IDay {
 	const {
 		availableDates,
 		date,
@@ -145,7 +145,7 @@ export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
 	return newWeek;
 }
 
-interface IGetWeekArgs {
+interface IGetWeeksArgs {
 	availableDates?: Date[];
 	events?: IEvent[];
 	firstDayOfWeek: number;
@@ -156,7 +156,7 @@ interface IGetWeekArgs {
 	year: number;
 }
 
-export function getWeeks(args: IGetWeekArgs): IWeek[] {
+export function getWeeks(args: IGetWeeksArgs): IWeek[] {
 	const {
 		availableDates,
 		events,

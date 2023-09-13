@@ -1,5 +1,4 @@
-import type { IUseCalendarOptions } from "../index";
-import { useCalendar } from "../index";
+import { useCalendar, type IUseCalendarOptions } from "../index";
 
 function Calendar(props?: Partial<IUseCalendarOptions>) {
 	const { months, getDayProps, getPrevMonthProps, getNextMonthProps } =

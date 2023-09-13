@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import * as df from "./date-fns";
 import {
@@ -12,7 +12,10 @@ import {
 	buildGetPrevNextMonthProps,
 	buildGetPrevNextYearProps,
 } from "./props";
-import type { ICalendarProps, IUseCalendarOptions } from "./use-calendar.d";
+import {
+	type ICalendarProps,
+	type IUseCalendarOptions,
+} from "./use-calendar.d";
 
 export type {
 	ICalendarProps,
@@ -42,6 +45,15 @@ export function useCalendar(
 	const [selected, setSelected] = useState<Date | undefined>(s);
 	const [visibleMonth, setVisibleMonth] = useState(
 		selected || new Date(Date.now())
+	);
+
+	useEffect(
+		() => {
+			if (s?.getTime() === selected?.getTime()) return;
+			setSelected(s);
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[s?.getTime()]
 	);
 
 	let monthsToDisplay = options?.monthsToDisplay || 1;

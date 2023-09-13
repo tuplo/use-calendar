@@ -11,7 +11,7 @@ import {
 	isValidDate,
 	padAdjacentMonthDays,
 } from "./helpers";
-import type { IDay } from "./use-calendar.d";
+import { type IDay } from "./use-calendar.d";
 
 describe("use-calendar helpers", () => {
 	const dateNowSpy = vi
