@@ -49,8 +49,9 @@ export function useCalendar(
 
 	useEffect(
 		() => {
-			if (s?.getTime() === selected?.getTime()) return;
+			if (!s || s?.getTime() === selected?.getTime()) return;
 			setSelected(s);
+			setVisibleMonth(s);
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[s?.getTime()]

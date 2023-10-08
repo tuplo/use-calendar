@@ -264,6 +264,17 @@ describe("use-calendar", () => {
 			expect(actual.months[0].weeks[1][0]!.isSelected).toBeUndefined();
 		});
 
+		it("sets the current month to the selected date's month", () => {
+			const props = {
+				minDate: new Date("2022-06-01"),
+				maxDate: new Date("2022-08-31"),
+				selectedDate: new Date("2022-07-03"),
+			};
+
+			const { result } = renderHook(() => useCalendar(props));
+			expect(result.current.months[0].month).toBe(6);
+		});
+
 		it("still returns current month if not provided selected date", () => {
 			const { result } = renderHook(() => useCalendar());
 			const { current: actual } = result;
