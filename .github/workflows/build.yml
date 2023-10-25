@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@main
       - uses: actions/setup-node@main
         with:
-          node-version: 18
+          node-version: 20
       - uses: actions/cache@main
         with:
           path: node_modules
@@ -51,7 +51,7 @@ jobs:
       - uses: actions/checkout@main
       - uses: actions/setup-node@main
         with:
-          node-version: 18
+          node-version: 20
           registry-url: https://registry.npmjs.org/
       - run: |
           yarn install --frozen-lockfile
