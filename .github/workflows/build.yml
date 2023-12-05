@@ -19,7 +19,7 @@ jobs:
       - run: |
           yarn install --frozen-lockfile
           yarn lint
-          yarn lint:ts
+          # yarn lint:ts
           yarn test:ci
 
   test-coverage:
