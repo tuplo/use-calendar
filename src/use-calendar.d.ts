@@ -1,9 +1,9 @@
-export interface IEvent {
+export type IEvent = {
 	[key: string]: unknown;
 	end?: Date;
 	start: Date;
-}
-export interface IDay {
+};
+export type IDay = {
 	date: Date;
 	events?: IEvent[];
 	isSelectable?: boolean;
@@ -11,46 +11,46 @@ export interface IDay {
 	isToday?: boolean;
 	isWeekend?: boolean;
 	isAdjacentMonth?: boolean;
-}
+};
 
 export type IWeek = IDay[];
 
-export interface IMonth {
+export type IMonth = {
 	weeks: IWeek[];
 	month: number;
 	year: number;
-}
+};
 
-export interface IGetDayPropsOptions {
+export type IGetDayPropsOptions = {
 	day: IDay | null;
-}
+};
 
-export interface IGetDayPropsReturns {
+export type IGetDayPropsReturns = {
 	"aria-selected": boolean;
 	"aria-label": string;
 	disabled: boolean;
 	key: string;
 	role: string;
 	onClick: () => void;
-}
+};
 
-export interface IGetDayPropsFn {
+export type IGetDayPropsFn = {
 	(options: IGetDayPropsOptions): Partial<IGetDayPropsReturns>;
-}
+};
 
-export interface IGetPrevNextPropsReturns {
+export type IGetPrevNextPropsReturns = {
 	"aria-label": string;
 	disabled: boolean;
 	role: string;
 	type: "button";
 	onClick: () => void;
-}
+};
 
-export interface IGetPrevNextPropsFn {
+export type IGetPrevNextPropsFn = {
 	(): IGetPrevNextPropsReturns;
-}
+};
 
-export interface ICalendarProps {
+export type ICalendarProps = {
 	getPrevYearProps: IGetPrevNextPropsFn;
 	getPrevMonthProps: IGetPrevNextPropsFn;
 	getDayProps: IGetDayPropsFn;
@@ -58,9 +58,9 @@ export interface ICalendarProps {
 	getNextYearProps: IGetPrevNextPropsFn;
 	months: IMonth[];
 	resetState: () => void;
-}
+};
 
-export interface IUseCalendarOptions {
+export type IUseCalendarOptions = {
 	availableDates: Date[];
 	events: IEvent[];
 	firstDayOfWeek: number;
@@ -69,4 +69,4 @@ export interface IUseCalendarOptions {
 	monthsToDisplay?: number;
 	onDateSelected: (day: IDay) => void;
 	selectedDate?: string | number | Date;
-}
+};

@@ -6,11 +6,11 @@ import {
 } from "./use-calendar.d";
 import * as df from "./date-fns";
 
-interface IBuildGetDayPropsArgs {
+type IBuildGetDayPropsArgs = {
 	setSelected: (newSelected: Date) => void;
 	onDateSelected?: (day: IDay) => void;
 	locale?: string;
-}
+};
 
 function getBrowserLocale() {
 	return typeof navigator !== "undefined" && navigator?.language;
@@ -51,12 +51,12 @@ export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 	};
 }
 
-interface IBuildGetPrevNextMonthPropsArgs {
+type IBuildGetPrevNextMonthPropsArgs = {
 	direction: string;
 	months: IMonth[];
 	setVisibleMonth: (newVisibleMonth: Date) => void;
 	monthsInRange: Partial<IMonth>[];
-}
+};
 
 export function buildGetPrevNextMonthProps(
 	args: IBuildGetPrevNextMonthPropsArgs
@@ -93,12 +93,12 @@ export function buildGetPrevNextMonthProps(
 	});
 }
 
-interface IBuildGetPrevNextYearPropsArgs {
+type IBuildGetPrevNextYearPropsArgs = {
 	direction: string;
 	setVisibleMonth: (newVisibleMonth: Date) => void;
 	monthsInRange: Partial<IMonth>[];
 	visibleMonth: Date;
-}
+};
 
 export function buildGetPrevNextYearProps(
 	args: IBuildGetPrevNextYearPropsArgs

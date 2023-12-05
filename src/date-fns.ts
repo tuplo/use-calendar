@@ -1,10 +1,10 @@
-interface IGetDateFromArgs {
+type IGetDateFromArgs = {
 	date: Date;
 	days?: number;
 	weeks?: number;
 	months?: number;
 	years?: number;
-}
+};
 
 export function getDateFrom(args: IGetDateFromArgs) {
 	const { date, days, weeks, months, years } = args;
@@ -71,10 +71,10 @@ export function getUTCDate(date: Date) {
 	return new Date(utc);
 }
 
-interface IGetDaysOfMonthArgs {
+type IGetDaysOfMonthArgs = {
 	year: number;
 	month: number;
-}
+};
 
 export function getDaysOfMonth(args: IGetDaysOfMonthArgs) {
 	const { year, month } = args;
@@ -89,10 +89,10 @@ export function getDaysOfMonth(args: IGetDaysOfMonthArgs) {
 	return days.map(getUTCDate);
 }
 
-interface IGetMonthsInRangeArgs {
+type IGetMonthsInRangeArgs = {
 	start?: Date;
 	end?: Date;
-}
+};
 
 export function getMonthsInRange(args: IGetMonthsInRangeArgs) {
 	const { start = new Date(Date.now()), end = new Date(Date.now()) } = args;
@@ -126,11 +126,11 @@ export function getLastDayOfMonth(date: Date = new Date(Date.now())) {
 	return new Date(year, month + 1, 0);
 }
 
-interface IIsInRangeArgs {
+type IIsInRangeArgs = {
 	date: Date;
 	minDate?: Date;
 	maxDate?: Date;
-}
+};
 
 export function isInRange(args: IIsInRangeArgs) {
 	const {

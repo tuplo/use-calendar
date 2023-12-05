@@ -24,10 +24,10 @@ export function getValidDate(d: string | number | Date | undefined) {
 	return new Date(d);
 }
 
-interface IGetDayEventsArgs {
+type IGetDayEventsArgs = {
 	date: Date;
 	events?: IEvent[];
-}
+};
 
 export function getDayEvents(args: IGetDayEventsArgs) {
 	const { date, events = [] } = args;
@@ -41,7 +41,7 @@ export function getDayEvents(args: IGetDayEventsArgs) {
 	);
 }
 
-interface IGetNewDayArgs {
+type IGetNewDayArgs = {
 	availableDates?: Date[];
 	date: Date;
 	events?: IEvent[];
@@ -49,7 +49,7 @@ interface IGetNewDayArgs {
 	minDate?: Date;
 	selected?: Date;
 	isAdjacentMonth?: boolean;
-}
+};
 
 export function getNewDay(args: IGetNewDayArgs): IDay {
 	const {
@@ -93,13 +93,13 @@ export function getNewDay(args: IGetNewDayArgs): IDay {
 	return day;
 }
 
-interface IPadAdjacentMonthDaysArgs {
+type IPadAdjacentMonthDaysArgs = {
 	availableDates?: Date[];
 	date: Date;
 	firstDayOfWeek: number;
 	selected?: Date;
 	week: IWeek;
-}
+};
 
 export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
 	const { availableDates, week, firstDayOfWeek, date, selected } = args;
@@ -145,7 +145,7 @@ export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
 	return newWeek;
 }
 
-interface IGetWeeksArgs {
+type IGetWeeksArgs = {
 	availableDates?: Date[];
 	events?: IEvent[];
 	firstDayOfWeek: number;
@@ -154,7 +154,7 @@ interface IGetWeeksArgs {
 	month: number;
 	selected?: Date;
 	year: number;
-}
+};
 
 export function getWeeks(args: IGetWeeksArgs): IWeek[] {
 	const {
@@ -210,7 +210,7 @@ export function getWeeks(args: IGetWeeksArgs): IWeek[] {
 	return weeks;
 }
 
-interface IGetCalendarMonthArgs {
+type IGetCalendarMonthArgs = {
 	availableDates?: Date[];
 	events?: IEvent[];
 	firstDayOfWeek: number;
@@ -219,7 +219,7 @@ interface IGetCalendarMonthArgs {
 	month: number;
 	selected?: Date;
 	year: number;
-}
+};
 
 export function getCalendarMonth(args: IGetCalendarMonthArgs): IMonth {
 	const { month, year } = args;
@@ -268,13 +268,13 @@ export function getMinMaxDate(options?: Partial<IUseCalendarOptions>) {
 	return { minDate: min, maxDate: max };
 }
 
-interface IGetStartEndDateArgs {
+type IGetStartEndDateArgs = {
 	availableDates?: Date[];
 	monthsToDisplay: number;
 	minDate?: Date;
 	maxDate?: Date;
 	visibleMonth: Date;
-}
+};
 
 export function getStartEndDate(args: IGetStartEndDateArgs) {
 	const { availableDates, monthsToDisplay, minDate, maxDate, visibleMonth } =
