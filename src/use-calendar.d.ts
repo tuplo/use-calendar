@@ -3,6 +3,7 @@ export type IEvent = {
 	end?: Date;
 	start: Date;
 };
+
 export type IDay = {
 	date: Date;
 	events?: IEvent[];
