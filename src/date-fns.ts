@@ -20,22 +20,29 @@ export function getDateFrom(args: IGetDateFromArgs) {
 	const { date, days, weeks, months, years } = args;
 
 	let d = days || 0;
-	if (weeks) d = weeks * 7;
+	if (weeks) {
+		d = weeks * 7;
+	}
+
 	if (d) {
-		return new Date(date.getFullYear(), date.getMonth(), date.getDate() + d);
+		const ms = d * 24 * 60 * 60 * 1_000;
+		return new Date(date.getTime() + ms);
 	}
 
 	if (months) {
 		const dayOfMonth = date.getDate();
-		const newDate = new Date(date.getTime());
-		newDate.setMonth(date.getMonth() + months + 1, 0);
-		const daysInMonth = newDate.getDate();
+		const endOfDesiredMonth = new Date(date.getTime());
+		endOfDesiredMonth.setMonth(date.getMonth() + months + 1, 0);
+		const daysInMonth = endOfDesiredMonth.getDate();
 		if (dayOfMonth >= daysInMonth) {
-			return newDate;
+			return endOfDesiredMonth;
 		}
 
-		newDate.setFullYear(newDate.getFullYear(), newDate.getMonth(), dayOfMonth);
-		return newDate;
+		return new Date(
+			endOfDesiredMonth.getFullYear(),
+			endOfDesiredMonth.getMonth(),
+			dayOfMonth
+		);
 	}
 
 	if (years) {
@@ -45,6 +52,7 @@ export function getDateFrom(args: IGetDateFromArgs) {
 			date.getMonth(),
 			date.getDate()
 		);
+
 		return newDate;
 	}
 
@@ -76,11 +84,6 @@ export function isFirstDayOfMonth(date: Date) {
 	return date.getDate() === 1;
 }
 
-export function getUTCDate(date: Date) {
-	const utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-	return new Date(utc);
-}
-
 type IGetDaysOfMonthArgs = {
 	year: number;
 	month: number;
@@ -96,7 +99,7 @@ export function getDaysOfMonth(args: IGetDaysOfMonthArgs) {
 		date = getDateFrom({ date, days: 1 });
 	}
 
-	return days.map(getUTCDate);
+	return days;
 }
 
 type IGetMonthsInRangeArgs = {

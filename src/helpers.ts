@@ -115,7 +115,7 @@ export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
 			lastDays.push(
 				getNewDay({
 					availableDates,
-					date: df.getUTCDate(lastDate),
+					date: lastDate,
 					isAdjacentMonth: true,
 					selected,
 				})
@@ -132,7 +132,7 @@ export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
 			nextDays.push(
 				getNewDay({
 					availableDates,
-					date: df.getUTCDate(nextDate),
+					date: nextDate,
 					isAdjacentMonth: true,
 					selected,
 				})
