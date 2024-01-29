@@ -1,5 +1,6 @@
 import { vi } from "vitest";
 
+import { dtz } from "./date-fns";
 import { buildGetPrevNextMonthProps, buildGetDayProps } from "./props";
 import { type IMonth } from "./use-calendar.d";
 
@@ -12,7 +13,7 @@ const commonProps = {
 describe("props functions", () => {
 	const dateNowSpy = vi
 		.spyOn(Date, "now")
-		.mockReturnValue(new Date("2022-07-02").getTime());
+		.mockReturnValue(new Date("2022-07-02T00:00:00").getTime());
 
 	afterAll(() => {
 		dateNowSpy.mockRestore();
@@ -28,7 +29,7 @@ describe("props functions", () => {
 				const setSelectedSpy = vi.fn();
 				const fn = buildGetDayProps({ setSelected: setSelectedSpy });
 				const day = {
-					date: new Date(Date.now()),
+					date: dtz(),
 					isToday: false,
 					isSelectable,
 					isSelected: false,
@@ -63,7 +64,7 @@ describe("props functions", () => {
 			it("uses locale provided as option", () => {
 				const fn = buildGetDayProps({ setSelected: vi.fn(), locale: "ar" });
 				const day = {
-					date: new Date(Date.now()),
+					date: dtz(),
 					isToday: false,
 					isSelectable: true,
 					isSelected: false,
@@ -85,7 +86,7 @@ describe("props functions", () => {
 				});
 				const fn = buildGetDayProps({ setSelected: vi.fn() });
 				const day = {
-					date: new Date(Date.now()),
+					date: dtz(),
 					isToday: false,
 					isSelectable: true,
 					isSelected: false,
@@ -103,7 +104,7 @@ describe("props functions", () => {
 
 				const fn = buildGetDayProps({ setSelected: vi.fn() });
 				const day = {
-					date: new Date(Date.now()),
+					date: dtz(),
 					isToday: false,
 					isSelectable: true,
 					isSelected: false,
@@ -123,7 +124,7 @@ describe("props functions", () => {
 					onDateSelected: onDateSelectedSpy,
 				});
 				const day = {
-					date: new Date(Date.now()),
+					date: dtz(),
 					isToday: false,
 					isSelectable: true,
 					isSelected: false,
@@ -244,7 +245,7 @@ describe("props functions", () => {
 				const actual = fn();
 				actual.onClick();
 
-				const expected = new Date(expectedDateStr);
+				const expected = dtz(expectedDateStr);
 				expect(setVisibleMonthSpy).toHaveBeenCalledTimes(1);
 				expect(setVisibleMonthSpy).toHaveBeenCalledWith(expected);
 			}

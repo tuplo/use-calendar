@@ -1,3 +1,13 @@
+export function dtz(date?: string | Date | number) {
+	if (typeof date === "undefined") {
+		return new Date(Date.now());
+	}
+
+	const d = new Date(date);
+	d.setTime(d.getTime() + d.getTimezoneOffset() * 60 * 1000);
+	return d;
+}
+
 type IGetDateFromArgs = {
 	date: Date;
 	days?: number;

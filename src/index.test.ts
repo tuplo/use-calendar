@@ -2,6 +2,8 @@
 import { act, renderHook } from "@testing-library/react";
 import { vi } from "vitest";
 
+import { dtz } from "./date-fns";
+
 import {
 	useCalendar,
 	type IEvent,
@@ -12,7 +14,7 @@ import {
 describe("use-calendar", () => {
 	const dateNowSpy = vi
 		.spyOn(Date, "now")
-		.mockReturnValue(new Date("2022-07-02").getTime());
+		.mockReturnValue(new Date("2022-07-02T00:00:00").getTime());
 
 	afterAll(() => {
 		dateNowSpy.mockRestore();
@@ -43,7 +45,7 @@ describe("use-calendar", () => {
 						].map((dateStr) =>
 							expect.arrayContaining([
 								{
-									date: new Date(dateStr),
+									date: dtz(dateStr),
 									isSelectable: true,
 								},
 							])
@@ -54,7 +56,7 @@ describe("use-calendar", () => {
 			expected.months[0].weeks.push(
 				expect.arrayContaining([
 					{
-						date: new Date("2022-07-31"),
+						date: dtz("2022-07-31"),
 						isSelectable: true,
 						isWeekend: true,
 					},
@@ -66,40 +68,40 @@ describe("use-calendar", () => {
 		it("pads last days of last month", () => {
 			const { result } = renderHook(() =>
 				useCalendar({
-					minDate: new Date("2022-07-01"),
-					maxDate: new Date("2022-07-31"),
+					minDate: dtz("2022-07-01"),
+					maxDate: dtz("2022-07-31"),
 				})
 			);
 			const { current: actual } = result;
 
 			const expected = [
 				{
-					date: new Date("2022-06-26"),
+					date: dtz("2022-06-26"),
 					isAdjacentMonth: true,
 					isWeekend: true,
 				},
 				{
-					date: new Date("2022-06-27"),
+					date: dtz("2022-06-27"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-06-28"),
+					date: dtz("2022-06-28"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-06-29"),
+					date: dtz("2022-06-29"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-06-30"),
+					date: dtz("2022-06-30"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-07-01"),
+					date: dtz("2022-07-01"),
 					isSelectable: true,
 				},
 				{
-					date: new Date("2022-07-02"),
+					date: dtz("2022-07-02"),
 					isToday: true,
 					isSelectable: true,
 					isWeekend: true,
@@ -111,40 +113,40 @@ describe("use-calendar", () => {
 		it("pads first days of next month", () => {
 			const { result } = renderHook(() =>
 				useCalendar({
-					minDate: new Date("2022-07-01"),
-					maxDate: new Date("2022-07-31"),
+					minDate: dtz("2022-07-01"),
+					maxDate: dtz("2022-07-31"),
 				})
 			);
 			const { current: actual } = result;
 
 			const expected = [
 				{
-					date: new Date("2022-07-31"),
+					date: dtz("2022-07-31"),
 					isSelectable: true,
 					isWeekend: true,
 				},
 				{
-					date: new Date("2022-08-01"),
+					date: dtz("2022-08-01"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-08-02"),
+					date: dtz("2022-08-02"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-08-03"),
+					date: dtz("2022-08-03"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-08-04"),
+					date: dtz("2022-08-04"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-08-05"),
+					date: dtz("2022-08-05"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-08-06"),
+					date: dtz("2022-08-06"),
 					isAdjacentMonth: true,
 					isWeekend: true,
 				},
@@ -158,8 +160,8 @@ describe("use-calendar", () => {
 			const { result } = renderHook(() =>
 				useCalendar({
 					firstDayOfWeek: 1,
-					minDate: new Date("2022-07-01"),
-					maxDate: new Date("2022-07-31"),
+					minDate: dtz("2022-07-01"),
+					maxDate: dtz("2022-07-31"),
 				})
 			);
 			const { current: actual } = result;
@@ -180,40 +182,40 @@ describe("use-calendar", () => {
 			const { result } = renderHook(() =>
 				useCalendar({
 					firstDayOfWeek: 1,
-					minDate: new Date("2022-07-01"),
-					maxDate: new Date("2022-07-31"),
+					minDate: dtz("2022-07-01"),
+					maxDate: dtz("2022-07-31"),
 				})
 			);
 			const { current: actual } = result;
 
 			const expected = [
 				{
-					date: new Date("2022-06-27"),
+					date: dtz("2022-06-27"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-06-28"),
+					date: dtz("2022-06-28"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-06-29"),
+					date: dtz("2022-06-29"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-06-30"),
+					date: dtz("2022-06-30"),
 					isAdjacentMonth: true,
 				},
 				{
-					date: new Date("2022-07-01"),
+					date: dtz("2022-07-01"),
 					isSelectable: true,
 				},
 				{
-					date: new Date("2022-07-02"),
+					date: dtz("2022-07-02"),
 					isToday: true,
 					isSelectable: true,
 				},
 				{
-					date: new Date("2022-07-03"),
+					date: dtz("2022-07-03"),
 					isSelectable: true,
 				},
 			];
@@ -224,8 +226,8 @@ describe("use-calendar", () => {
 			const { result } = renderHook(() =>
 				useCalendar({
 					firstDayOfWeek: 1,
-					minDate: new Date("2022-07-01"),
-					maxDate: new Date("2022-07-31"),
+					minDate: dtz("2022-07-01"),
+					maxDate: dtz("2022-07-31"),
 				})
 			);
 			const { current: actual } = result;
@@ -239,7 +241,7 @@ describe("use-calendar", () => {
 				"2022-07-30",
 				"2022-07-31",
 			].map((dateStr) => ({
-				date: new Date(dateStr),
+				date: dtz(dateStr),
 				isSelectable: true,
 			}));
 			expect(actual.months[0].weeks[4]).toMatchObject(expected);
@@ -249,7 +251,7 @@ describe("use-calendar", () => {
 	describe("with selected", () => {
 		it("returns selected date", () => {
 			const { result } = renderHook(() =>
-				useCalendar({ selectedDate: new Date("2022-07-03") })
+				useCalendar({ selectedDate: dtz("2022-07-03") })
 			);
 			const { current: actual } = result;
 
@@ -266,9 +268,9 @@ describe("use-calendar", () => {
 
 		it("sets the current month to the selected date's month", () => {
 			const props = {
-				minDate: new Date("2022-06-01"),
-				maxDate: new Date("2022-08-31"),
-				selectedDate: new Date("2022-07-03"),
+				minDate: dtz("2022-06-01"),
+				maxDate: dtz("2022-08-31"),
+				selectedDate: dtz("2022-07-03"),
 			};
 
 			const { result } = renderHook(() => useCalendar(props));
@@ -293,9 +295,9 @@ describe("use-calendar", () => {
 
 		it("returns all months for available dates, only selected month (1)", () => {
 			const args = {
-				minDate: new Date("2022-12-25"),
-				maxDate: new Date("2023-03-25"),
-				selectedDate: new Date("2022-12-25"),
+				minDate: dtz("2022-12-25"),
+				maxDate: dtz("2023-03-25"),
+				selectedDate: dtz("2022-12-25"),
 			};
 			const { result } = renderHook(() => useCalendar(args));
 			const { months } = result.current;
@@ -305,7 +307,7 @@ describe("use-calendar", () => {
 
 		it("returns number of months for available dates", () => {
 			const args = {
-				availableDates: [new Date("2022-12-25"), new Date("2023-02-25")],
+				availableDates: [dtz("2022-12-25"), dtz("2023-02-25")],
 			};
 			const { result } = renderHook(() => useCalendar(args));
 			const { months } = result.current;
@@ -316,9 +318,9 @@ describe("use-calendar", () => {
 		it("returns number of months for available dates", () => {
 			const args = {
 				monthsToDisplay: Infinity,
-				minDate: new Date("2022-12-25"),
-				maxDate: new Date("2023-03-25"),
-				selectedDate: new Date("2022-12-25"),
+				minDate: dtz("2022-12-25"),
+				maxDate: dtz("2023-03-25"),
+				selectedDate: dtz("2022-12-25"),
 			};
 			const { result } = renderHook(() => useCalendar(args));
 			const { months } = result.current;
@@ -344,7 +346,7 @@ describe("use-calendar", () => {
 		});
 
 		it("returns all months from now to single available date", () => {
-			const availableDates = [new Date("2022-12-25")];
+			const availableDates = [dtz("2022-12-25")];
 			const { result } = renderHook(() => useCalendar({ availableDates }));
 			const { current: actual } = result;
 
@@ -355,9 +357,9 @@ describe("use-calendar", () => {
 		it("handles 60 days of available dates", () => {
 			const today = new Date();
 			const day = 24 * 60 * 60 * 1_000;
-			const availableDates = new Array(60)
+			const availableDates = Array.from({ length: 60 })
 				.fill(null)
-				.map((_, i) => new Date(today.getTime() + i * day));
+				.map((_, i) => dtz(today.getTime() + i * day));
 			const { result } = renderHook(() => useCalendar({ availableDates }));
 			const { current: actual } = result;
 
@@ -367,7 +369,7 @@ describe("use-calendar", () => {
 
 		it("returns getPrevMonthProps", () => {
 			const args = {
-				availableDates: [new Date("2022-12-25")],
+				availableDates: [dtz("2022-12-25")],
 			};
 			const { result } = renderHook(() => useCalendar(args));
 			const { getPrevMonthProps } = result.current;
@@ -378,7 +380,7 @@ describe("use-calendar", () => {
 
 		it("returns getNextMonthProps", () => {
 			const args = {
-				availableDates: [new Date("2022-06-02")],
+				availableDates: [dtz("2022-06-02")],
 			};
 			const { result } = renderHook(() => useCalendar(args));
 			const { getNextMonthProps } = result.current;
@@ -397,7 +399,7 @@ describe("use-calendar", () => {
 				}
 				const events: MyEvent[] = [
 					{
-						start: new Date(dtStart),
+						start: dtz(dtStart),
 						title: "Alice's Birthday Party",
 					},
 				];
@@ -406,7 +408,7 @@ describe("use-calendar", () => {
 
 				const expected = [
 					{
-						start: new Date(dtStart),
+						start: dtz(dtStart),
 						title: "Alice's Birthday Party",
 					},
 				];
@@ -418,7 +420,7 @@ describe("use-calendar", () => {
 	describe("resetState", () => {
 		it("goes back to first month", () => {
 			const { result } = renderHook(() =>
-				useCalendar({ maxDate: new Date("2022-08-31") })
+				useCalendar({ maxDate: dtz("2022-08-31") })
 			);
 			const { getNextMonthProps: getForwardProps } = result.current;
 			const button = getForwardProps();
@@ -435,11 +437,11 @@ describe("use-calendar", () => {
 
 		it("goes back to selected date", () => {
 			const { result } = renderHook(() =>
-				useCalendar({ selectedDate: new Date("2022-07-10") })
+				useCalendar({ selectedDate: dtz("2022-07-10") })
 			);
 			const { getDayProps } = result.current;
 			const day: IDay = {
-				date: new Date("2022-07-13"),
+				date: dtz("2022-07-13"),
 				isSelected: false,
 				isSelectable: true,
 			};
@@ -448,7 +450,7 @@ describe("use-calendar", () => {
 			// picks a day
 			act(() => button.onClick());
 			expect(result.current.months[0].weeks[2][3]).toStrictEqual({
-				date: new Date("2022-07-13"),
+				date: dtz("2022-07-13"),
 				isSelectable: true,
 				isSelected: true,
 			});
@@ -458,7 +460,7 @@ describe("use-calendar", () => {
 			act(() => resetState());
 			expect(result.current.months[0].weeks[2][3]?.isSelected).toBeUndefined();
 			expect(result.current.months[0].weeks[2][0]).toStrictEqual({
-				date: new Date("2022-07-10"),
+				date: dtz("2022-07-10"),
 				isSelectable: true,
 				isSelected: true,
 				isWeekend: true,

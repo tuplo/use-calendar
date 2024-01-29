@@ -3,6 +3,8 @@ import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 
+import { dtz } from "../date-fns";
+
 import Calendar from "./index";
 
 describe("useCalendar UI", () => {
@@ -18,7 +20,7 @@ describe("useCalendar UI", () => {
 	describe("onDateSelected", () => {
 		const dateNowSpy = vi
 			.spyOn(Date, "now")
-			.mockReturnValue(new Date("2022-07-25").getTime());
+			.mockReturnValue(new Date("2022-07-25T00:00:00").getTime());
 
 		afterAll(() => {
 			dateNowSpy.mockRestore();
@@ -32,7 +34,7 @@ describe("useCalendar UI", () => {
 			});
 
 			const expected = {
-				date: new Date("2022-07-12T00:00:00.000Z"),
+				date: dtz("2022-07-12T00:00:00.000Z"),
 				isSelectable: true,
 			};
 			expect(onDateSelectedSpy).toHaveBeenCalledTimes(1);
@@ -41,8 +43,8 @@ describe("useCalendar UI", () => {
 
 		it("doesn't call when user clicks not available dates", async () => {
 			const onDateSelectedSpy = vi.fn();
-			const availableDates = [10, 12, 13, 14, 15].map(
-				(date) => new Date(`2022-07-${date}`)
+			const availableDates = [10, 12, 13, 14, 15].map((date) =>
+				dtz(`2022-07-${date}`)
 			);
 			render(
 				<Calendar
@@ -58,7 +60,7 @@ describe("useCalendar UI", () => {
 
 	describe("selectedDate", () => {
 		it("selects a date by default", async () => {
-			const selectedDate = new Date("2022-07-12");
+			const selectedDate = dtz("2022-07-12");
 			render(<Calendar selectedDate={selectedDate} />);
 
 			expect(screen.getByText("12")).toHaveAttribute("aria-selected", "true");
