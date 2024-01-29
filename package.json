@@ -43,8 +43,8 @@
 		"format": "prettier --write src sh",
 		"lint:ts": "tsc --noEmit",
 		"lint": "eslint src",
-		"test:ci": "TZ=utc vitest run",
-		"test": "TZ=utc vitest --watch"
+		"test:ci": "vitest run",
+		"test": "vitest --watch"
 	},
 	"peerDependencies": {
 		"react": "^16.8.6 || ^17.0.0 || ^18.0.0"

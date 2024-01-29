@@ -19,8 +19,11 @@ jobs:
       - run: |
           npm ci
           npm run lint
-          # npm run lint:ts
-          npm run test:ci
+          npm run lint:ts
+          TZ=utc npm run test:ci
+          TZ=Europe/London npm run test:ci
+          TZ=America/Chicago npm run test:ci
+          TZ=Asia/Tokyo npm run test:ci
 
   test-coverage:
     needs: test
