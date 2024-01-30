@@ -7,6 +7,7 @@
     "jsx": "react-jsx",
     "module": "esnext",
     "moduleResolution": "Bundler",
+    "skipLibCheck": true,
     "strict": true,
     "target": "es6",
   },
