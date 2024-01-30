@@ -39,6 +39,11 @@ describe("date-fns", () => {
 			expect(first).toStrictEqual(dtz("2023-04-01"));
 			expect(last).toStrictEqual(dtz("2023-04-30"));
 		});
+
+		it("with daylight savings time in it", () => {
+			const actual = df.getDaysOfMonth({ year: 2023, month: 9 });
+			expect(actual).toHaveLength(31);
+		});
 	});
 
 	describe("getFirstDayOfMonth", () => {

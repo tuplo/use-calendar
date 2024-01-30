@@ -25,8 +25,9 @@ export function getDateFrom(args: IGetDateFromArgs) {
 	}
 
 	if (d) {
-		const ms = d * 24 * 60 * 60 * 1_000;
-		return new Date(date.getTime() + ms);
+		const newDate = new Date(date.getTime());
+		newDate.setDate(date.getDate() + d);
+		return newDate;
 	}
 
 	if (months) {
