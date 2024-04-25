@@ -41,7 +41,7 @@ describe("date-fns", () => {
 		});
 
 		it("with daylight savings time in it", () => {
-			const actual = df.getDaysOfMonth({ year: 2023, month: 9 });
+			const actual = df.getDaysOfMonth({ month: 9, year: 2023 });
 			expect(actual).toHaveLength(31);
 		});
 	});
@@ -107,8 +107,8 @@ describe("date-fns", () => {
 			vi.useFakeTimers().setSystemTime(dtz("2022-07-02"));
 			const actual = df.isInRange({
 				date: dtz(dateStr),
-				minDate: minDate ? dtz(minDate) : undefined,
 				maxDate: maxDate ? dtz(maxDate) : undefined,
+				minDate: minDate ? dtz(minDate) : undefined,
 			});
 
 			expect(actual).toBe(expected);
@@ -118,8 +118,8 @@ describe("date-fns", () => {
 	describe("getMonthsInRange", () => {
 		it("get months in range", () => {
 			const actual = df.getMonthsInRange({
-				start: dtz("2022-06-14"),
 				end: dtz("2022-08-03"),
+				start: dtz("2022-06-14"),
 			});
 
 			const expected = [
@@ -132,8 +132,8 @@ describe("date-fns", () => {
 
 		it("get months in range ending on first of month", () => {
 			const actual = df.getMonthsInRange({
-				start: dtz("2022-06-14"),
 				end: dtz("2022-08-01"),
+				start: dtz("2022-06-14"),
 			});
 
 			const expected = [
@@ -146,8 +146,8 @@ describe("date-fns", () => {
 
 		it("get months in range starting on last of month", () => {
 			const actual = df.getMonthsInRange({
-				start: dtz("2022-06-30"),
 				end: dtz("2022-07-01"),
+				start: dtz("2022-06-30"),
 			});
 
 			const expected = [

@@ -7,19 +7,20 @@ import {
 	type IWeek,
 } from "./use-calendar.d";
 
-export function isValidDate(d: string | number | Date | undefined) {
+export function isValidDate(d: Date | number | string | undefined) {
 	if (d === null) return false;
 	if (typeof d === "boolean") return false;
-	if (typeof d === "undefined") return false;
+	if (d === undefined) return false;
 	if (typeof d === "string") return /^\d{4}-\d{2}-\d{2}/.test(d);
 
 	const dd = new Date(d);
 	return dd instanceof Date && !Number.isNaN(dd);
 }
 
-export function getValidDate(d: string | number | Date | undefined) {
-	if (typeof d === "undefined") return undefined;
-	if (!isValidDate(d)) return undefined;
+export function getValidDate(d: Date | number | string | undefined) {
+	if (d === undefined || !isValidDate(d)) {
+		return;
+	}
 
 	return new Date(d);
 }
@@ -35,8 +36,8 @@ export function getDayEvents(args: IGetDayEventsArgs) {
 	return events.filter((ev) =>
 		df.isInRange({
 			date,
-			minDate: ev.start,
 			maxDate: new Date(ev.end || ev.start),
+			minDate: ev.start,
 		})
 	);
 }
@@ -45,10 +46,10 @@ type IGetNewDayArgs = {
 	availableDates?: Date[];
 	date: Date;
 	events?: IEvent[];
+	isAdjacentMonth?: boolean;
 	maxDate?: Date;
 	minDate?: Date;
 	selected?: Date;
-	isAdjacentMonth?: boolean;
 };
 
 export function getNewDay(args: IGetNewDayArgs): IDay {
@@ -56,14 +57,14 @@ export function getNewDay(args: IGetNewDayArgs): IDay {
 		availableDates,
 		date,
 		events = [],
-		minDate,
-		maxDate,
-		selected,
 		isAdjacentMonth,
+		maxDate,
+		minDate,
+		selected,
 	} = args;
 	const today = new Date(Date.now());
 
-	let isSelectable = df.isInRange({ date, minDate, maxDate });
+	let isSelectable = df.isInRange({ date, maxDate, minDate });
 	if (availableDates) {
 		isSelectable = availableDates.findIndex((a) => df.isSameDay(date, a)) > -1;
 	}
@@ -102,11 +103,11 @@ type IPadAdjacentMonthDaysArgs = {
 };
 
 export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
-	const { availableDates, week, firstDayOfWeek, date, selected } = args;
+	const { availableDates, date, firstDayOfWeek, selected, week } = args;
 	const isFirstDayOfMonth = df.isFirstDayOfMonth(date);
 	const isLastDayOfMonth = df.isLastDayOfMonth(date);
 	const lastDayOfWeek = firstDayOfWeek - 1 >= 0 ? firstDayOfWeek - 1 : 6;
-	const newWeek = week.slice();
+	const newWeek = [...week];
 
 	if (isFirstDayOfMonth) {
 		const lastDays = [];
@@ -167,7 +168,7 @@ export function getWeeks(args: IGetWeeksArgs): IWeek[] {
 		selected,
 		year,
 	} = args;
-	const days = df.getDaysOfMonth({ year, month });
+	const days = df.getDaysOfMonth({ month, year });
 
 	let currentWeekIndex = 0;
 	const weeks: IWeek[] = [];
@@ -196,6 +197,7 @@ export function getWeeks(args: IGetWeeksArgs): IWeek[] {
 		);
 
 		// pad first days of next month
+		// eslint-disable-next-line unicorn/prefer-at
 		if (date === days[days.length - 1]) {
 			weeks[currentWeekIndex] = padAdjacentMonthDays({
 				availableDates,
@@ -225,14 +227,14 @@ export function getCalendarMonth(args: IGetCalendarMonthArgs): IMonth {
 	const { month, year } = args;
 	const weeks = getWeeks(args);
 
-	return { weeks, month, year };
+	return { month, weeks, year };
 }
 
 export function getMinMaxDate(options?: Partial<IUseCalendarOptions>) {
 	const {
 		availableDates,
-		minDate,
 		maxDate,
+		minDate,
 		selectedDate = new Date(Date.now()),
 	} = options || {};
 
@@ -265,19 +267,19 @@ export function getMinMaxDate(options?: Partial<IUseCalendarOptions>) {
 		}
 	}
 
-	return { minDate: min, maxDate: max };
+	return { maxDate: max, minDate: min };
 }
 
 type IGetStartEndDateArgs = {
 	availableDates?: Date[];
-	monthsToDisplay: number;
-	minDate?: Date;
 	maxDate?: Date;
+	minDate?: Date;
+	monthsToDisplay: number;
 	visibleMonth: Date;
 };
 
 export function getStartEndDate(args: IGetStartEndDateArgs) {
-	const { availableDates, monthsToDisplay, minDate, maxDate, visibleMonth } =
+	const { availableDates, maxDate, minDate, monthsToDisplay, visibleMonth } =
 		args;
 
 	// default 1 visible month
@@ -299,5 +301,5 @@ export function getStartEndDate(args: IGetStartEndDateArgs) {
 		end = new Date(maxNumDate);
 	}
 
-	return { start, end };
+	return { end, start };
 }

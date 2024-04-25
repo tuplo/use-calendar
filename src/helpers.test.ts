@@ -24,6 +24,7 @@ describe("use-calendar helpers", () => {
 	});
 
 	describe("isValidDate", () => {
+		// eslint-disable-next-line unicorn/no-null
 		it.each([null, false])("handles untyped values", (d) => {
 			// @ts-expect-error - we're testing this
 			const actual = isValidDate(d);
@@ -92,7 +93,7 @@ describe("use-calendar helpers", () => {
 			"pads last days of previous month: %s",
 			(_, week, strDate, firstDayOfWeek, expected) => {
 				const date = dtz(strDate);
-				const actual = padAdjacentMonthDays({ week, firstDayOfWeek, date });
+				const actual = padAdjacentMonthDays({ date, firstDayOfWeek, week });
 				expect(actual).toStrictEqual(expected);
 			}
 		);
@@ -137,17 +138,17 @@ describe("use-calendar helpers", () => {
 			(_, week, strDate, firstDayOfWeek, expected) => {
 				const date = dtz(strDate);
 
-				const actual = padAdjacentMonthDays({ week, firstDayOfWeek, date });
+				const actual = padAdjacentMonthDays({ date, firstDayOfWeek, week });
 				expect(actual).toStrictEqual(expected);
 			}
 		);
 
 		it("pads adjacent month days according to available dates", () => {
 			const actual = padAdjacentMonthDays({
-				week: [],
-				firstDayOfWeek: 0,
+				availableDates: df.getDaysOfMonth({ month: 5, year: 2022 }),
 				date: dtz("2022-07-01"),
-				availableDates: df.getDaysOfMonth({ year: 2022, month: 5 }),
+				firstDayOfWeek: 0,
+				week: [],
 			});
 
 			const expected: IDay[] = [
@@ -167,11 +168,11 @@ describe("use-calendar helpers", () => {
 
 		it('pads adjacent month days with "selected" date', () => {
 			const actual = padAdjacentMonthDays({
-				week: [],
-				firstDayOfWeek: 0,
+				availableDates: df.getDaysOfMonth({ month: 5, year: 2022 }),
 				date: dtz("2022-07-01"),
+				firstDayOfWeek: 0,
 				selected: dtz("2022-06-27"),
-				availableDates: df.getDaysOfMonth({ year: 2022, month: 5 }),
+				week: [],
 			});
 			const expected: IDay[] = [
 				"2022-06-26",
@@ -193,11 +194,11 @@ describe("use-calendar helpers", () => {
 	describe("getWeeks", () => {
 		it("gets weeks for a month", () => {
 			const actual = getWeeks({
-				year: 2022,
-				month: 6,
 				firstDayOfWeek: 0,
-				minDate: dtz("2022-07-01"),
 				maxDate: dtz("2022-07-31"),
+				minDate: dtz("2022-07-01"),
+				month: 6,
+				year: 2022,
 			});
 
 			const expected = [
@@ -223,8 +224,8 @@ describe("use-calendar helpers", () => {
 		])("creates a new Day object: %s", (dateStr, expectedAttrs) => {
 			const actual = getNewDay({
 				date: dtz(dateStr),
-				minDate: dtz("2022-07-01"),
 				maxDate: dtz("2022-07-31"),
+				minDate: dtz("2022-07-01"),
 			});
 
 			const expected = {
@@ -242,8 +243,8 @@ describe("use-calendar helpers", () => {
 			"creates a new Day object with available dates list: %s",
 			(dateStr, expectedAttrs) => {
 				const actual = getNewDay({
+					availableDates: df.getDaysOfMonth({ month: 6, year: 2022 }),
 					date: dtz(dateStr),
-					availableDates: df.getDaysOfMonth({ year: 2022, month: 6 }),
 				});
 
 				const expected = {
@@ -256,8 +257,8 @@ describe("use-calendar helpers", () => {
 
 		it("creates a selected Day", () => {
 			const actual = getNewDay({
+				availableDates: df.getDaysOfMonth({ month: 6, year: 2022 }),
 				date: dtz("2022-07-02"),
-				availableDates: df.getDaysOfMonth({ year: 2022, month: 6 }),
 				selected: dtz("2022-07-02"),
 			});
 
@@ -268,7 +269,7 @@ describe("use-calendar helpers", () => {
 			const actual = getNewDay({
 				date: dtz("2022-07-17"),
 				events: [
-					{ start: dtz("2022-07-17"), meta: { title: "Birthday Party" } },
+					{ meta: { title: "Birthday Party" }, start: dtz("2022-07-17") },
 				],
 			});
 
@@ -331,7 +332,7 @@ describe("use-calendar helpers", () => {
 			[
 				"2022-07-17",
 				"2022-07-20",
-				[{ start: dtz("2022-07-17"), end: dtz("2022-07-20") }],
+				[{ end: dtz("2022-07-20"), start: dtz("2022-07-17") }],
 			],
 			["2022-09-12", "2022-09-13", []],
 		])(
@@ -339,7 +340,7 @@ describe("use-calendar helpers", () => {
 			(dtStart, dtEnd, expected) => {
 				const actual = getDayEvents({
 					date: dtz("2022-07-17"),
-					events: [{ start: dtz(dtStart), end: dtz(dtEnd) }],
+					events: [{ end: dtz(dtEnd), start: dtz(dtStart) }],
 				});
 
 				expect(actual).toStrictEqual(expected);
@@ -352,57 +353,57 @@ describe("use-calendar helpers", () => {
 			const actual = getMinMaxDate();
 
 			const expected = {
-				minDate: dtz("2012-07-02"),
 				maxDate: dtz("2032-07-02"),
+				minDate: dtz("2012-07-02"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
 
 		it("gets min and max dates: with given min/max Date", () => {
 			const actual = getMinMaxDate({
-				minDate: dtz("2022-07-01"),
 				maxDate: dtz("2022-07-31"),
+				minDate: dtz("2022-07-01"),
 			});
 
 			const expected = {
-				minDate: dtz("2022-07-01"),
 				maxDate: dtz("2022-07-31"),
+				minDate: dtz("2022-07-01"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
 
 		it("always includes the current month with availableDates only (minDate)", () => {
-			const availableDates = df.getDaysOfMonth({ year: 2023, month: 1 });
+			const availableDates = df.getDaysOfMonth({ month: 1, year: 2023 });
 			const actual = getMinMaxDate({ availableDates });
 
 			const expected = {
-				minDate: dtz("2022-07-01"),
 				maxDate: dtz("2023-02-28"),
+				minDate: dtz("2022-07-01"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
 
 		it("always includes the current month with availableDates only (maxDate)", () => {
 			const actual = getMinMaxDate({
-				availableDates: df.getDaysOfMonth({ year: 2021, month: 9 }),
+				availableDates: df.getDaysOfMonth({ month: 9, year: 2021 }),
 			});
 
 			const expected = {
-				minDate: dtz("2021-10-01"),
 				maxDate: dtz("2022-07-31"),
+				minDate: dtz("2021-10-01"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
 
 		it("handles maxDate < minDate", () => {
 			const actual = getMinMaxDate({
-				minDate: dtz("2022-07-31"),
 				maxDate: dtz("2022-07-01"),
+				minDate: dtz("2022-07-31"),
 			});
 
 			const expected = {
-				minDate: dtz("2022-07-01"),
 				maxDate: dtz("2022-07-31"),
+				minDate: dtz("2022-07-01"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
@@ -413,11 +414,11 @@ describe("use-calendar helpers", () => {
 		const monthsToDisplay = 1;
 
 		it("default 1 visible month", () => {
-			const actual = getStartEndDate({ visibleMonth, monthsToDisplay });
+			const actual = getStartEndDate({ monthsToDisplay, visibleMonth });
 
 			const expected = {
-				start: dtz("2022-06-02"),
 				end: dtz("2022-08-02"),
+				start: dtz("2022-06-02"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
@@ -425,14 +426,14 @@ describe("use-calendar helpers", () => {
 		it("based on minDate", () => {
 			const minDate = dtz("2022-06-04");
 			const actual = getStartEndDate({
-				visibleMonth,
 				minDate,
 				monthsToDisplay,
+				visibleMonth,
 			});
 
 			const expected = {
-				start: dtz("2022-06-04"),
 				end: dtz("2022-08-02"),
+				start: dtz("2022-06-04"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
@@ -440,14 +441,14 @@ describe("use-calendar helpers", () => {
 		it("based on maxDate", () => {
 			const maxDate = dtz("2022-08-04");
 			const actual = getStartEndDate({
-				visibleMonth,
 				maxDate,
 				monthsToDisplay,
+				visibleMonth,
 			});
 
 			const expected = {
-				start: dtz("2022-06-02"),
 				end: dtz("2022-08-04"),
+				start: dtz("2022-06-02"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
@@ -456,30 +457,30 @@ describe("use-calendar helpers", () => {
 			const minDate = dtz("2022-06-22");
 			const maxDate = dtz("2022-08-04");
 			const actual = getStartEndDate({
-				visibleMonth,
-				minDate,
 				maxDate,
+				minDate,
 				monthsToDisplay,
+				visibleMonth,
 			});
 
 			const expected = {
-				start: dtz("2022-06-22"),
 				end: dtz("2022-08-04"),
+				start: dtz("2022-06-22"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});
 
 		it("based on available dates", () => {
-			const availableDates = ["2022-06-04", "2022-07-29"].map(dtz);
+			const availableDates = ["2022-06-04", "2022-07-29"].map((d) => dtz(d));
 			const actual = getStartEndDate({
 				availableDates,
-				visibleMonth,
 				monthsToDisplay,
+				visibleMonth,
 			});
 
 			const expected = {
-				start: dtz("2022-06-04"),
 				end: dtz("2022-07-29"),
+				start: dtz("2022-06-04"),
 			};
 			expect(actual).toStrictEqual(expected);
 		});

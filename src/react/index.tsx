@@ -1,12 +1,12 @@
-import { useCalendar, type IUseCalendarOptions } from "../index";
+import { type IUseCalendarOptions, useCalendar } from "../index";
 
 function Calendar(props?: Partial<IUseCalendarOptions>) {
-	const { months, getDayProps, getPrevMonthProps, getNextMonthProps } =
+	const { getDayProps, getNextMonthProps, getPrevMonthProps, months } =
 		useCalendar(props);
 
 	return (
 		<>
-			{months.map(({ year, month, weeks }) => (
+			{months.map(({ month, weeks, year }) => (
 				<div key={`${year}${month}`}>
 					<header>
 						<h1>

@@ -4,12 +4,15 @@
     "esModuleInterop": true,
     "incremental": true,
     "isolatedModules": true,
+    "lib": ["es2019", "DOM"],
     "jsx": "react-jsx",
     "module": "esnext",
     "moduleResolution": "Bundler",
     "skipLibCheck": true,
     "strict": true,
     "target": "es6",
+    "types": ["vitest/globals"],
+    "typeRoots": ["node_modules"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "sh/**/*.ts"],
   "exclude": ["node_modules"]

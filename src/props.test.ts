@@ -1,13 +1,13 @@
 import { vi } from "vitest";
 
 import { dtz } from "./date-fns";
-import { buildGetPrevNextMonthProps, buildGetDayProps } from "./props";
+import { buildGetDayProps, buildGetPrevNextMonthProps } from "./props";
 import { type IMonth } from "./use-calendar.d";
 
 const commonProps = {
+	onClick: expect.any(Function),
 	role: "button",
 	type: "button",
-	onClick: expect.any(Function),
 };
 
 describe("props functions", () => {
@@ -30,9 +30,9 @@ describe("props functions", () => {
 				const fn = buildGetDayProps({ setSelected: setSelectedSpy });
 				const day = {
 					date: dtz(),
-					isToday: false,
 					isSelectable,
 					isSelected: false,
+					isToday: false,
 				};
 				const actual = fn({ day });
 				actual.onClick();
@@ -44,6 +44,7 @@ describe("props functions", () => {
 		it("null day", () => {
 			const setSelectedSpy = vi.fn();
 			const fn = buildGetDayProps({ setSelected: setSelectedSpy });
+			// eslint-disable-next-line unicorn/no-null
 			const actual = fn({ day: null });
 
 			actual.onClick();
@@ -56,18 +57,18 @@ describe("props functions", () => {
 
 			afterEach(() => {
 				Object.defineProperty(global, "navigator", {
-					writable: true,
 					value: originalNavigator,
+					writable: true,
 				});
 			});
 
 			it("uses locale provided as option", () => {
-				const fn = buildGetDayProps({ setSelected: vi.fn(), locale: "ar" });
+				const fn = buildGetDayProps({ locale: "ar", setSelected: vi.fn() });
 				const day = {
 					date: dtz(),
-					isToday: false,
 					isSelectable: true,
 					isSelected: false,
+					isToday: false,
 				};
 				const actual = fn({ day });
 
@@ -81,15 +82,15 @@ describe("props functions", () => {
 			])("uses navigator.language as locale: %s", (language, expected) => {
 				Object.defineProperty(global.navigator, "language", {
 					configurable: true,
-					writable: false,
 					value: language,
+					writable: false,
 				});
 				const fn = buildGetDayProps({ setSelected: vi.fn() });
 				const day = {
 					date: dtz(),
-					isToday: false,
 					isSelectable: true,
 					isSelected: false,
+					isToday: false,
 				};
 				const actual = fn({ day });
 
@@ -105,9 +106,9 @@ describe("props functions", () => {
 				const fn = buildGetDayProps({ setSelected: vi.fn() });
 				const day = {
 					date: dtz(),
-					isToday: false,
 					isSelectable: true,
 					isSelected: false,
+					isToday: false,
 				};
 				const actual = fn({ day });
 
@@ -120,14 +121,14 @@ describe("props functions", () => {
 			it("when a callback is provided, call it on click", () => {
 				const onDateSelectedSpy = vi.fn();
 				const fn = buildGetDayProps({
-					setSelected: vi.fn(),
 					onDateSelected: onDateSelectedSpy,
+					setSelected: vi.fn(),
 				});
 				const day = {
 					date: dtz(),
-					isToday: false,
 					isSelectable: true,
 					isSelected: false,
+					isToday: false,
 				};
 				const actual = fn({ day });
 				actual.onClick();

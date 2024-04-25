@@ -7,18 +7,18 @@ export type IEvent = {
 export type IDay = {
 	date: Date;
 	events?: IEvent[];
+	isAdjacentMonth?: boolean;
 	isSelectable?: boolean;
 	isSelected?: boolean;
 	isToday?: boolean;
 	isWeekend?: boolean;
-	isAdjacentMonth?: boolean;
 };
 
 export type IWeek = IDay[];
 
 export type IMonth = {
-	weeks: IWeek[];
 	month: number;
+	weeks: IWeek[];
 	year: number;
 };
 
@@ -27,12 +27,12 @@ export type IGetDayPropsOptions = {
 };
 
 export type IGetDayPropsReturns = {
-	"aria-selected": boolean;
 	"aria-label": string;
+	"aria-selected": boolean;
 	disabled: boolean;
 	key: string;
-	role: string;
 	onClick: () => void;
+	role: string;
 };
 
 export type IGetDayPropsFn = {
@@ -42,9 +42,9 @@ export type IGetDayPropsFn = {
 export type IGetPrevNextPropsReturns = {
 	"aria-label": string;
 	disabled: boolean;
+	onClick: () => void;
 	role: string;
 	type: "button";
-	onClick: () => void;
 };
 
 export type IGetPrevNextPropsFn = {
@@ -52,11 +52,11 @@ export type IGetPrevNextPropsFn = {
 };
 
 export type ICalendarProps = {
-	getPrevYearProps: IGetPrevNextPropsFn;
-	getPrevMonthProps: IGetPrevNextPropsFn;
 	getDayProps: IGetDayPropsFn;
 	getNextMonthProps: IGetPrevNextPropsFn;
 	getNextYearProps: IGetPrevNextPropsFn;
+	getPrevMonthProps: IGetPrevNextPropsFn;
+	getPrevYearProps: IGetPrevNextPropsFn;
 	months: IMonth[];
 	resetState: () => void;
 };
@@ -69,5 +69,5 @@ export type IUseCalendarOptions = {
 	minDate: Date;
 	monthsToDisplay?: number;
 	onDateSelected: (day: IDay) => void;
-	selectedDate?: string | number | Date;
+	selectedDate?: Date | number | string;
 };

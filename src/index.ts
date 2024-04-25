@@ -38,8 +38,8 @@ export function useCalendar(
 		availableDates,
 		events = [],
 		firstDayOfWeek = 0,
-		selectedDate,
 		onDateSelected,
+		selectedDate,
 	} = options || {};
 	const s = getValidDate(selectedDate);
 	const [selected, setSelected] = useState<Date | undefined>(s);
@@ -47,35 +47,30 @@ export function useCalendar(
 		selected || new Date(Date.now())
 	);
 
-	useEffect(
-		() => {
-			if (!s || s?.getTime() === selected?.getTime()) return;
-			setSelected(s);
-			setVisibleMonth(s);
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[s?.getTime()]
-	);
+	useEffect(() => {
+		if (!s || s?.getTime() === selected?.getTime()) return;
+		setSelected(s);
+		setVisibleMonth(s);
+	}, [s?.getTime()]);
 
 	let monthsToDisplay = options?.monthsToDisplay || 1;
-	if (monthsToDisplay === Infinity) {
+	if (monthsToDisplay === Number.POSITIVE_INFINITY) {
 		const d1 = options?.minDate || df.getFirstDayOfMonth(visibleMonth);
 		const d2 = options?.maxDate || df.getLastDayOfMonth(visibleMonth);
 		monthsToDisplay = df.differenceInMonths(d1, d2) + 1;
 	}
 
-	const { minDate, maxDate } = getMinMaxDate(options);
-	const { start, end } = getStartEndDate({
+	const { maxDate, minDate } = getMinMaxDate(options);
+	const { end, start } = getStartEndDate({
 		availableDates,
-		monthsToDisplay,
-		minDate,
 		maxDate,
+		minDate,
+		monthsToDisplay,
 		visibleMonth,
 	});
 
 	const monthsInRange = useMemo(
-		() => df.getMonthsInRange({ start, end }),
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		() => df.getMonthsInRange({ end, start }),
 		[start.toISOString(), end.toISOString()]
 	);
 
@@ -101,15 +96,15 @@ export function useCalendar(
 			})
 		);
 
-	const getDayProps = buildGetDayProps({ setSelected, onDateSelected });
+	const getDayProps = buildGetDayProps({ onDateSelected, setSelected });
 
 	const [getPrevMonthProps, getNextMonthProps] = ["back", "forward"].map(
 		(direction) =>
 			buildGetPrevNextMonthProps({
 				direction,
 				months,
-				setVisibleMonth,
 				monthsInRange,
+				setVisibleMonth,
 			})
 	);
 
@@ -129,12 +124,12 @@ export function useCalendar(
 	};
 
 	return {
-		months,
 		getDayProps,
-		getPrevYearProps,
-		getPrevMonthProps,
 		getNextMonthProps,
 		getNextYearProps,
+		getPrevMonthProps,
+		getPrevYearProps,
+		months,
 		resetState,
 	};
 }

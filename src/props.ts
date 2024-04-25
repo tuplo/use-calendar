@@ -1,15 +1,15 @@
 import {
 	type IDay,
-	type IGetPrevNextPropsReturns,
 	type IGetDayPropsOptions,
+	type IGetPrevNextPropsReturns,
 	type IMonth,
 } from "./use-calendar.d";
 import * as df from "./date-fns";
 
 type IBuildGetDayPropsArgs = {
-	setSelected: (newSelected: Date) => void;
-	onDateSelected?: (day: IDay) => void;
 	locale?: string;
+	onDateSelected?: (day: IDay) => void;
+	setSelected: (newSelected: Date) => void;
 };
 
 function getBrowserLocale() {
@@ -17,13 +17,13 @@ function getBrowserLocale() {
 }
 
 export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
-	const { setSelected, onDateSelected } = args;
+	const { onDateSelected, setSelected } = args;
 
 	return (options: IGetDayPropsOptions) => {
 		const { day } = options;
 		if (!day) {
 			return {
-				onClick: () => undefined,
+				onClick: () => {},
 			};
 		}
 
@@ -31,11 +31,10 @@ export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 		const dtf = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
 
 		return {
-			"aria-selected": day.isSelected,
 			"aria-label": dtf.format(new Date(day.date)),
+			"aria-selected": day.isSelected,
 			disabled: !day.isSelectable,
 			key: day.date.toISOString(),
-			role: "button",
 			onClick: () => {
 				const { isSelectable } = day;
 				if (!isSelectable) {
@@ -47,6 +46,7 @@ export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 					onDateSelected(day);
 				}
 			},
+			role: "button",
 		};
 	};
 }
@@ -54,14 +54,14 @@ export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 type IBuildGetPrevNextMonthPropsArgs = {
 	direction: string;
 	months: IMonth[];
-	setVisibleMonth: (newVisibleMonth: Date) => void;
 	monthsInRange: Partial<IMonth>[];
+	setVisibleMonth: (newVisibleMonth: Date) => void;
 };
 
 export function buildGetPrevNextMonthProps(
 	args: IBuildGetPrevNextMonthPropsArgs
 ) {
-	const { months, direction, monthsInRange, setVisibleMonth } = args;
+	const { direction, months, monthsInRange, setVisibleMonth } = args;
 	const { 0: firstMonth, length, [length - 1]: lastMonth } = months;
 	const month = direction === "back" ? firstMonth : lastMonth;
 	const delta = direction === "back" ? -1 : 1;
@@ -85,18 +85,18 @@ export function buildGetPrevNextMonthProps(
 	};
 
 	return () => ({
+		"aria-label": label,
 		disabled,
+		onClick,
 		role: "button",
 		type: "button" as const,
-		"aria-label": label,
-		onClick,
 	});
 }
 
 type IBuildGetPrevNextYearPropsArgs = {
 	direction: string;
-	setVisibleMonth: (newVisibleMonth: Date) => void;
 	monthsInRange: Partial<IMonth>[];
+	setVisibleMonth: (newVisibleMonth: Date) => void;
 	visibleMonth: Date;
 };
 
@@ -122,10 +122,10 @@ export function buildGetPrevNextYearProps(
 	};
 
 	return () => ({
+		"aria-label": label,
 		disabled,
+		onClick,
 		role: "button",
 		type: "button" as const,
-		"aria-label": label,
-		onClick,
 	});
 }

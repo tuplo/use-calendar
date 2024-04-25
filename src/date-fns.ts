@@ -1,5 +1,5 @@
-export function dtz(date?: string | Date | number) {
-	if (typeof date === "undefined") {
+export function dtz(date?: Date | number | string) {
+	if (date === undefined) {
 		return new Date(Date.now());
 	}
 
@@ -11,13 +11,13 @@ export function dtz(date?: string | Date | number) {
 type IGetDateFromArgs = {
 	date: Date;
 	days?: number;
-	weeks?: number;
 	months?: number;
+	weeks?: number;
 	years?: number;
 };
 
 export function getDateFrom(args: IGetDateFromArgs) {
-	const { date, days, weeks, months, years } = args;
+	const { date, days, months, weeks, years } = args;
 
 	let d = days || 0;
 	if (weeks) {
@@ -86,12 +86,12 @@ export function isFirstDayOfMonth(date: Date) {
 }
 
 type IGetDaysOfMonthArgs = {
-	year: number;
 	month: number;
+	year: number;
 };
 
 export function getDaysOfMonth(args: IGetDaysOfMonthArgs) {
-	const { year, month } = args;
+	const { month, year } = args;
 	let date = new Date(year, month, 1);
 
 	const days: Date[] = [];
@@ -104,12 +104,12 @@ export function getDaysOfMonth(args: IGetDaysOfMonthArgs) {
 }
 
 type IGetMonthsInRangeArgs = {
-	start?: Date;
 	end?: Date;
+	start?: Date;
 };
 
 export function getMonthsInRange(args: IGetMonthsInRangeArgs) {
-	const { start = new Date(Date.now()), end = new Date(Date.now()) } = args;
+	const { end = new Date(Date.now()), start = new Date(Date.now()) } = args;
 	const months = [];
 
 	// include last date in range
@@ -120,7 +120,7 @@ export function getMonthsInRange(args: IGetMonthsInRangeArgs) {
 		const month = date.getMonth();
 		const index = months.findIndex((m) => m.year === year && m.month === month);
 		if (index === -1) {
-			months.push({ year, month });
+			months.push({ month, year });
 		}
 		date = getDateFrom({ date, days: 1 });
 	}
@@ -142,8 +142,8 @@ export function getLastDayOfMonth(date: Date = new Date(Date.now())) {
 
 type IIsInRangeArgs = {
 	date: Date;
-	minDate?: Date;
 	maxDate?: Date;
+	minDate?: Date;
 };
 
 export function isInRange(args: IIsInRangeArgs) {

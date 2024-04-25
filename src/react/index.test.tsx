@@ -48,8 +48,8 @@ describe("useCalendar UI", () => {
 			);
 			render(
 				<Calendar
-					onDateSelected={onDateSelectedSpy}
 					availableDates={availableDates}
+					onDateSelected={onDateSelectedSpy}
 				/>
 			);
 			await user.click(screen.getByText("25"));
