@@ -20,6 +20,25 @@ describe("props functions", () => {
 	});
 
 	describe("buildGetDayProps", () => {
+		it("builds day component props", () => {
+			const fn = buildGetDayProps({ setSelected: vi.fn() });
+			const day = {
+				date: dtz(),
+				isSelected: false,
+				isToday: false,
+			};
+			const actual = fn({ day });
+
+			const expected = {
+				"aria-label": "July 2, 2022",
+				"aria-selected": false,
+				disabled: true,
+				onClick: expect.any(Function),
+				role: "button",
+			};
+			expect(actual).toStrictEqual(expected);
+		});
+
 		it.each([
 			[true, 1],
 			[false, 0],

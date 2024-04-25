@@ -34,7 +34,6 @@ export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 			"aria-label": dtf.format(new Date(day.date)),
 			"aria-selected": day.isSelected,
 			disabled: !day.isSelectable,
-			key: day.date.toISOString(),
 			onClick: () => {
 				const { isSelectable } = day;
 				if (!isSelectable) {
