@@ -1,8 +1,8 @@
-import {
-	type IDay,
-	type IGetDayPropsOptions,
-	type IGetPrevNextPropsReturns,
-	type IMonth,
+import type {
+	IDay,
+	IGetDayPropsOptions,
+	IGetPrevNextPropsReturns,
+	IMonth,
 } from "./use-calendar.d";
 import * as df from "./date-fns";
 
@@ -12,9 +12,19 @@ type IBuildGetDayPropsArgs = {
 	setSelected: (newSelected: Date) => void;
 };
 
-function getBrowserLocale() {
-	return typeof navigator !== "undefined" && navigator?.language;
-}
+type IBuildGetPrevNextMonthPropsArgs = {
+	direction: string;
+	months: IMonth[];
+	monthsInRange: Partial<IMonth>[];
+	setVisibleMonth: (newVisibleMonth: Date) => void;
+};
+
+type IBuildGetPrevNextYearPropsArgs = {
+	direction: string;
+	monthsInRange: Partial<IMonth>[];
+	setVisibleMonth: (newVisibleMonth: Date) => void;
+	visibleMonth: Date;
+};
 
 export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 	const { onDateSelected, setSelected } = args;
@@ -50,13 +60,6 @@ export function buildGetDayProps(args: IBuildGetDayPropsArgs) {
 	};
 }
 
-type IBuildGetPrevNextMonthPropsArgs = {
-	direction: string;
-	months: IMonth[];
-	monthsInRange: Partial<IMonth>[];
-	setVisibleMonth: (newVisibleMonth: Date) => void;
-};
-
 export function buildGetPrevNextMonthProps(
 	args: IBuildGetPrevNextMonthPropsArgs
 ) {
@@ -69,12 +72,11 @@ export function buildGetPrevNextMonthProps(
 	}
 
 	const adjacentMonth = new Date(month.year, month.month + delta);
-	const disabled =
-		monthsInRange.findIndex(
-			(m) =>
-				m.month === adjacentMonth.getMonth() &&
-				m.year === adjacentMonth.getFullYear()
-		) === -1;
+	const disabled = !monthsInRange.some(
+		(m) =>
+			m.month === adjacentMonth.getMonth() &&
+			m.year === adjacentMonth.getFullYear()
+	);
 	const label = direction === "back" ? "Go back 1 month" : "Go forward 1 month";
 	const onClick = () => {
 		if (disabled) {
@@ -92,13 +94,6 @@ export function buildGetPrevNextMonthProps(
 	});
 }
 
-type IBuildGetPrevNextYearPropsArgs = {
-	direction: string;
-	monthsInRange: Partial<IMonth>[];
-	setVisibleMonth: (newVisibleMonth: Date) => void;
-	visibleMonth: Date;
-};
-
 export function buildGetPrevNextYearProps(
 	args: IBuildGetPrevNextYearPropsArgs
 ) {
@@ -106,12 +101,11 @@ export function buildGetPrevNextYearProps(
 
 	const delta = direction === "back" ? -1 : 1;
 	const adjacentMonth = df.getDateFrom({ date: visibleMonth, years: delta });
-	const disabled =
-		monthsInRange.findIndex(
-			(m) =>
-				m.month === adjacentMonth.getMonth() &&
-				m.year === adjacentMonth.getFullYear()
-		) === -1;
+	const disabled = !monthsInRange.some(
+		(m) =>
+			m.month === adjacentMonth.getMonth() &&
+			m.year === adjacentMonth.getFullYear()
+	);
 	const label = direction === "back" ? "Go back 1 year" : "Go forward 1 year";
 	const onClick = () => {
 		if (disabled) {
@@ -127,4 +121,8 @@ export function buildGetPrevNextYearProps(
 		role: "button",
 		type: "button" as const,
 	});
+}
+
+function getBrowserLocale() {
+	return typeof navigator !== "undefined" && navigator?.language;
 }

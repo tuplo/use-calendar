@@ -1,7 +1,6 @@
 import { vi } from "vitest";
 
 import * as df from "./date-fns";
-import { dtz } from "./date-fns";
 
 describe("date-fns", () => {
 	describe("getDateFrom", () => {
@@ -24,8 +23,21 @@ describe("date-fns", () => {
 			["next year", "2022-12-29", { years: 1 }, "2023-12-29"],
 			["previous year", "2022-12-29", { years: -1 }, "2021-12-29"],
 		])("getDateFrom: %s %s", (_, dateStr, args, expected) => {
-			const actual = df.getDateFrom({ date: dtz(dateStr), ...args });
-			expect(actual).toStrictEqual(dtz(expected));
+			const actual = df.getDateFrom({ date: df.dtz(dateStr), ...args });
+			expect(actual).toStrictEqual(df.dtz(expected));
+		});
+	});
+
+	describe("differenceInMonths", () => {
+		it.each([
+			["2024-05-01", "2024-07-01", 2],
+			["2023-05-01", "2024-07-01", 14],
+			["2024-07-01", "2024-05-01", 0],
+		])("differenceInMonths: %s %s", (d1, d2, expected) => {
+			const D1 = new Date(d1);
+			const D2 = new Date(d2);
+			const actual = df.differenceInMonths(D1, D2);
+			expect(actual).toBe(expected);
 		});
 	});
 
@@ -36,8 +48,8 @@ describe("date-fns", () => {
 			expect(actual).toHaveLength(30);
 			// eslint-disable-next-line no-useless-computed-key
 			const { [0]: first, length, [length - 1]: last } = actual;
-			expect(first).toStrictEqual(dtz("2023-04-01"));
-			expect(last).toStrictEqual(dtz("2023-04-30"));
+			expect(first).toStrictEqual(df.dtz("2023-04-01"));
+			expect(last).toStrictEqual(df.dtz("2023-04-30"));
 		});
 
 		it("with daylight savings time in it", () => {
@@ -48,16 +60,16 @@ describe("date-fns", () => {
 
 	describe("getFirstDayOfMonth", () => {
 		it("returns the first day of the month: current month", () => {
-			vi.useFakeTimers().setSystemTime(dtz("2022-07-11"));
+			vi.useFakeTimers().setSystemTime(df.dtz("2022-07-11"));
 			const actual = df.getFirstDayOfMonth();
 
-			const expected = dtz("2022-07-01");
+			const expected = df.dtz("2022-07-01");
 			expect(actual).toStrictEqual(expected);
 		});
 
 		it("returns the first day of the month", () => {
-			const actual = df.getFirstDayOfMonth(dtz("2020-01-01"));
-			const expected = dtz("2020-01-01");
+			const actual = df.getFirstDayOfMonth(df.dtz("2020-01-01"));
+			const expected = df.dtz("2020-01-01");
 			expect(actual).toStrictEqual(expected);
 		});
 	});
@@ -68,14 +80,14 @@ describe("date-fns", () => {
 		it("returns the first day of the month: current month", () => {
 			const actual = df.getFirstDayOfMonth();
 
-			const expected = dtz("2022-07-01");
+			const expected = df.dtz("2022-07-01");
 			expect(actual).toStrictEqual(expected);
 		});
 
 		it("returns the last day of the month: current month", () => {
 			const actual = df.getLastDayOfMonth();
 
-			const expected = dtz("2022-07-31");
+			const expected = df.dtz("2022-07-31");
 			expect(actual).toStrictEqual(expected);
 		});
 
@@ -87,8 +99,8 @@ describe("date-fns", () => {
 			["2022-02-28", "2022-02-28"],
 			["2022-07-01", "2022-07-31"],
 		])("gets last day of month: %s", (dateStr, expectedStr) => {
-			const actual = df.getLastDayOfMonth(dtz(dateStr));
-			const expected = dtz(expectedStr);
+			const actual = df.getLastDayOfMonth(df.dtz(dateStr));
+			const expected = df.dtz(expectedStr);
 			expect(actual).toStrictEqual(expected);
 		});
 	});
@@ -104,11 +116,11 @@ describe("date-fns", () => {
 			["2022-08-12", undefined, "2022-07-31", false],
 			["2022-08-12", "2022-07-01", "2022-07-31", false],
 		])("is in range: %s", (dateStr, minDate, maxDate, expected) => {
-			vi.useFakeTimers().setSystemTime(dtz("2022-07-02"));
+			vi.useFakeTimers().setSystemTime(df.dtz("2022-07-02"));
 			const actual = df.isInRange({
-				date: dtz(dateStr),
-				maxDate: maxDate ? dtz(maxDate) : undefined,
-				minDate: minDate ? dtz(minDate) : undefined,
+				date: df.dtz(dateStr),
+				maxDate: maxDate ? df.dtz(maxDate) : undefined,
+				minDate: minDate ? df.dtz(minDate) : undefined,
 			});
 
 			expect(actual).toBe(expected);
@@ -118,8 +130,8 @@ describe("date-fns", () => {
 	describe("getMonthsInRange", () => {
 		it("get months in range", () => {
 			const actual = df.getMonthsInRange({
-				end: dtz("2022-08-03"),
-				start: dtz("2022-06-14"),
+				end: df.dtz("2022-08-03"),
+				start: df.dtz("2022-06-14"),
 			});
 
 			const expected = [
@@ -132,8 +144,8 @@ describe("date-fns", () => {
 
 		it("get months in range ending on first of month", () => {
 			const actual = df.getMonthsInRange({
-				end: dtz("2022-08-01"),
-				start: dtz("2022-06-14"),
+				end: df.dtz("2022-08-01"),
+				start: df.dtz("2022-06-14"),
 			});
 
 			const expected = [
@@ -146,8 +158,8 @@ describe("date-fns", () => {
 
 		it("get months in range starting on last of month", () => {
 			const actual = df.getMonthsInRange({
-				end: dtz("2022-07-01"),
-				start: dtz("2022-06-30"),
+				end: df.dtz("2022-07-01"),
+				start: df.dtz("2022-06-30"),
 			});
 
 			const expected = [
@@ -159,7 +171,7 @@ describe("date-fns", () => {
 
 		it("get months in range with no start date", () => {
 			const actual = df.getMonthsInRange({
-				end: dtz("2022-08-10"),
+				end: df.dtz("2022-08-10"),
 			});
 
 			const expected = [

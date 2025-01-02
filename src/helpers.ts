@@ -1,34 +1,71 @@
 import * as df from "./date-fns";
-import {
-	type IDay,
-	type IEvent,
-	type IMonth,
-	type IUseCalendarOptions,
-	type IWeek,
+import type {
+	IDay,
+	IEvent,
+	IMonth,
+	IUseCalendarOptions,
+	IWeek,
 } from "./use-calendar.d";
 
-export function isValidDate(d: Date | number | string | undefined) {
-	if (d === null) return false;
-	if (typeof d === "boolean") return false;
-	if (d === undefined) return false;
-	if (typeof d === "string") return /^\d{4}-\d{2}-\d{2}/.test(d);
-
-	const dd = new Date(d);
-	return dd instanceof Date && !Number.isNaN(dd);
-}
-
-export function getValidDate(d: Date | number | string | undefined) {
-	if (d === undefined || !isValidDate(d)) {
-		return;
-	}
-
-	return new Date(d);
-}
+type IGetCalendarMonthArgs = {
+	availableDates?: Date[];
+	events?: IEvent[];
+	firstDayOfWeek: number;
+	maxDate?: Date;
+	minDate?: Date;
+	month: number;
+	selected?: Date;
+	year: number;
+};
 
 type IGetDayEventsArgs = {
 	date: Date;
 	events?: IEvent[];
 };
+
+type IGetNewDayArgs = {
+	availableDates?: Date[];
+	date: Date;
+	events?: IEvent[];
+	isAdjacentMonth?: boolean;
+	maxDate?: Date;
+	minDate?: Date;
+	selected?: Date;
+};
+
+type IGetStartEndDateArgs = {
+	availableDates?: Date[];
+	maxDate?: Date;
+	minDate?: Date;
+	monthsToDisplay: number;
+	visibleMonth: Date;
+};
+
+type IGetWeeksArgs = {
+	availableDates?: Date[];
+	events?: IEvent[];
+	firstDayOfWeek: number;
+	maxDate?: Date;
+	minDate?: Date;
+	month: number;
+	selected?: Date;
+	year: number;
+};
+
+type IPadAdjacentMonthDaysArgs = {
+	availableDates?: Date[];
+	date: Date;
+	firstDayOfWeek: number;
+	selected?: Date;
+	week: IWeek;
+};
+
+export function getCalendarMonth(args: IGetCalendarMonthArgs): IMonth {
+	const { month, year } = args;
+	const weeks = getWeeks(args);
+
+	return { month, weeks, year };
+}
 
 export function getDayEvents(args: IGetDayEventsArgs) {
 	const { date, events = [] } = args;
@@ -42,15 +79,45 @@ export function getDayEvents(args: IGetDayEventsArgs) {
 	);
 }
 
-type IGetNewDayArgs = {
-	availableDates?: Date[];
-	date: Date;
-	events?: IEvent[];
-	isAdjacentMonth?: boolean;
-	maxDate?: Date;
-	minDate?: Date;
-	selected?: Date;
-};
+export function getMinMaxDate(options?: Partial<IUseCalendarOptions>) {
+	const {
+		availableDates,
+		maxDate,
+		minDate,
+		selectedDate = new Date(Date.now()),
+	} = options || {};
+
+	const today = new Date(Date.now());
+	const date = getValidDate(selectedDate) || today;
+	let min = minDate || df.getDateFrom({ date, years: -10 });
+	let max = maxDate || df.getDateFrom({ date, years: 10 });
+
+	if (min > max) {
+		[min, max] = [max, min];
+	}
+
+	if (availableDates) {
+		const { 0: firstDate, length, [length - 1]: lastDate } = availableDates;
+		const firstDayOfCurrentMonth = df.getFirstDayOfMonth(today);
+		const lastDayOfCurrentMonth = df.getLastDayOfMonth(today);
+
+		min = firstDayOfCurrentMonth;
+		if (firstDate) {
+			min = new Date(
+				Math.min(firstDate.getTime(), firstDayOfCurrentMonth.getTime())
+			);
+		}
+
+		max = lastDayOfCurrentMonth;
+		if (lastDate) {
+			max = new Date(
+				Math.max(lastDate.getTime(), lastDayOfCurrentMonth.getTime())
+			);
+		}
+	}
+
+	return { maxDate: max, minDate: min };
+}
 
 export function getNewDay(args: IGetNewDayArgs): IDay {
 	const {
@@ -66,7 +133,7 @@ export function getNewDay(args: IGetNewDayArgs): IDay {
 
 	let isSelectable = df.isInRange({ date, maxDate, minDate });
 	if (availableDates) {
-		isSelectable = availableDates.findIndex((a) => df.isSameDay(date, a)) > -1;
+		isSelectable = availableDates.some((a) => df.isSameDay(date, a));
 	}
 
 	const day: IDay = { date };
@@ -94,68 +161,39 @@ export function getNewDay(args: IGetNewDayArgs): IDay {
 	return day;
 }
 
-type IPadAdjacentMonthDaysArgs = {
-	availableDates?: Date[];
-	date: Date;
-	firstDayOfWeek: number;
-	selected?: Date;
-	week: IWeek;
-};
+export function getStartEndDate(args: IGetStartEndDateArgs) {
+	const { availableDates, maxDate, minDate, monthsToDisplay, visibleMonth } =
+		args;
 
-export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
-	const { availableDates, date, firstDayOfWeek, selected, week } = args;
-	const isFirstDayOfMonth = df.isFirstDayOfMonth(date);
-	const isLastDayOfMonth = df.isLastDayOfMonth(date);
-	const lastDayOfWeek = firstDayOfWeek - 1 >= 0 ? firstDayOfWeek - 1 : 6;
-	const newWeek = [...week];
+	// default 1 visible month
+	let start = df.getDateFrom({ date: visibleMonth, months: -1 });
+	let end = df.getDateFrom({ date: visibleMonth, months: monthsToDisplay });
 
-	if (isFirstDayOfMonth) {
-		const lastDays = [];
-		let lastDate = df.getDateFrom({ date, days: -1 });
-		while (lastDate.getDay() !== lastDayOfWeek) {
-			lastDays.push(
-				getNewDay({
-					availableDates,
-					date: lastDate,
-					isAdjacentMonth: true,
-					selected,
-				})
-			);
-			lastDate = df.getDateFrom({ date: lastDate, days: -1 });
-		}
-		newWeek.unshift(...lastDays.reverse());
+	// min/max dates from user
+	start = minDate || start;
+	end = maxDate || end;
+
+	// min/max dates from available dates
+	if (availableDates) {
+		const numberDates = [...availableDates, Date.now()]
+			.map((d) => new Date(d).getTime())
+			.sort();
+		// eslint-disable-next-line no-useless-computed-key
+		const { [0]: minNumDate, length, [length - 1]: maxNumDate } = numberDates;
+		start = new Date(minNumDate);
+		end = new Date(maxNumDate);
 	}
 
-	if (isLastDayOfMonth) {
-		const nextDays = [];
-		let nextDate = df.getDateFrom({ date, days: 1 });
-		while (nextDate.getDay() !== firstDayOfWeek) {
-			nextDays.push(
-				getNewDay({
-					availableDates,
-					date: nextDate,
-					isAdjacentMonth: true,
-					selected,
-				})
-			);
-			nextDate = df.getDateFrom({ date: nextDate, days: 1 });
-		}
-		newWeek.push(...nextDays);
-	}
-
-	return newWeek;
+	return { end, start };
 }
 
-type IGetWeeksArgs = {
-	availableDates?: Date[];
-	events?: IEvent[];
-	firstDayOfWeek: number;
-	maxDate?: Date;
-	minDate?: Date;
-	month: number;
-	selected?: Date;
-	year: number;
-};
+export function getValidDate(d: Date | number | string | undefined) {
+	if (d === undefined || !isValidDate(d)) {
+		return;
+	}
+
+	return new Date(d);
+}
 
 export function getWeeks(args: IGetWeeksArgs): IWeek[] {
 	const {
@@ -212,94 +250,56 @@ export function getWeeks(args: IGetWeeksArgs): IWeek[] {
 	return weeks;
 }
 
-type IGetCalendarMonthArgs = {
-	availableDates?: Date[];
-	events?: IEvent[];
-	firstDayOfWeek: number;
-	maxDate?: Date;
-	minDate?: Date;
-	month: number;
-	selected?: Date;
-	year: number;
-};
+export function isValidDate(d: Date | number | string | undefined) {
+	if (d === null) return false;
+	if (typeof d === "boolean") return false;
+	if (d === undefined) return false;
+	if (typeof d === "string") return /^\d{4}-\d{2}-\d{2}/.test(d);
 
-export function getCalendarMonth(args: IGetCalendarMonthArgs): IMonth {
-	const { month, year } = args;
-	const weeks = getWeeks(args);
-
-	return { month, weeks, year };
+	const dd = new Date(d);
+	return dd instanceof Date && !Number.isNaN(dd);
 }
 
-export function getMinMaxDate(options?: Partial<IUseCalendarOptions>) {
-	const {
-		availableDates,
-		maxDate,
-		minDate,
-		selectedDate = new Date(Date.now()),
-	} = options || {};
+export function padAdjacentMonthDays(args: IPadAdjacentMonthDaysArgs) {
+	const { availableDates, date, firstDayOfWeek, selected, week } = args;
+	const isFirstDayOfMonth = df.isFirstDayOfMonth(date);
+	const isLastDayOfMonth = df.isLastDayOfMonth(date);
+	const lastDayOfWeek = firstDayOfWeek - 1 >= 0 ? firstDayOfWeek - 1 : 6;
+	const newWeek = [...week];
 
-	const today = new Date(Date.now());
-	const date = getValidDate(selectedDate) || today;
-	let min = minDate || df.getDateFrom({ date, years: -10 });
-	let max = maxDate || df.getDateFrom({ date, years: 10 });
-
-	if (min > max) {
-		[min, max] = [max, min];
-	}
-
-	if (availableDates) {
-		const { 0: firstDate, length, [length - 1]: lastDate } = availableDates;
-		const firstDayOfCurrentMonth = df.getFirstDayOfMonth(today);
-		const lastDayOfCurrentMonth = df.getLastDayOfMonth(today);
-
-		min = firstDayOfCurrentMonth;
-		if (firstDate) {
-			min = new Date(
-				Math.min(firstDate.getTime(), firstDayOfCurrentMonth.getTime())
+	if (isFirstDayOfMonth) {
+		const lastDays = [];
+		let lastDate = df.getDateFrom({ date, days: -1 });
+		while (lastDate.getDay() !== lastDayOfWeek) {
+			lastDays.push(
+				getNewDay({
+					availableDates,
+					date: lastDate,
+					isAdjacentMonth: true,
+					selected,
+				})
 			);
+			lastDate = df.getDateFrom({ date: lastDate, days: -1 });
 		}
+		newWeek.unshift(...lastDays.reverse());
+	}
 
-		max = lastDayOfCurrentMonth;
-		if (lastDate) {
-			max = new Date(
-				Math.max(lastDate.getTime(), lastDayOfCurrentMonth.getTime())
+	if (isLastDayOfMonth) {
+		const nextDays = [];
+		let nextDate = df.getDateFrom({ date, days: 1 });
+		while (nextDate.getDay() !== firstDayOfWeek) {
+			nextDays.push(
+				getNewDay({
+					availableDates,
+					date: nextDate,
+					isAdjacentMonth: true,
+					selected,
+				})
 			);
+			nextDate = df.getDateFrom({ date: nextDate, days: 1 });
 		}
+		newWeek.push(...nextDays);
 	}
 
-	return { maxDate: max, minDate: min };
-}
-
-type IGetStartEndDateArgs = {
-	availableDates?: Date[];
-	maxDate?: Date;
-	minDate?: Date;
-	monthsToDisplay: number;
-	visibleMonth: Date;
-};
-
-export function getStartEndDate(args: IGetStartEndDateArgs) {
-	const { availableDates, maxDate, minDate, monthsToDisplay, visibleMonth } =
-		args;
-
-	// default 1 visible month
-	let start = df.getDateFrom({ date: visibleMonth, months: -1 });
-	let end = df.getDateFrom({ date: visibleMonth, months: monthsToDisplay });
-
-	// min/max dates from user
-	start = minDate || start;
-	end = maxDate || end;
-
-	// min/max dates from available dates
-	if (availableDates) {
-		const numberDates = [...availableDates, Date.now()]
-			.map((d) => new Date(d).getTime())
-			.sort();
-		// eslint-disable-next-line no-useless-computed-key
-		const { [0]: minNumDate, length, [length - 1]: maxNumDate } = numberDates;
-		start = new Date(minNumDate);
-		end = new Date(maxNumDate);
-	}
-
-	return { end, start };
+	return newWeek;
 }

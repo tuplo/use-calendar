@@ -1,7 +1,11 @@
-export type IEvent = {
-	[key: string]: unknown;
-	end?: Date;
-	start: Date;
+export type ICalendarProps = {
+	getDayProps: IGetDayPropsFn;
+	getNextMonthProps: IGetPrevNextPropsFn;
+	getNextYearProps: IGetPrevNextPropsFn;
+	getPrevMonthProps: IGetPrevNextPropsFn;
+	getPrevYearProps: IGetPrevNextPropsFn;
+	months: IMonth[];
+	resetState: () => void;
 };
 
 export type IDay = {
@@ -14,12 +18,14 @@ export type IDay = {
 	isWeekend?: boolean;
 };
 
-export type IWeek = IDay[];
+export type IEvent = {
+	[key: string]: unknown;
+	end?: Date;
+	start: Date;
+};
 
-export type IMonth = {
-	month: number;
-	weeks: IWeek[];
-	year: number;
+export type IGetDayPropsFn = {
+	(options: IGetDayPropsOptions): Partial<IGetDayPropsReturns>;
 };
 
 export type IGetDayPropsOptions = {
@@ -35,8 +41,8 @@ export type IGetDayPropsReturns = {
 	role: string;
 };
 
-export type IGetDayPropsFn = {
-	(options: IGetDayPropsOptions): Partial<IGetDayPropsReturns>;
+export type IGetPrevNextPropsFn = {
+	(): IGetPrevNextPropsReturns;
 };
 
 export type IGetPrevNextPropsReturns = {
@@ -47,18 +53,10 @@ export type IGetPrevNextPropsReturns = {
 	type: "button";
 };
 
-export type IGetPrevNextPropsFn = {
-	(): IGetPrevNextPropsReturns;
-};
-
-export type ICalendarProps = {
-	getDayProps: IGetDayPropsFn;
-	getNextMonthProps: IGetPrevNextPropsFn;
-	getNextYearProps: IGetPrevNextPropsFn;
-	getPrevMonthProps: IGetPrevNextPropsFn;
-	getPrevYearProps: IGetPrevNextPropsFn;
-	months: IMonth[];
-	resetState: () => void;
+export type IMonth = {
+	month: number;
+	weeks: IWeek[];
+	year: number;
 };
 
 export type IUseCalendarOptions = {
@@ -71,3 +69,5 @@ export type IUseCalendarOptions = {
 	onDateSelected: (day: IDay) => void;
 	selectedDate?: Date | number | string;
 };
+
+export type IWeek = IDay[];
