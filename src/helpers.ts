@@ -178,7 +178,6 @@ export function getStartEndDate(args: IGetStartEndDateArgs) {
 		const numberDates = [...availableDates, Date.now()]
 			.map((d) => new Date(d).getTime())
 			.sort();
-		// eslint-disable-next-line no-useless-computed-key
 		const { [0]: minNumDate, length, [length - 1]: maxNumDate } = numberDates;
 		start = new Date(minNumDate);
 		end = new Date(maxNumDate);

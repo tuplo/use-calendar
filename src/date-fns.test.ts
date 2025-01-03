@@ -46,7 +46,6 @@ describe("date-fns", () => {
 			const actual = df.getDaysOfMonth({ month: 3, year: 2023 });
 
 			expect(actual).toHaveLength(30);
-			// eslint-disable-next-line no-useless-computed-key
 			const { [0]: first, length, [length - 1]: last } = actual;
 			expect(first).toStrictEqual(df.dtz("2023-04-01"));
 			expect(last).toStrictEqual(df.dtz("2023-04-30"));

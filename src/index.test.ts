@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { act, renderHook } from "@testing-library/react";
 import { vi } from "vitest";
 

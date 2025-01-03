@@ -45,10 +45,10 @@
 		"lint": "eslint sh/ src/",
 		"test:ci": "vitest run",
 		"test": "vitest --watch",
-		"upgrade": "npm-check-updates -u -x eslint && npm install"
+		"upgrade": "npm-check-updates -u && npm install"
 	},
 	"peerDependencies": {
-		"react": "^16.8.6 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+		"react": "^18.0.0 || ^19.0.0"
 	},
 	"devDependencies": {
 		"@testing-library/dom": "10.4.0",
@@ -62,15 +62,16 @@
 		"@types/react-dom": "19.0.2",
 		"@vitejs/plugin-react": "4.3.4",
 		"@vitest/coverage-v8": "2.1.8",
+		"@vitest/eslint-plugin": "1.1.24",
 		"esbuild": "0.24.2",
-		"eslint": "8.57.0",
+		"eslint": "9.17.0",
 		"eslint-config-prettier": "9.1.0",
-		"eslint-config-react-app": "7.0.1",
 		"eslint-plugin-import": "2.31.0",
 		"eslint-plugin-perfectionist": "4.6.0",
+		"eslint-plugin-react": "7.37.3",
+		"eslint-plugin-react-hooks": "5.1.0",
 		"eslint-plugin-testing-library": "7.1.1",
 		"eslint-plugin-unicorn": "56.0.1",
-		"eslint-plugin-vitest": "0.5.4",
 		"globals": "15.14.0",
 		"jsdom": "25.0.1",
 		"npm-check-updates": "17.1.13",
